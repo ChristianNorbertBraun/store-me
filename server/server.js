@@ -10,7 +10,11 @@ var app = express();
  /* serves all the static files */
  app.get(/^(.+)$/, function(req, res){
      console.log('static file request : ' + req.params);
-     res.sendfile( __dirname+ "/webapp" + req.params[0]);
+     if(req.params[0].indexOf(".") > -1){
+         res.sendfile( __dirname+ "/webapp" + req.params[0]);
+     }else if(req.params[0].indexOf(".") == -1){
+         res.sendfile( __dirname+ "/webapp" + req.params[0] + ".html");
+     }
  });
 
  app.listen(8080, function() {

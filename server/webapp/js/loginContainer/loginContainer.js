@@ -27,7 +27,6 @@ var loginContainer = Ractive.extend({
 
     data:{},
     oninit: function() {
-        window.app.da
     }
 
 
