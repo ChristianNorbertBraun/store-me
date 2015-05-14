@@ -4,10 +4,26 @@
 var loginContainer = Ractive.extend({
 
     template:'\
-      <div class=loginFrame>\
-        <input type="text" placeholder="Username"/>\
-        <input type="text" placeholder="Password"/>\
-      </div>\ ',
+      <div class="loginFrame container">\
+          <div class="panel panel-default login-panel center-block">\
+            <div class="panel-body">\
+                <h3 class="text-center">Login</h3>\
+                <div class="login-group center-block">\
+                    <div class="input-group">\
+                        <input class="form-control login-input" type="text" placeholder="Username"/>\
+                    </div>\
+                    <div class="input-group">\
+                        <input class="form-control login-input" type="password" placeholder="Password"/>\
+                    </div>\
+                </div>\
+                <button type="button" class="btn btn-primary login-btn center-block">Login</button>\
+            </div>\
+          </div>\
+          <div class="create-account center-block">\
+            <p class="text-center">Don\'t have a StoreMe account yet?<br>\
+            Sign up!</p>\
+          </div>\
+    </div>\ ',
 
     data: {},
     oninit: function() {
