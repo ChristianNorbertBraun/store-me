@@ -21,6 +21,10 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
+    <!--Components-->
+    <script src="js/registerContainer/registerContainer.js"></script>
+    <link rel="stylesheet" href="js/registerContainer/registerContainer.css">
+
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
@@ -35,8 +39,8 @@
     <!--calling main js-->
     <script src='js/app.js'></script>
     <script>
-        var components = {loginContainer: loginContainer};
-        loadTemplate(templates.login, components);
+        var components = {registerContainer: registerContainer};
+        loadTemplate(templates.register, components);
     </script>
 </body>
 </html>

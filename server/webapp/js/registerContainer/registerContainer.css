@@ -1,0 +1,33 @@
+.loginFrame{
+    margin-top: 15%;
+}
+
+.login-panel {
+    max-width: 400px;
+}
+
+.login-input {
+    width: 50%;
+}
+
+.input-group {
+    width:100%;
+}
+
+.login-group {
+    margin-top: 30px;
+    width:80%;
+}
+
+.login-btn {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    width:80%;
+}
+
+.register-button {
+    margin-top: 60px;
+}
+
+.create-account {
+}
