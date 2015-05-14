@@ -3,7 +3,7 @@
  */
 
 $.ajax({
-    url: 'design/page.tpl',
+    url: 'design/login.tpl',
     async:true
 }).done(function(data){
 
@@ -15,3 +15,20 @@ $.ajax({
         }
     });
 });
+
+
+
+function loadTemplate(template, components, dbdata) {
+    $.ajax({
+        url: template,
+        async: true
+    }).done(function (data) {
+
+        window.app = new Ractive({
+            el: $('#container'),
+            template: data,
+            components: components,
+            data:dbdata
+        });
+    });
+}

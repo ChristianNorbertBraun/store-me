@@ -21,11 +21,20 @@ var loginContainer = Ractive.extend({
           </div>\
           <div class="create-account center-block">\
             <p class="text-center">Don\'t have a StoreMe account yet?<br>\
-            Sign up!</p>\
+            <a id="sign-up" href="#">Sign up!</a> </p>\
           </div>\
     </div>\ ',
 
     data: {},
     oninit: function() {
+
+    },
+
+    oncomplete: function() {
+        $("#sign-up").click(function(){
+            loadTemplate("design/register.tpl");
+        });
     }
+
+
 });
