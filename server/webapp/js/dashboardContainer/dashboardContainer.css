@@ -17,3 +17,11 @@
     background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
     color: #FFF;
 }
+
+th.headerSortUp {
+    color: #F00;
+}
+
+th.headerSortDown {
+    color: #0F0;
+}
