@@ -1,0 +1,19 @@
+
+
+.dashboard-container {
+    margin-top: 80px;
+}
+
+.info-panel {
+
+}
+
+.dashboard-button {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.item-table-header {
+    background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
+    color: #FFF;
+}
