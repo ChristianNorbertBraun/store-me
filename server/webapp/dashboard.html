@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
     <!--Components-->
+    <script src="js/dashboardContainer/dashboardContainer.js"></script>
+    <link rel="stylesheet" href="js/dashboardContainer/dashboardContainer.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -37,7 +39,8 @@
     <!--calling main js-->
     <script src='js/app.js'></script>
     <script>
-
+        var components = {dashboardContainer: dashboardContainer};
+        loadTemplate(templates.dashboard,components,"");
     </script>
 </body>
 </html>
