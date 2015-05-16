@@ -39,11 +39,11 @@ var dashboardContainer = Ractive.extend({
                     </div>\
                     \
                     <div class="col-sm-9">\
-                        <table class="table table-bordered">\
+                        <table id="item-table" class="table table-bordered">\
                             <thead class="item-table-header">\
                                 <tr>\
                                     {{#each table.header}}\
-                                        <th>{{column}}</th>\
+                                        <th on-click="sort">{{column}}</th>\
                                     {{/each}}\
                                 </tr>\
                             </thead>\
@@ -70,6 +70,12 @@ var dashboardContainer = Ractive.extend({
 
     oninit: function() {
 
+    },
+
+    oncomplete: function() {
+        $('#item-table').tablesorter();
     }
 
 });
+
+
