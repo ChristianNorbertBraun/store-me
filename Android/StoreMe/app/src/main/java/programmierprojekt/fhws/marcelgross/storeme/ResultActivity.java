@@ -16,6 +16,8 @@ public class ResultActivity extends ActionBarActivity {
     private final String  URL = "http://faulratte.lima-city.de/";
     private WebView browser;
     private String result1, result2;
+    private ActivityRegistry ar = new ActivityRegistry();
+    private int counter = 0;
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -23,6 +25,9 @@ public class ResultActivity extends ActionBarActivity {
         super.onCreate(state);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        ar.register(this);
+
         Intent intent = getIntent();
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
@@ -70,6 +75,13 @@ public class ResultActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
+        if (counter == 0){
+            Toast.makeText(this, R.string.clickToClose, Toast.LENGTH_SHORT).show();
+            counter++;
+        } else {
+            ar.finishAll();
+        }
+
+
     }
 }

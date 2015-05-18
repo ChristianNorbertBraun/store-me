@@ -14,6 +14,7 @@ public class MainActivity extends ActionBarActivity{
 
     private final String  URL = "http://faulratte.lima-city.de/";
     private WebView browser;
+    private ActivityRegistry ar = new ActivityRegistry();
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -21,6 +22,8 @@ public class MainActivity extends ActionBarActivity{
         super.onCreate(state);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        ar.register(this);
         browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setLoadsImagesAutomatically(true);

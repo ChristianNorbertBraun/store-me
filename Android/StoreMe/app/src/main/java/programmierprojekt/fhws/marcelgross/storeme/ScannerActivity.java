@@ -15,6 +15,7 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
     private ZXingScannerView mScannerView;
     private String result1, result2;
     private int resultPosition;
+    private ActivityRegistry ar = new ActivityRegistry();
 
     @Override
     public void onCreate(Bundle state) {
@@ -22,6 +23,8 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
         mScannerView = new ZXingScannerView(this);
         setContentView(mScannerView);
         getSupportActionBar().hide();
+
+        ar.register(this);
 
         Intent intent = getIntent();
         resultPosition = intent.getIntExtra("Scan", -1);
