@@ -1,0 +1,58 @@
+package programmierprojekt.fhws.marcelgross.storeme;
+
+import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+
+import com.google.zxing.Result;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+
+public class ScannerActivity extends ActionBarActivity implements ZXingScannerView.ResultHandler {
+
+    private ZXingScannerView mScannerView;
+    private String result1, result2;
+    private int resultPosition;
+
+    @Override
+    public void onCreate(Bundle state) {
+        super.onCreate(state);
+        mScannerView = new ZXingScannerView(this);
+        setContentView(mScannerView);
+        getSupportActionBar().hide();
+
+        Intent intent = getIntent();
+        resultPosition = intent.getIntExtra("Scan", -1);
+        result1 = intent.getStringExtra("Scan1");
+        result2 = intent.getStringExtra("Scan2");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        Intent intent = new Intent(ScannerActivity.this, ResultActivity.class);
+        if (resultPosition == 1){
+            intent.putExtra("result1", rawResult.getText());
+            intent.putExtra("result2", result2);
+        } else if (resultPosition == 2){
+            intent.putExtra("result1", result1);
+            intent.putExtra("result2", rawResult.getText());
+        }
+        startActivity(intent);
+    }
+
+
+}
