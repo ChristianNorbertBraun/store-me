@@ -8,6 +8,7 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 
 public class ResultActivity extends ActionBarActivity {
@@ -25,6 +26,7 @@ public class ResultActivity extends ActionBarActivity {
         Intent intent = getIntent();
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
+
         browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setLoadsImagesAutomatically(true);

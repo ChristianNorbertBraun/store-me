@@ -3,6 +3,7 @@ package programmierprojekt.fhws.marcelgross.storeme;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 
@@ -24,8 +25,9 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
 
         Intent intent = getIntent();
         resultPosition = intent.getIntExtra("Scan", -1);
-        result1 = intent.getStringExtra("Scan1");
-        result2 = intent.getStringExtra("Scan2");
+        result1 = intent.getStringExtra("result1");
+        result2 = intent.getStringExtra("result2");
+
     }
 
     @Override
@@ -47,10 +49,13 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
         if (resultPosition == 1){
             intent.putExtra("result1", rawResult.getText());
             intent.putExtra("result2", result2);
+
         } else if (resultPosition == 2){
             intent.putExtra("result1", result1);
             intent.putExtra("result2", rawResult.getText());
+
         }
+
         startActivity(intent);
     }
 
