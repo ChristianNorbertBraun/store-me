@@ -5,7 +5,8 @@
 var templates = {
     login: "design/login.tpl",
     register: "design/register.tpl",
-    dashboard: "design/dashboard.tpl"
+    dashboard: "design/dashboard.tpl",
+    manager: "design/manager.tpl"
 };
 
 var english = {

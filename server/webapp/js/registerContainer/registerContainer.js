@@ -30,7 +30,6 @@ var registerContainer = Ractive.extend({
 
     data: {},
     oninit: function() {
-
     }
 
 
