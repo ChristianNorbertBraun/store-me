@@ -39,27 +39,29 @@ var dashboardContainer = Ractive.extend({
                     </div>\
                     \
                     <div class="col-sm-9">\
-                        <table id="item-table" class="table table-bordered">\
-                            <thead class="item-table-header">\
-                                <tr>\
-                                    {{#each table.header}}\
-                                        <th on-click="sort">{{column}}</th>\
-                                    {{/each}}\
-                                </tr>\
-                            </thead>\
-                            \
-                            <tbody>\
-                                {{#each table.data}}\
+                        <div class="panel panel-default">\
+                            <table id="item-table" class="table table-bordered">\
+                                <thead class="item-table-header">\
                                     <tr>\
-                                        <td>{{date}}</td>\
-                                        <td>{{container}}</td>\
-                                        <td>{{item}}</td>\
-                                        <td>{{amount}}</td>\
-                                        <td>{{employee}}</td>\
+                                        {{#each table.header}}\
+                                            <th on-click="sort">{{column}}</th>\
+                                        {{/each}}\
                                     </tr>\
-                                {{/each}}\
-                            </tbody>\
-                        </table>\
+                                </thead>\
+                                \
+                                <tbody>\
+                                    {{#each table.data}}\
+                                        <tr>\
+                                            <td>{{date}}</td>\
+                                            <td>{{container}}</td>\
+                                            <td>{{item}}</td>\
+                                            <td>{{amount}}</td>\
+                                            <td>{{employee}}</td>\
+                                        </tr>\
+                                    {{/each}}\
+                                </tbody>\
+                            </table>\
+                        </div>\
                     </div>\
                 </div>\
             </div>\
