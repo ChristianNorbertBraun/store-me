@@ -94,6 +94,20 @@ var english = {
             }],
         info:{
             title:'Item Info'
+        },
+        data:{
+            container:[{
+                name:"Test Container",
+                parentid:"",
+                attributes:[{
+                    name:'width',
+                    value:'200',
+                    unit:'cm',
+                    type:'quantity',
+                    must:true
+                }
+                ]
+            }]
         }
     }
 };
