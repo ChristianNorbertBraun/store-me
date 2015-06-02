@@ -41,6 +41,9 @@ var english = {
         table: {
             header: [
                 {
+                    column: 'Action'
+                },
+                {
                     column: 'Date'
                 },
                 {
