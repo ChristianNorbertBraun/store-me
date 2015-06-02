@@ -6,10 +6,12 @@ var name, pass, passwordConfirmed;
 function register() {
     try
     {
+        $.couch.urlPrefix = "http://localhost:5984";
         getValues();
         checkNull();
         checkIfUserAlreadyExist();
         checkPasswordConfirmation();
+        createUser();
     }
     catch(err)
     {
@@ -21,6 +23,7 @@ function getValues()
     name = $('#username').val();
     pass = $('#password').val();
     passwordConfirmed = $('#confirmed-password').val();
+    //throw "hello";
 }
 
 //have to be changed if final DB is ready
@@ -28,25 +31,28 @@ function checkIfUserAlreadyExist()
 {
     var mapFunction = function (doc)
     {
-        if(doc.username == name) {
+        if(doc.username) {
             emit("username", doc.username);
         }
     };
-    $.couch.db("storeme").query(mapFunction,"_count", "javascript", {
+
+    $.couch.db("storeme").query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
-            if(data.total_rows == 1) window.alert("true");
-            else
-            {
-                window.alert(userExist);
-                throw "User already exist";
+            var x = data["rows"];
+            var i;
+            for (i = 0; i < data["total_rows"]; i++) {
+                if (x[i].value == name) {
+                    window.alert("User already exist!");
+                }
             }
         },
         error: function (status) {
-
+            console.log(status);
         },
         reduce: false
     });
+
 }
 
 function checkNull()
@@ -59,6 +65,7 @@ function checkNull()
     {
         window.alert(noPassword);
         throw "missing password"
+    }
 }
 
 function checkPasswordConfirmation()
@@ -69,4 +76,24 @@ function checkPasswordConfirmation()
         throw "Password doesn't match the confirmation";
     }
 }
+
+function createUser()
+{
+    var user =
+    {
+        _id: this.name,
+        "type": "User",
+        "username": this.name,
+        "password": this.pass
+    };
+    $.couch.db("storeme").saveDoc(user, {
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(status) {
+            console.log(status);
+            throw "can not create User";
+        }
+    });
 }
+
