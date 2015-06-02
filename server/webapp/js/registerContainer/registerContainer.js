@@ -10,16 +10,16 @@ var registerContainer = Ractive.extend({
                 <h3 class="text-center">Sign Up</h3>\
                 <div class="login-group center-block">\
                     <div class="input-group">\
-                        <input class="form-control login-input" type="text" placeholder="Username"/>\
+                        <input id="username" class="form-control login-input" type="text" placeholder="Username"/>\
                     </div>\
                     <div class="input-group">\
-                        <input class="form-control login-input" type="password" placeholder="Password"/>\
+                        <input id="password" class="form-control login-input" type="password" placeholder="Password"/>\
                     </div>\
                     <div class="input-group">\
-                        <input class="form-control login-input" type="password" placeholder="Confirm Password"/>\
+                        <input id="confirmed-password" class="form-control login-input" type="password" placeholder="Confirm Password"/>\
                     </div>\
                 </div>\
-                <button type="button" class="btn btn-primary login-btn center-block">Sign Up!</button>\
+                <button type="button" class="btn btn-primary login-btn center-block" onclick="register()">Sign Up!</button>\
             </div>\
           </div>\
           <div class="create-account center-block">\

@@ -10,6 +10,13 @@ var templates = {
 };
 
 var english = {
+    registration:{
+        noUsername:"Missing username",
+        noPassword:"Missing password",
+        passwordDontMatch:"Password doesn't match the confirmation",
+        userExist: "User already exist"
+    },
+
     login:{
         button:"login",
         question:"Don't have a StoreMe account yet?",
