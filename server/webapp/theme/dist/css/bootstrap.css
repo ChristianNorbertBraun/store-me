@@ -4,6 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -2990,7 +2991,8 @@ select[multiple].form-group-lg .form-control {
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-family: "Roboto";
+  font-size: 20px;
   font-weight: normal;
   line-height: 1.42857143;
   text-align: center;
@@ -3006,6 +3008,8 @@ select[multiple].form-group-lg .form-control {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+          box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
 }
 .btn:focus,
 .btn:active:focus,
@@ -3087,8 +3091,8 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #3498db;
+  border-color: #2980b9;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -3097,8 +3101,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
+  background-color: #217dbb;
+  border-color: #1e5d87;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3123,11 +3127,11 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #3498db;
+  border-color: #2980b9;
 }
 .btn-primary .badge {
-  color: #337ab7;
+  color: #3498db;
   background-color: #fff;
 }
 .btn-success {
