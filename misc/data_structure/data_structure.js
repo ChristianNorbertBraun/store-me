@@ -31,6 +31,25 @@ Container.prototype.addItem = function(item)
     this.items.push(item);
 }
 
+Container.prototype.removeItem = function(itemID, amount)
+{
+    for (var i = 0; i < this.items.length; i++)
+    {
+        if (this.items[i].itemID === itemID)
+        {
+            if (this.items[i].amount > amount)
+            {
+                this.items[i].amount -= amount;
+            }
+            else
+            {
+                delete this.items[i];
+            }
+            break;
+        }
+    }
+}
+
 // get all items from container and subcontainers
 Container.prototype.getAllItems = function()
 {
@@ -78,3 +97,8 @@ console.log(baseContainer.getAllItems());
 console.log(subContainer1.getAllItems());
 console.log(subContainer2.getAllItems());
 console.log(subContainer3.getAllItems());
+
+//baseContainer.removeItem("1", 6);
+console.log(baseContainer);
+//baseContainer.removeItem("1", 1);
+console.log(baseContainer);
