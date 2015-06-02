@@ -4,6 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -2244,6 +2245,8 @@ pre code {
   }
 }
 table {
+  font-family: "Roboto";
+  font-weight: normal;
   background-color: transparent;
 }
 caption {
@@ -2253,7 +2256,8 @@ caption {
   text-align: left;
 }
 th {
-  text-align: left;
+  font-size: 20px;
+  text-align: center;
 }
 .table {
   width: 100%;
@@ -2302,11 +2306,13 @@ th {
 }
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > th,
+.table-bordered > tfoot > tr > th {
+  border: 1px solid #337ab7;
+}
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid #337ab7;
+  border: 1px solid #ddd;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -2990,7 +2996,8 @@ select[multiple].form-group-lg .form-control {
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-family: "Roboto";
+  font-size: 20px;
   font-weight: normal;
   line-height: 1.42857143;
   text-align: center;
@@ -3006,6 +3013,8 @@ select[multiple].form-group-lg .form-control {
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+          box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
 }
 .btn:focus,
 .btn:active:focus,
@@ -3087,8 +3096,8 @@ fieldset[disabled] .btn-default.active {
 }
 .btn-primary {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #3498db;
+  border-color: #2980b9;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -3097,8 +3106,8 @@ fieldset[disabled] .btn-default.active {
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
   color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
+  background-color: #217dbb;
+  border-color: #1e5d87;
 }
 .btn-primary:active,
 .btn-primary.active,
@@ -3123,11 +3132,11 @@ fieldset[disabled] .btn-primary:active,
 .btn-primary.disabled.active,
 .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary.active {
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  background-color: #3498db;
+  border-color: #2980b9;
 }
 .btn-primary .badge {
-  color: #337ab7;
+  color: #3498db;
   background-color: #fff;
 }
 .btn-success {
@@ -5306,17 +5315,20 @@ a.list-group-item-danger.active:focus {
 }
 .panel {
   margin-bottom: 20px;
+  font-family: "Roboto";
+  font-weight: normal;
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 4px;
-  -webkit-box-shadow: 3px 3px 1px rgba(0, 0, 0, .05);
-          box-shadow: 3px 3px 1px rgba(0, 0, 0, .05);
+  -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+          box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
 }
 .panel-body {
   padding: 15px;
 }
 .panel-heading {
   padding: 10px 15px;
+  font-size: 20px;
   border-bottom: 1px solid transparent;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
@@ -5539,16 +5551,16 @@ a.list-group-item-danger.active:focus {
   border-color: #ddd;
 }
 .panel-default > .panel-heading {
-  color: #333;
-  background-color: #f5f5f5;
+  color: #fff;
+  background-color: #337ab7;
   border-color: #ddd;
 }
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #ddd;
 }
 .panel-default > .panel-heading .badge {
-  color: #f5f5f5;
-  background-color: #333;
+  color: #337ab7;
+  background-color: #fff;
 }
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #ddd;

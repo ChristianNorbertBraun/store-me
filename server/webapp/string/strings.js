@@ -59,6 +59,7 @@ var english = {
 
             data: [
                 {
+                    action: 'stored',
                     date: '16:25 13.03.2003',
                     container: 'R4 F2 B3',
                     item: 'Hohlkopfzylinder',
@@ -67,6 +68,7 @@ var english = {
                 },
 
                 {
+                    action: 'removed',
                     date: '09:47 09.03.2003',
                     container: 'R2 F1 B12',
                     item: 'Playstation 4',
@@ -75,6 +77,7 @@ var english = {
                 },
 
                 {
+                    action: 'stored',
                     date: '12:32 18.04.2003',
                     container: 'R5 F2 B10',
                     item: 'iPhone 4S',
