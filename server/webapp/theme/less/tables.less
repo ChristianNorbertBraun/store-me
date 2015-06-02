@@ -4,6 +4,8 @@
 
 
 table {
+  font-family: "Roboto";
+  font-weight: normal;
   background-color: @table-bg;
 }
 caption {
@@ -13,7 +15,8 @@ caption {
   text-align: left;
 }
 th {
-  text-align: left;
+  text-align: center;
+  font-size: 20px;
 }
 
 
@@ -91,9 +94,11 @@ th {
   > tbody,
   > tfoot {
     > tr {
-      > th,
-      > td {
+      > th {
         border: 1px solid @table-border-color;
+      }
+      > td {
+        border: 1px solid #ddd;
       }
     }
   }
