@@ -14,15 +14,21 @@ var managerContainer = Ractive.extend(
                 \
                 <div class="row">\
                     <div class="col-sm-4">\
-                        <div class="panel panel-primary info-panel">\
-                            <div class="panel-heading">Hi Chris</div>\
+                        <div id="container-list" class="panel panel-primary info-panel">\
+                            <div class="panel-heading">{{panels[0].title}}</div>\
                             <div class="panel-body">Bye Chris</div>\
                         </div>\
                     </div>\
                     <div class="col-sm-4">\
-                        <div class="panel panel-primary info-panel">\
-                            <div class="panel-heading">Hi Chris</div>\
+                        <div id="item-list" class="panel panel-primary info-panel">\
+                            <div class="panel-heading">{{panels[1].title}}</div>\
                             <div class="panel-body">Bye Chris</div>\
+                        </div>\
+                   </div>\
+                   \
+                   <div class="col-sm-4">\
+                        <div id="item-info" class="container">\
+                            \
                         </div>\
                    </div>\
                 </div>\

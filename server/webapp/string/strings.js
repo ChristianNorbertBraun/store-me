@@ -83,6 +83,18 @@ var english = {
                 }
             ]
         }
+    },
+
+    manager: {
+        panels:[{
+                title:'Container'
+            },
+            {
+                title:'Items'
+            }],
+        info:{
+            title:'Item Info'
+        }
     }
 };
 
