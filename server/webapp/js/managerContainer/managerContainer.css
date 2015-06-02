@@ -1,5 +1,17 @@
 .container-entry{
-    border-bottom: 2px solid #dddddd;
     height:20px;
     margin-bottom: 10px;
+}
+
+.attributes{
+    display: inline;
+}
+
+.vertical-line{
+    background-color: #dddddd;
+    height: 1px;
+}
+
+.badge{
+    margin-right: 10px;
 }
