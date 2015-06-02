@@ -25,3 +25,12 @@ th.headerSortUp {
 th.headerSortDown {
     color: #0F0;
 }
+
+.table-icon {
+    height:30px;
+    width: auto;
+}
+
+.icon-field {
+    text-align: center;
+}

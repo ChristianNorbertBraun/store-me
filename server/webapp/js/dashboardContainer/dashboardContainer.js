@@ -52,7 +52,13 @@ var dashboardContainer = Ractive.extend({
                                 <tbody>\
                                     {{#each table.data}}\
                                         <tr>\
-                                            <td>{{status}}</td>\
+                                            <td class="icon-field">\
+                                            {{#if stored}}\
+                                                <img class="table-icon" src="resources/icons/stored-icon.jpg">\
+                                            {{else}}\
+                                                <img class="table-icon" src="resources/icons/removed-icon.jpg">\
+                                            {{/if}}\
+                                            </td>\
                                             <td>{{date}}</td>\
                                             <td>{{container}}</td>\
                                             <td>{{item}}</td>\

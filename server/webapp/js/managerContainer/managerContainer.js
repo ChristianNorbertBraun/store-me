@@ -16,7 +16,15 @@ var managerContainer = Ractive.extend(
                     <div class="col-sm-4">\
                         <div id="container-list" class="panel panel-primary info-panel">\
                             <div class="panel-heading">{{panels[0].title}}</div>\
-                            <div class="panel-body">Bye Chris</div>\
+                            <div class="panel-body">\
+                            {{#each container}}\
+                                <div class="container-entry">\
+                                    <div class="header">\
+                                        <h3>BLA</h3>\
+                                    </div>\
+                                </div>\
+                            {{/each}}\
+                            </div>\
                         </div>\
                     </div>\
                     <div class="col-sm-4">\
@@ -28,7 +36,6 @@ var managerContainer = Ractive.extend(
                    \
                    <div class="col-sm-4">\
                         <div id="item-info" class="container">\
-                            \
                         </div>\
                    </div>\
                 </div>\
