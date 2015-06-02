@@ -11,7 +11,7 @@ var templates = {
 
 var english = {
     login:{
-        button:"login",
+        button:"Login",
         question:"Don't have a StoreMe account yet?",
         signup:"Sign Up!"
     },
