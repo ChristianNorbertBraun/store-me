@@ -1,17 +1,13 @@
-.container-entry{
-    height:20px;
-    margin-bottom: 10px;
+.badge{
+    margin-right: 5px;
 }
+.list-group-item:hover{
+    background-color: #3498db;
+    color: #ffffff;
+}
+
 
 .attributes{
-    display: inline;
+    display:inline;
 }
 
-.vertical-line{
-    background-color: #dddddd;
-    height: 1px;
-}
-
-.badge{
-    margin-right: 10px;
-}
