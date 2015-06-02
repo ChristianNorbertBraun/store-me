@@ -18,7 +18,7 @@ var english = {
     },
 
     login:{
-        button:"login",
+        button:"Login",
         question:"Don't have a StoreMe account yet?",
         signup:"Sign Up!"
     },
@@ -48,6 +48,9 @@ var english = {
         table: {
             header: [
                 {
+                    column: 'Action'
+                },
+                {
                     column: 'Date'
                 },
                 {
@@ -66,7 +69,7 @@ var english = {
 
             data: [
                 {
-                    action: 'stored',
+                    stored: true,
                     date: '16:25 13.03.2003',
                     container: 'R4 F2 B3',
                     item: 'Hohlkopfzylinder',
@@ -75,7 +78,7 @@ var english = {
                 },
 
                 {
-                    action: 'removed',
+                    stored: false,
                     date: '09:47 09.03.2003',
                     container: 'R2 F1 B12',
                     item: 'Playstation 4',
@@ -84,7 +87,7 @@ var english = {
                 },
 
                 {
-                    action: 'stored',
+                    stored: true,
                     date: '12:32 18.04.2003',
                     container: 'R5 F2 B10',
                     item: 'iPhone 4S',
@@ -104,6 +107,62 @@ var english = {
             }],
         info:{
             title:'Item Info'
+        },
+        data:{
+            container:[{
+                name:'Test Container',
+                parentid:'',
+                attributes:[{
+                    name:'width',
+                    value:'200',
+                    unit:'cm',
+                    type:'quantity',
+                    must:true
+                },
+                {
+                    name:'height',
+                    value:'300',
+                    unit:'cm',
+                    type:'quantity',
+                    must:true
+                }],
+                items:[{
+                    name:'Nothing',
+                    id:'2',
+                    amount:20,
+                    attributes:[{
+                        name:'height',
+                        value:'300'
+                    }]
+                }],
+                subcontainer:[{
+                    name:'Test Container',
+                    parentid:'',
+                    attributes:[{
+                        name:'width',
+                        value:'200',
+                        unit:'cm',
+                        type:'quantity',
+                        must:true
+                    },
+                        {
+                            name:'height',
+                            value:'300',
+                            unit:'cm',
+                            type:'quantity',
+                            must:true
+                        }],
+                    items:[{
+                        name:'Nothing',
+                        id:'2',
+                        amount:20,
+                        attributes:[{
+                            name:'height',
+                            value:'300'
+                        }]
+                    }]
+                }]
+            }]
         }
     }
 };
