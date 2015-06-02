@@ -100,16 +100,58 @@ var english = {
         },
         data:{
             container:[{
-                name:"Test Container",
-                parentid:"",
+                name:'Test Container',
+                parentid:'',
                 attributes:[{
                     name:'width',
                     value:'200',
                     unit:'cm',
                     type:'quantity',
                     must:true
-                }
-                ]
+                },
+                {
+                    name:'height',
+                    value:'300',
+                    unit:'cm',
+                    type:'quantity',
+                    must:true
+                }],
+                items:[{
+                    name:'Nothing',
+                    id:'2',
+                    amount:20,
+                    attributes:[{
+                        name:'height',
+                        value:'300'
+                    }]
+                }],
+                subcontainer:[{
+                    name:'Test Container',
+                    parentid:'',
+                    attributes:[{
+                        name:'width',
+                        value:'200',
+                        unit:'cm',
+                        type:'quantity',
+                        must:true
+                    },
+                        {
+                            name:'height',
+                            value:'300',
+                            unit:'cm',
+                            type:'quantity',
+                            must:true
+                        }],
+                    items:[{
+                        name:'Nothing',
+                        id:'2',
+                        amount:20,
+                        attributes:[{
+                            name:'height',
+                            value:'300'
+                        }]
+                    }]
+                }]
             }]
         }
     }
