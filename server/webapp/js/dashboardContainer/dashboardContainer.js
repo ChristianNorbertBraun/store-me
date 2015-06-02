@@ -52,6 +52,7 @@ var dashboardContainer = Ractive.extend({
                                 <tbody>\
                                     {{#each table.data}}\
                                         <tr>\
+                                            <td>{{status}}</td>\
                                             <td>{{date}}</td>\
                                             <td>{{container}}</td>\
                                             <td>{{item}}</td>\
