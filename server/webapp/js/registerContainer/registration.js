@@ -9,9 +9,23 @@ function register() {
         $.couch.urlPrefix = "http://localhost:5984";
         getValues();
         checkNull();
-        checkIfUserAlreadyExist();
-        checkPasswordConfirmation();
-        createUser();
+        checkIfUserAlreadyExist(function(exists, data){
+            if (exists) {
+                window.alert(strings.registration.userExist);
+                throw 'User already exists';
+            }
+
+            // work with data
+            //console.log(data);
+            // end work with data
+
+            checkPasswordConfirmation();
+            createUser();
+            //TODO: - open next page;
+            //      - start registration after pressing Enter in passwordConfirmation
+            //      - secure Data transaction; maybe with https
+        });
+
     }
     catch(err)
     {
@@ -23,11 +37,10 @@ function getValues()
     name = $('#username').val();
     pass = $('#password').val();
     passwordConfirmed = $('#confirmed-password').val();
-    //throw "hello";
 }
 
 //have to be changed if final DB is ready
-function checkIfUserAlreadyExist()
+function checkIfUserAlreadyExist(cbFn)
 {
     var mapFunction = function (doc)
     {
@@ -38,14 +51,15 @@ function checkIfUserAlreadyExist()
 
     $.couch.db("storeme").query(mapFunction, "_count", "javascript", {
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             var x = data["rows"];
             var i;
             for (i = 0; i < data["total_rows"]; i++) {
                 if (x[i].value == name) {
-                    window.alert("User already exist!");
+                    cbFn(true);
                 }
             }
+            cbFn(false, data);
         },
         error: function (status) {
             console.log(status);
@@ -58,12 +72,12 @@ function checkIfUserAlreadyExist()
 function checkNull()
 {
     if(!name) {
-        window.alert(noUsername);
+        window.alert(strings.registration.noUsername);
         throw "missing username";
     }
     else if(!pass)
     {
-        window.alert(noPassword);
+        window.alert(strings.registration.noPassword);
         throw "missing password"
     }
 }
@@ -72,7 +86,7 @@ function checkPasswordConfirmation()
 {
     if(pass != passwordConfirmed)
     {
-        window.alert(passwordDontMatch)
+        window.alert(strings.registration.passwordDontMatch);
         throw "Password doesn't match the confirmation";
     }
 }
@@ -88,11 +102,10 @@ function createUser()
     };
     $.couch.db("storeme").saveDoc(user, {
         success: function(data) {
-            console.log(data);
+            //console.log(data);
         },
         error: function(status) {
             console.log(status);
-            throw "can not create User";
         }
     });
 }
