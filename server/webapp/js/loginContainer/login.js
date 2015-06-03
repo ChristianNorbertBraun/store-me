@@ -6,7 +6,7 @@ var loginName, loginPassword;
 function tryLogin()
 {
     try {
-        $.couch.urlPrefix = "http://localhost:5984";
+        $.couch.urlPrefix = strings.link.dbConnection;
         getLoginValues();
         checkNullLoginValues();
         LoginCheckUserValues(function(userExist, passwordCorrect){

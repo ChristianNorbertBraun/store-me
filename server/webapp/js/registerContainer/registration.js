@@ -6,7 +6,7 @@ var name, pass, passwordConfirmed;
 function register() {
     try
     {
-        $.couch.urlPrefix = "http://localhost:5984";
+        $.couch.urlPrefix = strings.link.dbConnection;
         getValues();
         checkNull();
         checkIfUserAlreadyExist(function(exists, data){

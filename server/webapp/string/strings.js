@@ -12,7 +12,8 @@ var templates = {
 var english = {
 
     link:{
-        toDashboard:"dashboard.html"
+        toDashboard:"dashboard.html",
+        dbConnection:"http://localhost:5984"
     },
 
     registration:{
