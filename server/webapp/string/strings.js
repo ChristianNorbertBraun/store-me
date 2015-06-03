@@ -26,7 +26,11 @@ var english = {
     login:{
         button:"Login",
         question:"Don't have a StoreMe account yet?",
-        signup:"Sign Up!"
+        signup:"Sign Up!",
+        noUsername:"Please enter a Username",
+        noPassword:"Please enter a Password",
+        noUser:"There is no User with this Username",
+        wrongPassword:"Password is incorrect"
     },
 
     dashboard: {

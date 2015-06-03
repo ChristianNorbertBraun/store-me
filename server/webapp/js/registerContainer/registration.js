@@ -33,6 +33,7 @@ function register() {
             });
 
             //TODO: secure Data transaction; maybe with https
+            //TODO: check if password safe
         });
 
     }

@@ -10,13 +10,13 @@ var loginContainer = Ractive.extend({
                 <h3 class="text-center">Login</h3>\
                 <div class="login-group center-block">\
                     <div class="input-group">\
-                        <input class="form-control login-input" type="text" placeholder="Username"/>\
+                        <input id="login-username" class="form-control login-input" type="text" placeholder="Username"/>\
                     </div>\
                     <div class="input-group">\
-                        <input class="form-control login-input" type="password" placeholder="Password"/>\
+                        <input id="login-password" class="form-control login-input" type="password" placeholder="Password" onkeypress="keyHandlerLogin(event)"/>\
                     </div>\
                 </div>\
-                <button type="button" class="btn btn-primary login-btn center-block">{{button}}</button>\
+                <button type="button" class="btn btn-primary login-btn center-block" onclick="tryLogin()">{{button}}</button>\
             </div>\
           </div>\
           <div class="create-account center-block">\
