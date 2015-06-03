@@ -16,7 +16,7 @@ var registerContainer = Ractive.extend({
                         <input id="password" class="form-control login-input" type="password" placeholder="Password"/>\
                     </div>\
                     <div class="input-group">\
-                        <input id="confirmed-password" class="form-control login-input" type="password" placeholder="Confirm Password"/>\
+                        <input id="confirmed-password" class="form-control login-input" type="password" placeholder="Confirm Password" onkeypress="keyHandler(event)"/>\
                     </div>\
                 </div>\
                 <button type="button" class="btn btn-primary login-btn center-block" onclick="register()">Sign Up!</button>\

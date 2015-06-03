@@ -21,15 +21,21 @@ function register() {
 
             checkPasswordConfirmation();
             createUser();
-            //TODO: - open next page;
-            //      - start registration after pressing Enter in passwordConfirmation
-            //      - secure Data transaction; maybe with https
+            location.href = "http://localhost:63342/gruppe-1-storeme/server/webapp/dashboard.html";
+
+            //TODO: secure Data transaction; maybe with https
         });
 
     }
     catch(err)
     {
     }
+}
+
+function keyHandler(e)
+{
+    var key = e.keyCode;
+    if(key == 13) register();
 }
 
 function getValues()
