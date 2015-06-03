@@ -41,7 +41,7 @@ function register() {
     }
 }
 
-function keyHandler(e)
+function keyHandlerRegister(e)
 {
     var key = e.keyCode;
     if(key == 13) register();
