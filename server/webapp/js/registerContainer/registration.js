@@ -49,8 +49,8 @@ function keyHandlerRegister(e)
 
 function getValues()
 {
-    name = $('#username').val();
-    pass = $('#password').val();
+    name = $('#register-username').val();
+    pass = $('#register-password').val();
     passwordConfirmed = $('#confirmed-password').val();
 }
 
