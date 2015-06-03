@@ -20,8 +20,17 @@ function register() {
             // end work with data
 
             checkPasswordConfirmation();
-            createUser();
-            location.href = "http://localhost:63342/gruppe-1-storeme/server/webapp/dashboard.html";
+            createUser(function(created){
+                if(created)
+                {
+                    location.href = strings.link.toDashboard;
+                }
+                else
+                {
+                    window.alert(strings.registration.creatingError);
+                }
+
+            });
 
             //TODO: secure Data transaction; maybe with https
         });
@@ -97,7 +106,7 @@ function checkPasswordConfirmation()
     }
 }
 
-function createUser()
+function createUser(cbFn)
 {
     var user =
     {
@@ -108,10 +117,12 @@ function createUser()
     };
     $.couch.db("storeme").saveDoc(user, {
         success: function(data) {
-            //console.log(data);
+            cbFn(true);
+            console.log(data);
         },
         error: function(status) {
             console.log(status);
+            cbFn(false);
         }
     });
 }

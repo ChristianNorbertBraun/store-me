@@ -12,14 +12,15 @@ var templates = {
 var english = {
 
     link:{
-        toDashboard:"http://localhost:63342/gruppe-1-storeme/server/webapp/dashboard.html"
+        toDashboard:"dashboard.html"
     },
 
     registration:{
         noUsername:"Missing username!",
         noPassword:"Missing password!",
         passwordDontMatch:"Password doesn't match the confirmation!",
-        userExist: "User already exist!"
+        userExist: "User already exist!",
+        creatingError: "Error while creating User"
     },
 
     login:{
