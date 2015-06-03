@@ -10,6 +10,11 @@ var templates = {
 };
 
 var english = {
+
+    link:{
+        toDashboard:"http://localhost:63342/gruppe-1-storeme/server/webapp/dashboard.html"
+    },
+
     registration:{
         noUsername:"Missing username!",
         noPassword:"Missing password!",
