@@ -1,0 +1,1 @@
+<inventoryContainer></inventoryContainer>

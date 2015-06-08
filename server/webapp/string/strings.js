@@ -6,7 +6,8 @@ var templates = {
     login: "design/login.tpl",
     register: "design/register.tpl",
     dashboard: "design/dashboard.tpl",
-    manager: "design/manager.tpl"
+    manager: "design/manager.tpl",
+    inventory: "design/inventory.tpl"
 };
 
 var english = {
@@ -229,6 +230,10 @@ var english = {
                     }]
                 }]
         }
+    },
+
+    inventory: {
+
     }
 };
 
