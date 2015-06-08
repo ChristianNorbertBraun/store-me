@@ -31,6 +31,7 @@ Container.prototype.addItem = function(item)
     this.items.push(item);
 }
 
+// TODO:
 Container.prototype.removeItem = function(itemID, amount)
 {
     for (var i = 0; i < this.items.length; i++)
@@ -97,8 +98,4 @@ console.log(baseContainer.getAllItems());
 console.log(subContainer1.getAllItems());
 console.log(subContainer2.getAllItems());
 console.log(subContainer3.getAllItems());
-
-//baseContainer.removeItem("1", 6);
-console.log(baseContainer);
-//baseContainer.removeItem("1", 1);
 console.log(baseContainer);
