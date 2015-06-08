@@ -1,9 +1,11 @@
 .badge{
     margin-right: 5px;
 }
+
 .list-group-item:hover{
     background-color: #3498db;
     color: #ffffff;
+    border: 1px solid #3498db;
 }
 
 
@@ -20,4 +22,8 @@
         height: 500px;
         border: solid #dddddd 1px;
     }
+}
+
+.no-padding {
+    padding: 0px;
 }

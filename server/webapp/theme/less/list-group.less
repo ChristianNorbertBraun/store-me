@@ -29,11 +29,11 @@
 
   // Round the first and last items
   &:first-child {
-    .border-top-radius(@list-group-border-radius);
+    // Take out border radius: .border-top-radius(@list-group-border-radius);
   }
   &:last-child {
     margin-bottom: 0;
-    .border-bottom-radius(@list-group-border-radius);
+    // Take out border radius: .border-bottom-radius(@list-group-border-radius);
   }
 }
 
@@ -56,6 +56,7 @@ a.list-group-item {
     text-decoration: none;
     color: @list-group-link-hover-color;
     background-color: @list-group-hover-bg;
+    border: 0;
   }
 }
 
@@ -84,7 +85,8 @@ a.list-group-item {
     z-index: 2; // Place active items above their siblings for proper border styling
     color: @list-group-active-color;
     background-color: @list-group-active-bg;
-    border-color: @list-group-active-border;
+    // Before border-color: @list-group-active-border;
+    border: 0;
 
     // Force color to inherit for custom content
     .list-group-item-heading,
