@@ -184,7 +184,7 @@ var english = {
                         value:'true',
                         type:'boolean',
                         must:true
-                    },
+                        },
                         {
                             name:'weight',
                             value:'300',

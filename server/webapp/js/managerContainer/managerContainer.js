@@ -14,12 +14,12 @@ var managerContainer = Ractive.extend(
                 \
                 <div class="row">\
                     <div class="col-sm-4">\
-                        <div id="container-list" class="panel panel-primary info-panel">\
+                        <div class="panel panel-primary info-panel">\
                             <div class="panel-heading">{{panels[0].title}}</div>\
                             <div class="panel-body no-padding">\
-                                <div class="list-group">\
+                                <ul class="list-group" id="container-list" onclick="test()">\
                                     {{#each data.container}}\
-                                        <div class="list-group-item list-group-border">\
+                                        <li class="list-group-item list-group-border">\
                                             <div class="row">\
                                                 <div class="col-xs-10">\
                                                     <h4 class="list-group-item-heading">{{name}}</h4>\
@@ -33,9 +33,9 @@ var managerContainer = Ractive.extend(
                                                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>\
                                                 </div>\
                                             </div>\
-                                        </div>\
+                                        </li>\
                                     {{/each}}\
-                                </div>\
+                                </ul>\
                             </div>\
                         </div>\
                     </div>\
