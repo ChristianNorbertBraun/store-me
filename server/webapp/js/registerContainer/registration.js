@@ -18,7 +18,7 @@ function register() {
             // work with data
             //console.log(data);
             // end work with data
-
+            checkSafePassword();
             checkPasswordConfirmation();
             createUser(function(created){
                 if(created)
@@ -46,6 +46,28 @@ function keyHandlerRegister(e)
 {
     var key = e.keyCode;
     if(key == 13) register();
+}
+
+function checkSafePassword()
+{
+    if (this.pass.length < 7) notSafe();
+    var passwordArray = pass.split("");
+    var containBigLetter = false;
+    var containSmallLetter = false;
+    var containNumber = false;
+    for(var i = 0; i<this.pass.length; i++)
+    {
+        if(passwordArray[i] >= 'A' && passwordArray[i] <= 'Z') containBigLetter = true;
+        if(passwordArray[i] >= 'a' && passwordArray[i] <= 'z') containSmallLetter = true;
+        if(passwordArray[i] >= '0' && passwordArray[i] <= '9') containNumber = true;
+    }
+    if(!containBigLetter || !containSmallLetter || !containNumber) notSafe();
+}
+
+function notSafe()
+{
+    window.alert(strings.registration.PasswordNotSafe);
+    throw "Password not Safe";
 }
 
 function getValues()

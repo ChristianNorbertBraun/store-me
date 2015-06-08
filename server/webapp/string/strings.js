@@ -21,7 +21,8 @@ var english = {
         noPassword:"Missing password!",
         passwordDontMatch:"Password doesn't match the confirmation!",
         userExist: "User already exist!",
-        creatingError: "Error while creating User"
+        creatingError: "Error while creating User",
+        PasswordNotSafe: "Password is not Safe \n Password must contain: \n - at least 7 characters \n - a small letter \n - a big letter \n - a number"
     },
 
     login:{
