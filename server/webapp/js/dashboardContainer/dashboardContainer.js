@@ -43,8 +43,15 @@ var dashboardContainer = Ractive.extend({
                             <table id="item-table" class="table table-bordered">\
                                 <thead class="item-table-header">\
                                     <tr>\
-                                        {{#each table.header}}\
-                                            <th on-click="sort">{{column}}</th>\
+                                        {{#each table.header:i}}\
+                                            <th id="{{i}}" on-click="sortTable()">{{column}}\
+                                            <span class="dropdown">\
+                                                <span class="caret"></span>\
+                                            </span>\
+                                            <span class="dropup">\
+                                                <span class="caret">\
+                                                </span>\
+                                            </span></th>\
                                         {{/each}}\
                                     </tr>\
                                 </thead>\
@@ -75,7 +82,9 @@ var dashboardContainer = Ractive.extend({
         </div>\
         ',
 
-    data: {},
+    data: {
+        columnsorted: [false,true,false,false,false,false]
+    },
 
     oninit: function() {
 
@@ -83,8 +92,28 @@ var dashboardContainer = Ractive.extend({
 
     oncomplete: function() {
         $('#item-table').tablesorter();
+
+        $('.caret').each(function() {
+            $(this).toggle();
+        });
+    },
+
+    sortTable: function() {
+        //sort();
+        console.log($('#1').hasClass('headerSortDown'));
+
+        if ($('#1').hasClass('headerSortDown')) {
+            $('#1 > .dropup > .caret').hide();
+            $('#1 > .dropdown > .caret').show();
+        }
+        if ($('#1').hasClass('headerSortUp')) {
+            $('#1 > .dropup > .caret').show();
+            $('#1 > .dropdown > .caret').hide();
+        }
     }
 
 });
 
+// TODO:
+// jQuery function and onclick on li elements, then read out with this and try to change classes
 
