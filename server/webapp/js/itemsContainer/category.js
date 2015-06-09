@@ -2,16 +2,17 @@
  * Created by Waleska on 09.06.2015.
  */
 
-var categoryInputField = "hallo", markedCategory;
+var categoryInputField , markedCategory;
 
 function categoryAddOrEdit()
 {
     try
     {
-        $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+        $.couch.urlPrefix = strings.link.dbConnection;
         getCategoryInput();
         checkCategoryInputField();
         addCategoryToDB();
+        addCategoryToTable();
     }
     catch(err)
     {
@@ -20,10 +21,30 @@ function categoryAddOrEdit()
 
 function markField(id)
 {
+    blankOldElement();
     document.getElementById(id).style.backgroundColor = "#d3d3d3";
     markedCategory = id;
 }
 
+function blankOldElement()
+{
+    if(markedCategory)
+    {
+        document.getElementById(markedCategory).style.backgroundColor = "#ffffff";
+    }
+}
+
+function addCategoryToTable()
+{
+    var newCategoryRow = document.getElementById("category-table").insertRow();
+    newCategoryRow.addEventListener("click", function(event){
+        markField(event.target.id);
+    });
+    newCategoryRow.id = categoryInputField + "row";
+    var newCategory = newCategoryRow.insertCell(0);
+    newCategory.id = categoryInputField;
+    newCategory.innerHTML = categoryInputField;
+}
 
 function getCategoryInput() {
     categoryInputField = $('#category-input').val();
@@ -31,7 +52,11 @@ function getCategoryInput() {
 
 function checkCategoryInputField()
 {
-    if(!categoryInputField) throw "no input";
+    if(!categoryInputField)
+    {
+        window.alert(strings.categroy.noInput);
+        throw "no input";
+    }
 }
 
 function addCategoryToDB()
@@ -58,20 +83,21 @@ function categoryDelete()
 
     checkIfCategoryIsMarked();
     deleteCategoryFromDB();
+    deleteCategoryFromTable();
 }
 
 function checkIfCategoryIsMarked()
 {
     if(!markedCategory)
     {
-        window.alert("no category choosen!");
+        window.alert(strings.category.noCategory);
         throw "no category";
     }
 }
 
 function deleteCategoryFromDB()
 {
-    $.couch.db("items").openDoc("hallo", {
+    $.couch.db("items").openDoc(markedCategory, {
         success: function(data) {
             console.log(data);
             $.couch.db("items").removeDoc(data, {
@@ -87,4 +113,11 @@ function deleteCategoryFromDB()
             console.log(status);
         }
     });
+}
+
+function deleteCategoryFromTable()
+{
+    var tableRow = document.getElementById(markedCategory + "row");
+    document.getElementById("category-table").deleteRow(tableRow.rowIndex);
+    markedCategory = null;
 }
