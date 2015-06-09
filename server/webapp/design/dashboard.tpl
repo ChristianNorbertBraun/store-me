@@ -1,1 +1,2 @@
+<navbarContainer></navbarContainer>
 <dashboardContainer></dashboardContainer>
