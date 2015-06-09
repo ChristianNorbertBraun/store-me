@@ -1,16 +1,15 @@
 package programmierprojekt.fhws.marcelgross.storeme;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 
-public class ScannerActivity extends ActionBarActivity implements ZXingScannerView.ResultHandler {
+public class ScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView mScannerView;
     private String result1, result2;
@@ -22,8 +21,6 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
         super.onCreate(state);
         mScannerView = new ZXingScannerView(this);
         setContentView(mScannerView);
-        getSupportActionBar().hide();
-
         ar.register(this);
 
         Intent intent = getIntent();
@@ -49,6 +46,7 @@ public class ScannerActivity extends ActionBarActivity implements ZXingScannerVi
     @Override
     public void handleResult(Result rawResult) {
         Intent intent = new Intent(ScannerActivity.this, ResultActivity.class);
+
         if (resultPosition == 1){
             intent.putExtra("result1", rawResult.getText());
             intent.putExtra("result2", result2);
