@@ -38,7 +38,8 @@ var english = {
 
     category:{
         noInput: "There is no Input!",
-        noCategory: "no Category choosen!"
+        noCategory: "no Category choosen!",
+        alreadyExist: "Category already Exist"
     },
 
     dashboard: {
