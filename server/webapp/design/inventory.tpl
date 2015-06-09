@@ -1,1 +1,2 @@
+<navbarContainer></navbarContainer>
 <inventoryContainer></inventoryContainer>

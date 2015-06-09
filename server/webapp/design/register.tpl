@@ -1,1 +1,2 @@
+<navbarContainer></navbarContainer>
 <registerContainer></registerContainer>
