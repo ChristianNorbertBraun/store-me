@@ -108,19 +108,51 @@ function Container(containerName)
         this.subContainers = [];
     };
 
-    this.addItem = function(containerItem)
+    this.addItem = function(itemID, amount)
     {
-        containerItem.setParentContainerID(this.containerID);
-        this.items.push(containerItem);
+        var containerItem = this.containsItem(itemID);
+
+        if (containerItem != null)
+        {
+            containerItem.increaseAmount(amount);
+        }
+        else
+        {
+            containerItem = new ContainerItem(itemID, amount);
+            containerItem.setParentContainerID(this.containerID);
+            this.items.push(containerItem);
+        }
     };
 
-    this.removeItem = function(containerItemID)
+    this.containsItem = function(itemID)
+    {
+        var result = null;
+
+        for (var i = 0; i < this.items.length; i++)
+        {
+            if (this.items[i].getID() === itemID)
+            {
+                result = this.items[i];
+                break;
+            }
+        }
+        return result;
+    };
+
+    this.removeItem = function(itemID, amount)
     {
         for (var i = 0; i < this.items.length; i++)
         {
-            if (this.items[i].getID() === containerItemID)
+            if (this.items[i].getID() === itemID)
             {
-                this.items = removeFromArray(this.items, i);
+                if (this.items[i].getAmount() === amount)
+                {
+                    removeFromArray(this.items, i);
+                }
+                else
+                {
+                    this.items[i].decreaseAmount(amount);
+                }
                 break;
             }
         }
@@ -252,6 +284,16 @@ function ContainerItem(itemID, amount)
     {
         this.parentContainerID = parentContainerID;
     };
+
+    this.increaseAmount = function(amount)
+    {
+        this.amount += amount;
+    };
+
+    this.decreaseAmount = function(amount)
+    {
+        this.amount -= amount;
+    };
 }
 
 function Item(itemID, itemName)
@@ -347,7 +389,7 @@ function ItemAttribute(attributeName, value, unit, type)
 }
 
 // functions
-
+/*
 var removeFromArray = function(array, index)
 {
     var result = [];
@@ -361,6 +403,14 @@ var removeFromArray = function(array, index)
     }
     return result;
 };
+*/
+var removeFromArray = function(array, index)
+{
+    var hold = array[index];
+    array[index] = array[array.length-1];
+    array[array.length-1] = hold;
+    array.pop();
+}
 
 var copyArray = function(array)
 {
@@ -374,7 +424,7 @@ var copyArray = function(array)
 };
 
 // test cases
-
+/*
 console.log("Construct Container");
 var testStorage = new Container("Storage");
 var array = [];
@@ -456,6 +506,7 @@ var testItem3 = new ContainerItem("A003", 47);
 var testItem4 = new ContainerItem("A004", 9);
 var testItem5 = new ContainerItem("A005", 1);
 console.log(JSON.stringify(testContainer));
+console.log(testContainer);
 
 console.log("Get all items");
 testContainer.addItem(testItem1);
@@ -465,8 +516,21 @@ subContainer3.addItem(testItem4);
 subContainer7.addItem(testItem5);
 console.log(testContainer.getAllItems());
 
-// TODO: handling amount of items and sub containers
+console.log("Adding amounts of items");
+testContainerB = new Container("Test container for items");
+testContainerB.addItem("0815", 7);
+testContainerB.addItem("0815", 7);
+console.log(testContainerB.getItems().length === 1);
+console.log(testContainerB.getItems()[0].getAmount() === 14);
+testContainerB.removeItem("0815", 7);
+console.log(testContainerB.getItems()[0].getAmount() === 7);
+testContainerB.removeItem("0815", 7);
+console.log(testContainerB.getItems().length === 0);
+ */
+
+// TODO: handling amout of sub containers
 // TODO: already exist checks
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
 // TODO: information hiding
+// TODO: link item id with items

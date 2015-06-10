@@ -14,9 +14,28 @@ var inventoryContainer = Ractive.extend({
                                     {{panel.title.criteria}}\
                                 </div>\
                                 <div class="col-xs-3">\
-                                    <button class="btn btn-primary btn-sm criteria-add-button" on-click="addCriteria()">\
+                                    <button class="btn btn-primary btn-sm criteria-add-button" data-toggle="modal" data-target="#add-criteria-modal">\
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
                                     </button>\
+                                    \
+                                    <div class="modal fade" id="add-criteria-modal" tabindex="-1" role="dialog" aria-labelledby="add-criteria" aria-hidden="true">\
+                                        <div class="modal-dialog">\
+                                            <div class="modal-content">\
+                                                <div class="modal-header">\
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
+                                                    <h4 class="modal-title modal-title-color" id="add-criteria">Add a new criteria</h4>\
+                                                </div>\
+                                                \
+                                                <div class="modal-body">\
+                                                    <input id="add-criteria-input" type="text" class="form-control" placeholder="Criteria Name">\
+                                                </div>\
+                                                <div class="modal-footer">\
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                                                    <button type="button" class="btn btn-primary" on-click="addCriteria()">Add</button>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div> \
                                 </div>\
                             </div>\
                         </div>\
@@ -86,12 +105,18 @@ var inventoryContainer = Ractive.extend({
     },
 
     addCriteria: function() {
+        var criteriaName = $('#add-criteria-input').val();
+
         if (this.get('criteria') == null) {
-            this.set('criteria[0]', 'value');
+            this.set('criteria[0]', criteriaName);
         }
         else {
-            this.push('criteria', 'value');
+            this.push('criteria', criteriaName);
         }
+
+        $('#add-criteria-input').val("");
+
+        $('#add-criteria-modal').modal('hide');
     },
 
     deleteCriteria: function(element, index) {
