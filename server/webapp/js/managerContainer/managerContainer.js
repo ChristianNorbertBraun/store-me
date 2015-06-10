@@ -2,8 +2,8 @@
  * Created by captainluma on 02.06.15.
  */
 
-
-var subcontainerPath = [];
+//ToDo remove all hardcoded strings
+var clickedContainerHistory = [];
 
 var managerContainer = Ractive.extend(
     {
@@ -13,9 +13,19 @@ var managerContainer = Ractive.extend(
                 <div class="row">\
                     <div class="container">\
                         <p>\
+                          {{#if pathElements.length > 4}}\
+                            <div class="path-entry" >.../</div>\
+                            {{#each pathElements:i}}\
+                            {{#if i >= pathElements.length - 4}}\
+                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                            {{/if}}\
+                            {{/each}}\
+                          \
+                          {{else}}\
                           {{#each pathElements:i}}\
                             <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
                           {{/each}}\
+                          {{/if}}\
                        </p>\
                     </div>\
                 </div>\
@@ -71,23 +81,33 @@ var managerContainer = Ractive.extend(
 
         selectContainer: function(event, index){
             $('#'+index).toggleClass('selected');
+
         },
 
         navigateUp: function(event, index){
-            console.log(index);
+            window.app.set('data.container',clickedContainerHistory[index]);
+
+            while(clickedContainerHistory.length > index){
+                window.app.pop('pathElements');
+                clickedContainerHistory.pop();
+            }
         },
 
         navigateDown: function(event, index){
             var parentContainers = window.app.get('data.container');
             var clickedContainer = window.app.get('data.container.'+index);
             var subContainer = clickedContainer.subcontainer ;
+
             $('#'+index).toggleClass('selected');
             window.app.set('data.container', subContainer);
             
-            window.app.push('pathElements',clickedContainer);
-            var pathAppend ='<div id=path' + subcontainerPath.length + ' class = "path-entry" on-click="navigateUp()">' + clickedContainer.name+'/ </div>';
-            $('#path').append(pathAppend);
-            subcontainerPath.push(parentContainers);
+
+            window.app.push('pathElements', clickedContainer);
+            clickedContainerHistory.push(parentContainers);
+
+        },
+
+        loadItems: function(){
 
         }
 
