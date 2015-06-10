@@ -70,7 +70,7 @@ function Container(containerName)
         {
             if (this.attributes[i].getName() === attributeName)
             {
-                this.attributes = removeFromArray(this.attributes, i);
+                removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -97,7 +97,7 @@ function Container(containerName)
         {
             if (this.subContainers[i].getID() === subContainerID)
             {
-                this.subContainers = removeFromArray(this.subContainers, i);
+                removeFromArray(this.subContainers, i);
                 break;
             }
         }
@@ -333,7 +333,7 @@ function Item(itemID, itemName)
         {
             if (this.attributes[i].getName() === attributeName)
             {
-                this.attributes = removeFromArray(this.attributes, i);
+                removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -404,13 +404,14 @@ var removeFromArray = function(array, index)
     return result;
 };
 */
+
 var removeFromArray = function(array, index)
 {
     var hold = array[index];
     array[index] = array[array.length-1];
     array[array.length-1] = hold;
     array.pop();
-}
+};
 
 var copyArray = function(array)
 {
@@ -470,9 +471,10 @@ testStorage.removeSubContainer(container1.getID());
 console.log(testStorage.getSubContainers().length === 0);
 
 console.log("Handling container items");
-container1.addItem(containerItem);
+container1.addItem(containerItem.getID(), 5);
 console.log(container1.getItems()[0].getID() === "0815");
-container1.removeItem(item.getID());
+console.log(container1.getItems()[0].getAmount() === 5);
+container1.removeItem(item.getID(), 5);
 console.log(container1.getItems().length === 0);
 
 console.log("Handling item attributes");
@@ -505,6 +507,8 @@ var testItem2 = new ContainerItem("A002", 3);
 var testItem3 = new ContainerItem("A003", 47);
 var testItem4 = new ContainerItem("A004", 9);
 var testItem5 = new ContainerItem("A005", 1);
+
+console.log("Representations");
 console.log(JSON.stringify(testContainer));
 console.log(testContainer);
 
@@ -526,9 +530,9 @@ testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems()[0].getAmount() === 7);
 testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems().length === 0);
- */
+*/
 
-// TODO: handling amout of sub containers
+// TODO: handling amount of sub containers
 // TODO: already exist checks
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
