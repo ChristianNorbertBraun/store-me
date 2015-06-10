@@ -42,6 +42,11 @@ var english = {
         alreadyExist: "Category already Exist"
     },
 
+    item:{
+        noInput: "There is no Input!",
+        noItemMarked: "Please Select an Item!"
+    },
+
     dashboard: {
 
         button: {
