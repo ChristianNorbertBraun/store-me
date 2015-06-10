@@ -69,6 +69,14 @@ function Container(containerName)
         var id = this.findFreeID();
         subContainer.setID(id);
         _subContainers.push(subContainer);
+
+        var subContainers = copyArray(subContainer.getSubContainers());
+        subContainer.removeAllSubContainers();
+
+        for (var i = 0; i < subContainers.length; i++)
+        {
+            subContainer.addSubContainer(subContainers[i]);
+        }
     };
 
     this.removeSubContainer = function(subContainerID)
@@ -83,16 +91,22 @@ function Container(containerName)
         }
     };
 
-    this.addItem = function(item)
+    this.removeAllSubContainers = function()
     {
-        _items.push(item);
+        _subContainers = [];
+    }
+
+    this.addItem = function(containerItem)
+    {
+        containerItem.setParentContainerID(_containerID);
+        _items.push(containerItem);
     };
 
-    this.removeItem = function(itemID)
+    this.removeItem = function(containerItemID)
     {
         for (var i = 0; i < _items.length; i++)
         {
-            if (_items[i].getID() === itemID)
+            if (_items[i].getID() === containerItemID)
             {
                 _items = removeFromArray(_items, i);
                 break;
@@ -200,6 +214,7 @@ function ContainerItem(itemID, amount)
 {
     var _itemID = itemID;
     var _amount = amount;
+    var _parentContainerID = "0";
 
     this.getID = function()
     {
@@ -209,6 +224,16 @@ function ContainerItem(itemID, amount)
     this.getAmount = function()
     {
         return _amount;
+    };
+
+    this.getParentContainerID = function()
+    {
+        return _parentContainerID;
+    };
+
+    this.setParentContainerID = function(parentContainerID)
+    {
+        _parentContainerID = parentContainerID;
     };
 }
 
@@ -320,12 +345,23 @@ var removeFromArray = function(array, index)
     return result;
 };
 
+var copyArray = function(array)
+{
+    var result = [];
+
+    for (var i = 0; i < array.length; i++)
+    {
+        result.push(array[i]);
+    }
+    return result;
+};
+
 // test cases
 
 console.log("Construct Container");
-var testStorage = new Container("0-0-0", "Storage");
+var testStorage = new Container("Storage");
 var array = [];
-console.log(testStorage.getID() === "0-0-0");
+console.log(testStorage.getID() === "0");
 console.log(testStorage.getName() === "Storage");
 
 console.log("Construct ContainerAttribute");
@@ -360,7 +396,7 @@ testStorage.removeAttribute(containerAttribute.getName());
 console.log(testStorage.getAttributes().length === 0);
 
 console.log("Handling sub containers");
-var container1 = new Container("0-0", "Container 1");
+var container1 = new Container("Container 1");
 testStorage.addSubContainer(container1);
 console.log(testStorage.getSubContainers()[0].getName() === "Container 1");
 testStorage.removeSubContainer(container1.getID());
@@ -389,14 +425,21 @@ var subContainer6 = new Container("Sub Container 6");
 var subContainer7 = new Container("Sub Container 7");
 
 testContainer.addSubContainer(subContainer1);
-testContainer.addSubContainer(subContainer2);
 subContainer2.addSubContainer(subContainer3);
 subContainer2.addSubContainer(subContainer4);
-subContainer4.addSubContainer(subContainer5);
-subContainer4.addSubContainer(subContainer6);
-subContainer3.addSubContainer(subContainer7);
+subContainer2.addSubContainer(subContainer5);
+subContainer2.addSubContainer(subContainer6);
+subContainer6.addSubContainer(subContainer7);
+
+console.log(testContainer.toString());
+console.log(subContainer2.toString());
+
+testContainer.addSubContainer(subContainer2);
 
 console.log(testContainer.toString());
 
+
 // TODO: handling amount of items and sub containers
 // TODO: already exist checks
+// TODO: what if I somehow use an object which has been successfully removed from the data structure
+// TODO: think about parent managing
