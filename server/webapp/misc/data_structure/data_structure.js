@@ -4,49 +4,54 @@
 
 function Container(containerID, containerName)
 {
-    var containerID = containerID;
-    var containerName = containerName;
-    var attributes = [];
-    var subContainers = [];
-    var items = [];
+    var _containerID = containerID;
+    var _containerName = containerName;
+    var _attributes = [];
+    var _subContainers = [];
+    var _items = [];
 
     this.getID = function()
     {
-        return containerID;
+        return _containerID;
     };
 
     this.getName = function()
     {
-        return containerName;
+        return _containerName;
     };
+
+    this.setName = function(containerName)
+    {
+        _containerName= containerName;
+    }
 
     this.getAttributes = function()
     {
-        return attributes;
+        return _attributes;
     };
 
     this.getSubContainers = function()
     {
-        return subContainers;
+        return _subContainers;
     };
 
     this.getItems = function()
     {
-        return items;
+        return _items;
     };
 
     this.addAttribute = function(attribute)
     {
-        attributes.push(attribute);
+        _attributes.push(attribute);
     };
 
     this.removeAttribute = function(attributeName)
     {
-        for (var i = 0; i < attributes.length; i++)
+        for (var i = 0; i < _attributes.length; i++)
         {
-            if (attributes[i].getName() === attributeName)
+            if (_attributes[i].getName() === attributeName)
             {
-                attributes = removeFromArray(attributes, i);
+                _attributes = removeFromArray(_attributes, i);
                 break;
             }
         }
@@ -54,16 +59,16 @@ function Container(containerID, containerName)
 
     this.addSubContainer = function(subContainer)
     {
-        subContainers.push(subContainer);
+        _subContainers.push(subContainer);
     };
 
     this.removeSubContainer = function(subContainerID)
     {
-        for (var i = 0; i < subContainers.length; i++)
+        for (var i = 0; i < _subContainers.length; i++)
         {
-            if (subContainers[i].getID() === subContainerID)
+            if (_subContainers[i].getID() === subContainerID)
             {
-                subContainers = removeFromArray(subContainers, i);
+                _subContainers = removeFromArray(_subContainers, i);
                 break;
             }
         }
@@ -71,16 +76,16 @@ function Container(containerID, containerName)
 
     this.addItem = function(item)
     {
-        items.push(item);
+        _items.push(item);
     };
 
     this.removeItem = function(itemID)
     {
-        for (var i = 0; i < items.length; i++)
+        for (var i = 0; i < _items.length; i++)
         {
-            if (items[i].getID() === itemID)
+            if (_items[i].getID() === itemID)
             {
-                items = removeFromArray(items, i);
+                _items = removeFromArray(_items, i);
                 break;
             }
         }
@@ -89,87 +94,112 @@ function Container(containerID, containerName)
 
 function ContainerAttribute(attributeName, value, unit, type, compulsory)
 {
-    var attributeName = attributeName;
-    var value = value;
-    var unit = unit;
-    var type = type;
-    var compulsory = compulsory;
+    var _attributeName = attributeName;
+    var _value = value;
+    var _unit = unit;
+    var _type = type;
+    var _compulsory = compulsory;
 
     this.getName = function()
     {
-        return attributeName;
+        return _attributeName;
+    };
+
+    this.setName = function(attributeName)
+    {
+        _attributeName = attributeName;
     };
 
     this.getValue = function()
     {
-        return value;
+        return _value;
+    };
+
+    this.setValue = function(Value)
+    {
+        _value = value;
     };
 
     this.getUnit = function()
     {
-        return unit;
+        return _unit;
+    };
+
+    this.setValue = function(unit)
+    {
+        _unit = unit;
     };
 
     this.getType = function()
     {
-        return type;
+        return _type;
+    };
+
+    this.setType = function(type)
+    {
+        _type = type;
     };
 
     this.isCompulsory = function()
     {
-        return compulsory;
+        return _compulsory;
+    };
+
+    this.setCompulsory = function(compulsory)
+    {
+        _compulsory = compulsory;
     };
 }
 
 function ContainerItem(itemID, amount)
 {
-    var itemID = itemID;
-    var amount = amount;
+    var _itemID = itemID;
+    var _amount = amount;
 
     this.getID = function()
     {
-        return itemID;
+        return _itemID;
     };
 
     this.getAmount = function()
     {
-        return amount;
+        return _amount;
     };
 }
 
 function Item(itemID, itemName)
 {
-    var itemID = itemID;
-    var itemName = itemName;
-    var attributes = [];
+    var _itemID = itemID;
+    var _itemName = itemName;
+    var _attributes = [];
 
     this.getID = function()
     {
-        return itemID;
+        return _itemID;
     };
 
     this.getName = function()
     {
-        return itemName;
+        return _itemName;
     };
 
     this.getAttributes = function()
     {
-        return attributes;
+        return _attributes;
     };
 
     this.addAttribute = function(attribute)
     {
-        attributes.push(attribute);
+        _attributes.push(attribute);
     };
 
     this.removeAttribute = function(attributeName)
     {
-        for (var i = 0; i < attributes.length; i++)
+        for (var i = 0; i < _attributes.length; i++)
         {
-            if (attributes[i].getName() === attributeName)
+            if (_attributes[i].getName() === attributeName)
             {
-                attributes = removeFromArray(attributes, i);
+                _attributes = removeFromArray(_attributes, i);
                 break;
             }
         }
@@ -178,29 +208,29 @@ function Item(itemID, itemName)
 
 function ItemAttribute(attributeName, value, unit, type)
 {
-    var attributeName = attributeName;
-    var value = value;
-    var unit = unit;
-    var type = type;
+    var _attributeName = attributeName;
+    var _value = value;
+    var _unit = unit;
+    var _type = type;
 
     this.getName = function()
     {
-        return attributeName;
+        return _attributeName;
     };
 
     this.getValue = function()
     {
-        return value;
+        return _value;
     };
 
     this.getUnit = function()
     {
-        return unit;
+        return _unit;
     };
 
     this.getType = function()
     {
-        return type;
+        return _type;
     };
 }
 
