@@ -91,6 +91,15 @@ function Container(containerName)
         }
     };
 
+    this.addSubContainers = function(subContainerPrefix, amount)
+    {
+        for (var i = 0; i < amount; i++)
+        {
+            var subContainer = new Container(subContainerPrefix + i);
+            this.addSubContainer(subContainer);
+        }
+    };
+
     this.removeSubContainer = function(subContainerID)
     {
         for (var i = 0; i < this.subContainers.length; i++)
@@ -175,7 +184,7 @@ function Container(containerName)
             var subContainerSubID = subContainerIDAsArray.pop();
             subContainerSubIDs.push(subContainerSubID);
         }
-        subContainerSubIDs.sort();
+        subContainerSubIDs.sort(sortNumerically);
 
         for (var k = 0; k < subContainerSubIDs.length; k++)
         {
@@ -389,21 +398,6 @@ function ItemAttribute(attributeName, value, unit, type)
 }
 
 // functions
-/*
-var removeFromArray = function(array, index)
-{
-    var result = [];
-
-    for (var i = 0; i < array.length; i++)
-    {
-        if (i !== index)
-        {
-            result.push(array[i])
-        }
-    }
-    return result;
-};
-*/
 
 var removeFromArray = function(array, index)
 {
@@ -422,6 +416,11 @@ var copyArray = function(array)
         result.push(array[i]);
     }
     return result;
+};
+
+var sortNumerically = function (a, b)
+{
+    return a - b;
 };
 
 // test cases
@@ -520,7 +519,7 @@ subContainer3.addItem(testItem4);
 subContainer7.addItem(testItem5);
 console.log(testContainer.getAllItems());
 
-console.log("Adding amounts of items");
+console.log("Adding and removing amounts of items");
 testContainerB = new Container("Test container for items");
 testContainerB.addItem("0815", 7);
 testContainerB.addItem("0815", 7);
@@ -530,11 +529,17 @@ testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems()[0].getAmount() === 7);
 testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems().length === 0);
-*/
 
-// TODO: handling amount of sub containers
-// TODO: already exist checks
+
+console.log("Adding amounts of sub containers");
+var testContainerC = new Container("Test container for sub containers");
+testContainerC.addSubContainers("sub",20);
+testContainerC.getSubContainers()[7].addSubContainers("subsub",45);
+console.log(testContainerC.toString());
+ */
+
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
 // TODO: information hiding
 // TODO: link item id with items
+// TODO: plausi (already exists, etc.)
