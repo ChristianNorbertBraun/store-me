@@ -6,59 +6,71 @@
 
 function Container(containerName)
 {
-    var _containerID = "0";
-    var _containerName = containerName;
-    var _attributes = [];
-    var _subContainers = [];
-    var _items = [];
+    this.containerID = "0";
+    this.containerName = containerName;
+    this.attributes = [];
+    this.subContainers = [];
+    this.items = [];
 
     this.getID = function()
     {
-        return _containerID;
+        return this.containerID;
     };
 
     this.setID = function(containerID)
     {
-        _containerID = containerID;
+        this.containerID = containerID;
     };
 
     this.getName = function()
     {
-        return _containerName;
+        return this.containerName;
     };
 
     this.setName = function(containerName)
     {
-        _containerName= containerName;
+        this.containerName= containerName;
     };
 
     this.getAttributes = function()
     {
-        return _attributes;
+        return this.attributes;
     };
 
     this.getSubContainers = function()
     {
-        return _subContainers;
+        return this.subContainers;
     };
 
     this.getItems = function()
     {
-        return _items;
+        return this.items;
+    };
+
+    this.getAllItems = function()
+    {
+        var allItems = this.items;
+
+        for (var i = 0; i < this.subContainers.length; i++)
+        {
+            var subContainer = this.subContainers[i];
+            allItems = allItems.concat(subContainer.getAllItems());
+        }
+        return allItems;
     };
 
     this.addAttribute = function(attribute)
     {
-        _attributes.push(attribute);
+        this.attributes.push(attribute);
     };
 
     this.removeAttribute = function(attributeName)
     {
-        for (var i = 0; i < _attributes.length; i++)
+        for (var i = 0; i < this.attributes.length; i++)
         {
-            if (_attributes[i].getName() === attributeName)
+            if (this.attributes[i].getName() === attributeName)
             {
-                _attributes = removeFromArray(_attributes, i);
+                this.attributes = removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -68,7 +80,7 @@ function Container(containerName)
     {
         var id = this.findFreeID();
         subContainer.setID(id);
-        _subContainers.push(subContainer);
+        this.subContainers.push(subContainer);
 
         var subContainers = copyArray(subContainer.getSubContainers());
         subContainer.removeAllSubContainers();
@@ -81,11 +93,11 @@ function Container(containerName)
 
     this.removeSubContainer = function(subContainerID)
     {
-        for (var i = 0; i < _subContainers.length; i++)
+        for (var i = 0; i < this.subContainers.length; i++)
         {
-            if (_subContainers[i].getID() === subContainerID)
+            if (this.subContainers[i].getID() === subContainerID)
             {
-                _subContainers = removeFromArray(_subContainers, i);
+                this.subContainers = removeFromArray(this.subContainers, i);
                 break;
             }
         }
@@ -93,35 +105,40 @@ function Container(containerName)
 
     this.removeAllSubContainers = function()
     {
-        _subContainers = [];
-    }
+        this.subContainers = [];
+    };
 
     this.addItem = function(containerItem)
     {
-        containerItem.setParentContainerID(_containerID);
-        _items.push(containerItem);
+        containerItem.setParentContainerID(this.containerID);
+        this.items.push(containerItem);
     };
 
     this.removeItem = function(containerItemID)
     {
-        for (var i = 0; i < _items.length; i++)
+        for (var i = 0; i < this.items.length; i++)
         {
-            if (_items[i].getID() === containerItemID)
+            if (this.items[i].getID() === containerItemID)
             {
-                _items = removeFromArray(_items, i);
+                this.items = removeFromArray(this.items, i);
                 break;
             }
         }
     };
 
+    this.removeAllItems = function()
+    {
+        this.items = [];
+    };
+
     this.findFreeID = function()
     {
-        var freeSubID = _subContainers.length;
+        var freeSubID = this.subContainers.length;
         var subContainerSubIDs = [];
 
-        for (var i = 0; i < _subContainers.length; i++)
+        for (var i = 0; i < this.subContainers.length; i++)
         {
-            var subContainerID = _subContainers[i].getID();
+            var subContainerID = this.subContainers[i].getID();
             var subContainerIDAsArray = subContainerID.split("-");
             var subContainerSubID = subContainerIDAsArray.pop();
             subContainerSubIDs.push(subContainerSubID);
@@ -136,16 +153,16 @@ function Container(containerName)
                 break;
             }
         }
-        return _containerID + "-" + freeSubID;
+        return this.containerID + "-" + freeSubID;
     };
 
     this.toString = function()
     {
-        var result = _containerID + "\t" + _containerName + "\n";
+        var result = this.containerID + "\t" + this.containerName + "\n";
 
-        for (var i = 0; i < _subContainers.length; i++)
+        for (var i = 0; i < this.subContainers.length; i++)
         {
-            result += _subContainers[i].toString();
+            result += this.subContainers[i].toString();
         }
         return result;
     }
@@ -153,128 +170,128 @@ function Container(containerName)
 
 function ContainerAttribute(attributeName, value, unit, type, compulsory)
 {
-    var _attributeName = attributeName;
-    var _value = value;
-    var _unit = unit;
-    var _type = type;
-    var _compulsory = compulsory;
+    this.attributeName = attributeName;
+    this.value = value;
+    this.unit = unit;
+    this.type = type;
+    this.compulsory = compulsory;
 
     this.getName = function()
     {
-        return _attributeName;
+        return this.attributeName;
     };
 
     this.setName = function(attributeName)
     {
-        _attributeName = attributeName;
+        this.attributeName = attributeName;
     };
 
     this.getValue = function()
     {
-        return _value;
+        return this.value;
     };
 
     this.setValue = function(Value)
     {
-        _value = value;
+        this.value = value;
     };
 
     this.getUnit = function()
     {
-        return _unit;
+        return this.unit;
     };
 
     this.setValue = function(unit)
     {
-        _unit = unit;
+        this.unit = unit;
     };
 
     this.getType = function()
     {
-        return _type;
+        return this.type;
     };
 
     this.setType = function(type)
     {
-        _type = type;
+        this.type = type;
     };
 
     this.isCompulsory = function()
     {
-        return _compulsory;
+        return this.compulsory;
     };
 
     this.setCompulsory = function(compulsory)
     {
-        _compulsory = compulsory;
+        this.compulsory = compulsory;
     };
 }
 
 function ContainerItem(itemID, amount)
 {
-    var _itemID = itemID;
-    var _amount = amount;
-    var _parentContainerID = "0";
+    this.itemID = itemID;
+    this.amount = amount;
+    this.parentContainerID = "0";
 
     this.getID = function()
     {
-        return _itemID;
+        return this.itemID;
     };
 
     this.getAmount = function()
     {
-        return _amount;
+        return this.amount;
     };
 
     this.getParentContainerID = function()
     {
-        return _parentContainerID;
+        return this.parentContainerID;
     };
 
     this.setParentContainerID = function(parentContainerID)
     {
-        _parentContainerID = parentContainerID;
+        this.parentContainerID = parentContainerID;
     };
 }
 
 function Item(itemID, itemName)
 {
-    var _itemID = itemID;
-    var _itemName = itemName;
-    var _attributes = [];
+    this.itemID = itemID;
+    this.itemName = itemName;
+    this.attributes = [];
 
     this.getID = function()
     {
-        return _itemID;
+        return this.itemID;
     };
 
     this.getName = function()
     {
-        return _itemName;
+        return this.itemName;
     };
 
     this.setName = function(itemName)
     {
-        _itemName = itemName;
+        this.itemName = itemName;
     };
 
     this.getAttributes = function()
     {
-        return _attributes;
+        return this.attributes;
     };
 
     this.addAttribute = function(attribute)
     {
-        _attributes.push(attribute);
+        this.attributes.push(attribute);
     };
 
     this.removeAttribute = function(attributeName)
     {
-        for (var i = 0; i < _attributes.length; i++)
+        for (var i = 0; i < this.attributes.length; i++)
         {
-            if (_attributes[i].getName() === attributeName)
+            if (this.attributes[i].getName() === attributeName)
             {
-                _attributes = removeFromArray(_attributes, i);
+                this.attributes = removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -283,49 +300,49 @@ function Item(itemID, itemName)
 
 function ItemAttribute(attributeName, value, unit, type)
 {
-    var _attributeName = attributeName;
-    var _value = value;
-    var _unit = unit;
-    var _type = type;
+    this.attributeName = attributeName;
+    this.value = value;
+    this.unit = unit;
+    this.type = type;
 
     this.getName = function()
     {
-        return _attributeName;
+        return this.attributeName;
     };
 
     this.setName = function(attributeName)
     {
-        _attributeName = attributeName;
+        this.attributeName = attributeName;
     };
 
     this.getValue = function()
     {
-        return _value;
+        return this.value;
     };
 
     this.setValue = function(value)
     {
-        _value = value;
+        this.value = value;
     };
 
     this.getUnit = function()
     {
-        return _unit;
+        return this.unit;
     };
 
     this.setUnit = function(unit)
     {
-        _unit = unit;
+        this.unit = unit;
     };
 
     this.getType = function()
     {
-        return _type;
+        return this.type;
     };
 
     this.setType = function(type)
     {
-        _type = type;
+        this.type = type;
     };
 }
 
@@ -423,23 +440,33 @@ var subContainer4 = new Container("Sub Container 4");
 var subContainer5 = new Container("Sub Container 5");
 var subContainer6 = new Container("Sub Container 6");
 var subContainer7 = new Container("Sub Container 7");
-
 testContainer.addSubContainer(subContainer1);
 subContainer2.addSubContainer(subContainer3);
 subContainer2.addSubContainer(subContainer4);
 subContainer2.addSubContainer(subContainer5);
 subContainer2.addSubContainer(subContainer6);
 subContainer6.addSubContainer(subContainer7);
-
 console.log(testContainer.toString());
 console.log(subContainer2.toString());
-
 testContainer.addSubContainer(subContainer2);
-
 console.log(testContainer.toString());
+var testItem1 = new ContainerItem("A001", 1);
+var testItem2 = new ContainerItem("A002", 3);
+var testItem3 = new ContainerItem("A003", 47);
+var testItem4 = new ContainerItem("A004", 9);
+var testItem5 = new ContainerItem("A005", 1);
+console.log(JSON.stringify(testContainer));
 
+console.log("Get all items");
+testContainer.addItem(testItem1);
+subContainer1.addItem(testItem2);
+subContainer2.addItem(testItem3);
+subContainer3.addItem(testItem4);
+subContainer7.addItem(testItem5);
+console.log(testContainer.getAllItems());
 
 // TODO: handling amount of items and sub containers
 // TODO: already exist checks
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
+// TODO: information hiding
