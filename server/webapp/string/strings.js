@@ -141,6 +141,9 @@ var english = {
         info:{
             title:'Item Info'
         },
+
+        pathElements:[],
+
         data:{
             container:[{
                 name:'Test Container',
