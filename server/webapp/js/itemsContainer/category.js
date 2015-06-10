@@ -13,7 +13,7 @@ function loadTable()
             emit();
     };
 
-    $.couch.db("items").query(mapFunction, "_count", "javascript", {
+    $.couch.db("categorys").query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
             var rows = data["rows"];
@@ -30,7 +30,7 @@ function loadTable()
     });
 }
 
-function categoryAddOrEdit()
+function categoryAdd()
 {
     try
     {
@@ -45,6 +45,142 @@ function categoryAddOrEdit()
     }
 }
 
+function refreshTable()
+{
+    markedCategory = null;
+    var Parent = document.getElementById("category-table");
+    while(Parent.hasChildNodes())
+    {
+        Parent.removeChild(Parent.firstChild);
+    }
+    loadTable();
+}
+
+function checkIfCategoryHasItems(cbFn)
+{
+    var mapFunction = function (doc)
+    {
+        emit("category_id", doc.category_id);
+    };
+
+    $.couch.db("items").query(mapFunction, "_count", "javascript", {
+        success: function (data) {
+            console.log(data);
+            var rows = data["rows"];
+            var i;
+            for(i = 0; i < data["total_rows"] ; i++)
+            {
+                if(rows[i].value == markedCategory)
+                {
+                    window.alert("cannot delete an category wit items");
+                    throw "delete error";
+                }
+            }
+            cbFn(true);
+        },
+        error: function (status) {
+            console.log(status);
+        },
+        reduce: false
+    });
+}
+
+function categoryEdit()
+{
+    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+    getCategoryInput();
+    checkCategoryInputField();
+    setItemsToNewCategory(function (itemsReady){
+        if(itemsReady)
+        {
+            deleteCategoryId(function (categroyReady){
+                if(categroyReady)
+                {
+                    addCategoryToDB(function (ready){
+                        if(ready)
+                        {
+                            refreshTable();
+                            cleanItemTable();
+                        };
+                    });
+                }
+            });
+        }
+    });
+}
+
+function setItemsToNewCategory(cbFn)
+{
+    try
+    {
+        var mapFunction = function (doc)
+        {
+            emit("category_id", doc.category_id);
+        };
+
+        $.couch.db("items").query(mapFunction, "_count", "javascript", {
+            success: function (data) {
+                console.log(data);
+                var rows = data["rows"];
+                var i;
+                for(i = 0; i < data["total_rows"] ; i++)
+                {
+                    if(rows[i].value == markedCategory) setNewCategory(rows[i].id);
+                }
+                cbFn(true);
+            },
+            error: function (status) {
+                console.log(status);
+            },
+            reduce: false
+        });
+    }
+    catch(err)
+    {
+    }
+}
+function setNewCategory(id)
+{
+    $.couch.db("items").openDoc(id, {
+        success: function(data) {
+            console.log(data);
+            data.category_id = categoryInputField;
+            $.couch.db("items").saveDoc(data, {
+                success: function(data2) {
+                    console.log(data2);
+                },
+                error: function(status) {
+                    console.log(status);
+                }
+            });
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
+}
+
+function deleteCategoryId(cbFn)
+{
+    $.couch.db("categorys").openDoc(markedCategory, {
+        success: function(data) {
+            console.log(data);
+            $.couch.db("categorys").removeDoc(data, {
+                success: function(data2) {
+                    console.log(data2);
+                    cbFn(true);
+                },
+                error: function(status) {
+                    console.log(status);
+                }
+            });
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
+}
+
 function keyHandlerCategory(event)
 {
     var key = event.keyCode;
@@ -53,12 +189,14 @@ function keyHandlerCategory(event)
 
 function markField(id)
 {
-    blankOldElement();
+    blankOldCategory();
     document.getElementById(id).style.backgroundColor = "#d3d3d3";
     markedCategory = id;
+    cleanItemTable();
+    loadCategoryItems();
 }
 
-function blankOldElement()
+function blankOldCategory()
 {
     if(markedCategory)
     {
@@ -107,17 +245,17 @@ function checkCategoryInputField()
     }
 }
 
-function addCategoryToDB()
+function addCategoryToDB(cbFn)
 {
     var category =
     {
-        _id: categoryInputField,
-        "items": []
+        _id: categoryInputField
     };
 
-    $.couch.db("items").saveDoc(category, {
+    $.couch.db("categorys").saveDoc(category, {
         success: function(data) {
             console.log(data);
+            cbFn(true);
         },
         error: function(status) {
             console.log(status);
@@ -127,11 +265,16 @@ function addCategoryToDB()
 
 function categoryDelete()
 {
-    $.couch.urlPrefix = "http://localhost:5984";
+    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
     checkIfCategoryIsMarked();
-    deleteCategoryFromDB();
-    deleteCategoryFromTable();
+    checkIfCategoryHasItems(function (checked){
+        if(checked)
+        {
+            deleteCategoryFromDB();
+            deleteCategoryFromTable();
+        }
+    });
 }
 
 function checkIfCategoryIsMarked()
@@ -145,10 +288,10 @@ function checkIfCategoryIsMarked()
 
 function deleteCategoryFromDB()
 {
-    $.couch.db("items").openDoc(markedCategory, {
+    $.couch.db("categorys").openDoc(markedCategory, {
         success: function(data) {
             console.log(data);
-            $.couch.db("items").removeDoc(data, {
+            $.couch.db("categorys").removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
                 },
