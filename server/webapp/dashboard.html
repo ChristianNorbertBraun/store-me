@@ -22,6 +22,9 @@
     <script src="js/dashboardContainer/dashboardContainer.js"></script>
     <link rel="stylesheet" href="js/dashboardContainer/dashboardContainer.css">
 
+    <script src="js/navbarContainer/navbarContainer.js"></script>
+    <link rel="stylesheet" href="js/navbarContainer/navbarContainer.css">
+
     <!-- bootstrap js -->
     <script src="theme/dist/js/bootstrap.min.js"></script>
 
@@ -30,16 +33,15 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
-        <div class="container">
-        </div>
-    </nav>
     <div id='container'></div>
 
     <!--calling main js-->
     <script src='js/app.js'></script>
     <script>
-        var components = {dashboardContainer: dashboardContainer};
+        var components = {
+            dashboardContainer: dashboardContainer,
+            navbarContainer: navbarContainer
+        };
         loadTemplate(templates.dashboard,components,strings.dashboard);
     </script>
 </body>

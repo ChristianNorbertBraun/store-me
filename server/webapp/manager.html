@@ -23,24 +23,27 @@
     <script type="text/javascript" src="js/managerContainer/managerContainer.js"></script>
     <link rel="stylesheet" href="js/managerContainer/managerContainer.css">
 
+    <script src="js/navbarContainer/navbarContainer.js"></script>
+    <link rel="stylesheet" href="js/navbarContainer/navbarContainer.css">
+
     <!-- bootstrap js -->
     <script src="theme/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
-    <div class="container">
-    </div>
-</nav>
-<div id='container'></div>
+    <div id='container'></div>
 
-<!--calling main js-->
-<script src='js/app.js'></script>
-<script>
-    var components = {managerContainer: managerContainer};
-    loadTemplate(templates.manager, components, strings.manager);
-</script>
-<!--custom JS logic-->
-<script type="text/javascript" src="js/managerContainer/managerHandler.js"></script>
+    <!--calling main js-->
+    <script src='js/app.js'></script>
+    <script>
+        var components = {
+            managerContainer: managerContainer,
+            navbarContainer: navbarContainer
+        };
+
+        loadTemplate(templates.manager, components, strings.manager);
+    </script>
+    <!--custom JS logic-->
+    <script type="text/javascript" src="js/managerContainer/managerHandler.js"></script>
 </body>
 </html>
