@@ -38,8 +38,8 @@ var managerContainer = Ractive.extend(
                             <div class="panel-body no-padding">\
                                 <ul class="list-group" id="container-list">\
                                     {{#each data.container:i}}\
-                                        <li id = {{i}} class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
-                                           <div class="row">\
+                                        <li id = {{i}} intro-outro="slideh" class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
+                                           <div  class="row">\
                                                 <div class="col-xs-10">\
                                                     <h4 class="list-group-item-heading">{{name}}</h4>\
                                                     {{#each attributes}}\

@@ -13,7 +13,8 @@ var templates = {
 var english = {
 
     link:{
-        toDashboard:"dashboard.html",
+        toDashboard:"dashboard",
+        toManager:"manager",
         dbConnection:"http://localhost:5984"
     },
 
@@ -252,7 +253,7 @@ var english = {
                         }]
                     }],
                     subcontainer:[{
-                        name:'Test Container',
+                        name:'Sub Container',
                         parentid:'',
                         attributes:[{
                             name:'width',
@@ -262,9 +263,9 @@ var english = {
                             must:true
                         },
                             {
-                                name:'height',
+                                name:'weight',
                                 value:'300',
-                                unit:'cm',
+                                unit:'kg',
                                 type:'quantity',
                                 must:true
                             }],
