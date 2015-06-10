@@ -18,14 +18,6 @@
     color: #FFF;
 }
 
-th.headerSortUp {
-    color: #F00;
-}
-
-th.headerSortDown {
-    color: #0F0;
-}
-
 .table-icon {
     height:30px;
     width: auto;

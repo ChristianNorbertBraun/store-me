@@ -44,14 +44,16 @@ var dashboardContainer = Ractive.extend({
                                 <thead class="item-table-header">\
                                     <tr>\
                                         {{#each table.header:i}}\
-                                            <th id="{{i}}" on-click="sortTable()">{{column}}\
-                                            <span class="dropdown">\
-                                                <span class="caret"></span>\
-                                            </span>\
-                                            <span class="dropup">\
-                                                <span class="caret">\
+                                            <th id="column_{{i}}" on-click="sortTable(this, i)">\
+                                                {{column}}\
+                                                <span class="dropdown hidden">\
+                                                    <span class="caret"></span>\
                                                 </span>\
-                                            </span></th>\
+                                                <span class="dropup hidden">\
+                                                    <span class="caret">\
+                                                    </span>\
+                                                </span>\
+                                            </th>\
                                         {{/each}}\
                                     </tr>\
                                 </thead>\
@@ -61,9 +63,9 @@ var dashboardContainer = Ractive.extend({
                                         <tr>\
                                             <td class="icon-field">\
                                             {{#if stored}}\
-                                                <img class="table-icon" src="resources/icons/stored-icon.jpg">\
+                                                <img class="table-icon" src="resources/icons/stored-icon.jpg" alt="stored">\
                                             {{else}}\
-                                                <img class="table-icon" src="resources/icons/removed-icon.jpg">\
+                                                <img class="table-icon" src="resources/icons/removed-icon.jpg" alt="removed">\
                                             {{/if}}\
                                             </td>\
                                             <td>{{date}}</td>\
@@ -82,8 +84,9 @@ var dashboardContainer = Ractive.extend({
         </div>\
         ',
 
+    sortModeDown: true,
+
     data: {
-        columnsorted: [false,true,false,false,false,false]
     },
 
     oninit: function() {
@@ -92,28 +95,43 @@ var dashboardContainer = Ractive.extend({
 
     oncomplete: function() {
         $('#item-table').tablesorter();
+    },
 
-        $('.caret').each(function() {
-            $(this).toggle();
+    sortTable: function(element, index) {
+        this.determineMode(index);
+        this.clearCarets();
+        this.setCorrectCaret(index);
+    },
+
+    determineMode: function(index) {
+        if ($('#column_' + index + ' span.dropdown').hasClass('hidden')) {
+            // check sorted up
+            if (!($('#column_' + index + ' span.dropup').hasClass('hidden'))) {
+                // up is active --> change to down
+                this.sortModeDown = true;
+            }
+        }
+        else {
+            this.sortModeDown = false;
+        }
+    },
+
+    clearCarets: function() {
+        $('span.dropdown').each(function() {
+            $(this).addClass('hidden');
+        });
+
+        $('span.dropup').each(function() {
+            $(this).addClass('hidden');
         });
     },
 
-    sortTable: function() {
-        //sort();
-        console.log($('#1').hasClass('headerSortDown'));
-
-        if ($('#1').hasClass('headerSortDown')) {
-            $('#1 > .dropup > .caret').hide();
-            $('#1 > .dropdown > .caret').show();
+    setCorrectCaret: function(index) {
+        if (this.sortModeDown) {
+            $('#column_' + index + ' span.dropdown').removeClass('hidden');
         }
-        if ($('#1').hasClass('headerSortUp')) {
-            $('#1 > .dropup > .caret').show();
-            $('#1 > .dropdown > .caret').hide();
+        else {
+            $('#column_' + index + ' span.dropup').removeClass('hidden');
         }
     }
-
 });
-
-// TODO:
-// jQuery function and onclick on li elements, then read out with this and try to change classes
-
