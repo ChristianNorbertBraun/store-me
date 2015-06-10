@@ -29,26 +29,14 @@ function initStore(){
     var shelf2 = new Container("Shelf2");
 
     storage.addSubContainer(shelf1);
-   /* storage.addSubContainer(shelf2);
-*/
+    storage.addSubContainer(shelf2);
+
     return storage;
 };
 
 function createStore(callBackFunction, container){
-   /* var store =
-    {
-        _id: container.getID(),
-        "containerName" : container.getName(),
-        "containerAttributes" : container.getAttributes(),
-        "subContainers" : container.getSubContainers(),
-        "containerItems" : container.getItems()
-    };*/
-    var store = JSON.stringify(container);
 
-    console.log(container);
-    console.log(store);
-
-    $.couch.db("container").saveDoc(store, {
+    $.couch.db("container").saveDoc(container, {
        success: function(data) {
            callBackFunction(true);
            console.log(data);
@@ -58,6 +46,29 @@ function createStore(callBackFunction, container){
             callBackFunction(false);
         }
     });
+};
+
+function loadStore(){
+
+/*
+
+    var link = strings.link.dbConnection + "/container/_design/all/_view/all";
+    $.get(link, function(data){
+        console.log(data);
+        objectString = data["rows"];
+    });
+*/
+
+    $.couch.allDbs({
+        success: function(data) {
+            console.log(data);
+        }
+    });
+
+
+
 }
 
-saveStore();
+// container/_design/all/_view/all
+//saveStore();
+loadStore();
