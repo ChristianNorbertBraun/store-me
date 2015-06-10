@@ -2,13 +2,32 @@
  * Created by captainluma on 02.06.15.
  */
 
+//ToDo remove all hardcoded strings
+var clickedContainerHistory = [];
+
 var managerContainer = Ractive.extend(
     {
         template : '\
         <div class="manager-container">\
             <div class="container">\
                 <div class="row">\
-                    <div class="container"><p id="path">/</p></div>\
+                    <div class="container">\
+                        <p>\
+                          {{#if pathElements.length > 4}}\
+                            <div class="path-entry" >.../</div>\
+                            {{#each pathElements:i}}\
+                            {{#if i >= pathElements.length - 4}}\
+                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                            {{/if}}\
+                            {{/each}}\
+                          \
+                          {{else}}\
+                          {{#each pathElements:i}}\
+                            <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                          {{/each}}\
+                          {{/if}}\
+                       </p>\
+                    </div>\
                 </div>\
                 \
                 \
@@ -19,8 +38,8 @@ var managerContainer = Ractive.extend(
                             <div class="panel-body no-padding">\
                                 <ul class="list-group" id="container-list">\
                                     {{#each data.container:i}}\
-                                        <li id = {{i}} class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
-                                           <div class="row">\
+                                        <li id = {{i}} intro-outro="slideh" class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
+                                           <div  class="row">\
                                                 <div class="col-xs-10">\
                                                     <h4 class="list-group-item-heading">{{name}}</h4>\
                                                     {{#each attributes}}\
@@ -62,21 +81,38 @@ var managerContainer = Ractive.extend(
 
         selectContainer: function(event, index){
             $('#'+index).toggleClass('selected');
-        },
 
-        navigateDown: function(event, index){
-            var clickedContainer = window.app.get('data.container.'+index);
-            var subContainer = clickedContainer.subcontainer ;
-            $('#'+index).toggleClass('selected');
-            window.app.set('data.container', subContainer);
-
-            var pathContent = $('#path').text();
-            $('#path').text(pathContent + clickedContainer.name+'/') ;
         },
 
         navigateUp: function(event, index){
+            window.app.set('data.container',clickedContainerHistory[index]);
+
+            while(clickedContainerHistory.length > index){
+                window.app.pop('pathElements');
+                clickedContainerHistory.pop();
+            }
+        },
+
+        navigateDown: function(event, index){
+            var parentContainers = window.app.get('data.container');
+            var clickedContainer = window.app.get('data.container.'+index);
+            var subContainer = clickedContainer.subcontainer ;
+
+            $('#'+index).toggleClass('selected');
+            window.app.set('data.container', subContainer);
+            
+
+            window.app.push('pathElements', clickedContainer);
+            clickedContainerHistory.push(parentContainers);
+
+        },
+
+        loadItems: function(){
 
         }
 
+
+
     })
 ;
+

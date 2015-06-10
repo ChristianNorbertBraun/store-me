@@ -13,7 +13,8 @@ var templates = {
 var english = {
 
     link:{
-        toDashboard:"dashboard.html",
+        toDashboard:"dashboard",
+        toManager:"manager",
         dbConnection:"http://localhost:5984"
     },
 
@@ -117,6 +118,15 @@ var english = {
                     item: 'iPhone 4S',
                     amount: '12',
                     employee: 'Christian Braun'
+                },
+
+                {
+                    stored: false,
+                    date: '17:33 09.05.2003',
+                    container: 'R5 F3 B34',
+                    item: 'Macbook Pro 15 Zoll',
+                    amount: '37',
+                    employee: 'Christian Paling'
                 }
             ]
         }
@@ -132,6 +142,9 @@ var english = {
         info:{
             title:'Item Info'
         },
+
+        pathElements:[],
+
         data:{
             container:[{
                 name:'Test Container',
@@ -240,7 +253,7 @@ var english = {
                         }]
                     }],
                     subcontainer:[{
-                        name:'Test Container',
+                        name:'Sub Container',
                         parentid:'',
                         attributes:[{
                             name:'width',
@@ -250,9 +263,9 @@ var english = {
                             must:true
                         },
                             {
-                                name:'height',
+                                name:'weight',
                                 value:'300',
-                                unit:'cm',
+                                unit:'kg',
                                 type:'quantity',
                                 must:true
                             }],
@@ -271,7 +284,13 @@ var english = {
     },
 
     inventory: {
-
+        panel: {
+            title: {
+                criteria: 'Criterias',
+                attribute: 'Attributes',
+                inventorytable: 'Inventory Table'
+            }
+        }
     }
 };
 
