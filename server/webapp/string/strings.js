@@ -280,7 +280,13 @@ var english = {
     },
 
     inventory: {
-
+        panel: {
+            title: {
+                criteria: 'Criterias',
+                attribute: 'Attributes',
+                inventorytable: 'Inventory Table'
+            }
+        }
     }
 };
 
