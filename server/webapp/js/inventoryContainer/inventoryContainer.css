@@ -1,0 +1,37 @@
+.item-table-header {
+    background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
+    color: #FFF;
+}
+
+.criteria-add-button {
+    margin-top: -5px;
+}
+
+.criteria-panel {
+    min-height: 300px;
+}
+
+.attribute-panel {
+    min-height: 400px;
+}
+
+.same-height {
+    height: 40px;
+}
+
+.disable-shadow {
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.glyphicons-small {
+    font-size: 15px;
+    top: -2px;
+}
+
+.criteria-input {
+    margin-bottom: 10px;
+}
+
+.modal-title-color {
+    color: black;
+}
