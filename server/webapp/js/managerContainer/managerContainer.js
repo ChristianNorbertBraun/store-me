@@ -72,11 +72,11 @@ var managerContainer = Ractive.extend(
 
             var pathContent = $('#path').text();
             $('#path').text(pathContent + clickedContainer.name+'/') ;
+        },
+
+        navigateUp: function(event, index){
+
         }
 
     })
 ;
-
-$('.container-entry').click(function(){
-    console.log('Hallo');
-})
