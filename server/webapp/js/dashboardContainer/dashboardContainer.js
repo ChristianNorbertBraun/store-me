@@ -94,7 +94,12 @@ var dashboardContainer = Ractive.extend({
     },
 
     oncomplete: function() {
-        $('#item-table').tablesorter();
+        $('#item-table').tablesorter({
+            textExtraction:function(s){
+                if($(s).find('img').length == 0) return $(s).text();
+                return $(s).find('img').attr('alt');
+            }
+        });
     },
 
     sortTable: function(element, index) {

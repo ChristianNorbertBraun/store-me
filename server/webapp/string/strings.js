@@ -117,6 +117,15 @@ var english = {
                     item: 'iPhone 4S',
                     amount: '12',
                     employee: 'Christian Braun'
+                },
+
+                {
+                    stored: false,
+                    date: '17:33 09.05.2003',
+                    container: 'R5 F3 B34',
+                    item: 'Macbook Pro 15 Zoll',
+                    amount: '37',
+                    employee: 'Christian Paling'
                 }
             ]
         }
