@@ -133,18 +133,26 @@ function Container(containerName)
             if (this.items[i].getID() === itemID)
             {
                 result = this.items[i];
+                break;
             }
         }
         return result;
     };
 
-    this.removeItem = function(containerItemID)
+    this.removeItem = function(itemID, amount)
     {
         for (var i = 0; i < this.items.length; i++)
         {
-            if (this.items[i].getID() === containerItemID)
+            if (this.items[i].getID() === itemID)
             {
-                this.items = removeFromArray(this.items, i);
+                if (this.items[i].getAmount() === amount)
+                {
+                    removeFromArray(this.items, i);
+                }
+                else
+                {
+                    this.items[i].decreaseAmount(amount);
+                }
                 break;
             }
         }
@@ -281,6 +289,11 @@ function ContainerItem(itemID, amount)
     {
         this.amount += amount;
     };
+
+    this.decreaseAmount = function(amount)
+    {
+        this.amount -= amount;
+    };
 }
 
 function Item(itemID, itemName)
@@ -393,9 +406,9 @@ var removeFromArray = function(array, index)
 */
 var removeFromArray = function(array, index)
 {
-    var hold = array[i];
-    array[i] = array[array.length-1];
-    array[array.length-1];
+    var hold = array[index];
+    array[index] = array[array.length-1];
+    array[array.length-1] = hold;
     array.pop();
 }
 
@@ -509,12 +522,12 @@ testContainerB.addItem("0815", 7);
 testContainerB.addItem("0815", 7);
 console.log(testContainerB.getItems().length === 1);
 console.log(testContainerB.getItems()[0].getAmount() === 14);
+testContainerB.removeItem("0815", 7);
+console.log(testContainerB.getItems()[0].getAmount() === 7);
+testContainerB.removeItem("0815", 7);
+console.log(testContainerB.getItems().length === 0);
  */
 
-
-
-
-// TODO: handling amount of items
 // TODO: handling amout of sub containers
 // TODO: already exist checks
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
