@@ -36,6 +36,12 @@ var english = {
         wrongPassword:"Password is incorrect"
     },
 
+    category:{
+        noInput: "There is no Input!",
+        noCategory: "no Category choosen!",
+        alreadyExist: "Category already Exist"
+    },
+
     dashboard: {
 
         button: {

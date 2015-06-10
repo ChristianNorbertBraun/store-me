@@ -89,7 +89,7 @@ function checkIfUserAlreadyExist(cbFn)
 
     $.couch.db("storeme").query(mapFunction, "_count", "javascript", {
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             var x = data["rows"];
             var i;
             for (i = 0; i < data["total_rows"]; i++) {
