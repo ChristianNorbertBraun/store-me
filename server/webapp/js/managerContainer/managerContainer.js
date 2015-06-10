@@ -2,13 +2,22 @@
  * Created by captainluma on 02.06.15.
  */
 
+
+var subcontainerPath = [];
+
 var managerContainer = Ractive.extend(
     {
         template : '\
         <div class="manager-container">\
             <div class="container">\
                 <div class="row">\
-                    <div class="container"><p id="path">/</p></div>\
+                    <div class="container">\
+                        <p>\
+                          {{#each pathElements:i}}\
+                            <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                          {{/each}}\
+                       </p>\
+                    </div>\
                 </div>\
                 \
                 \
@@ -64,19 +73,26 @@ var managerContainer = Ractive.extend(
             $('#'+index).toggleClass('selected');
         },
 
+        navigateUp: function(event, index){
+            console.log(index);
+        },
+
         navigateDown: function(event, index){
+            var parentContainers = window.app.get('data.container');
             var clickedContainer = window.app.get('data.container.'+index);
             var subContainer = clickedContainer.subcontainer ;
             $('#'+index).toggleClass('selected');
             window.app.set('data.container', subContainer);
-
-            var pathContent = $('#path').text();
-            $('#path').text(pathContent + clickedContainer.name+'/') ;
-        },
-
-        navigateUp: function(event, index){
+            
+            window.app.push('pathElements',clickedContainer);
+            var pathAppend ='<div id=path' + subcontainerPath.length + ' class = "path-entry" on-click="navigateUp()">' + clickedContainer.name+'/ </div>';
+            $('#path').append(pathAppend);
+            subcontainerPath.push(parentContainers);
 
         }
 
+
+
     })
 ;
+
