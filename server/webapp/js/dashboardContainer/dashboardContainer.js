@@ -34,7 +34,9 @@ var dashboardContainer = Ractive.extend({
                             </div>\
                         </div>\
                         \
+                        <a href="/manager">\
                         <button type="button" class="btn btn-primary dashboard-button">{{button.stock}}</button>\
+                        </a>\
                         <button type="button" class="btn btn-primary dashboard-button">{{button.overview}}</button>\
                     </div>\
                     \
