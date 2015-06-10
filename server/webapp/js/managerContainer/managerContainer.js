@@ -8,7 +8,7 @@ var managerContainer = Ractive.extend(
         <div class="manager-container">\
             <div class="container">\
                 <div class="row">\
-                    <div class="container"><p>current/container/path</p></div>\
+                    <div class="container"><p id="path">/</p></div>\
                 </div>\
                 \
                 \
@@ -17,10 +17,10 @@ var managerContainer = Ractive.extend(
                         <div class="panel panel-primary info-panel">\
                             <div class="panel-heading">{{panels[0].title}}</div>\
                             <div class="panel-body no-padding">\
-                                <ul class="list-group" id="container-list" onclick="test()">\
-                                    {{#each data.container}}\
-                                        <li class="list-group-item list-group-border">\
-                                            <div class="row">\
+                                <ul class="list-group" id="container-list">\
+                                    {{#each data.container:i}}\
+                                        <li id = {{i}} class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
+                                           <div class="row">\
                                                 <div class="col-xs-10">\
                                                     <h4 class="list-group-item-heading">{{name}}</h4>\
                                                     {{#each attributes}}\
@@ -29,7 +29,7 @@ var managerContainer = Ractive.extend(
                                                         </div>\
                                                     {{/each}}\
                                                 </div>\
-                                                <div class="col-xs-2">\
+                                                <div class="col-xs-2" on-click="navigateDown(this,i)">\
                                                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>\
                                                 </div>\
                                             </div>\
@@ -54,6 +54,29 @@ var managerContainer = Ractive.extend(
                 </div>\
             </div>\
         </div>\
-        '
-    }
-);
+        ',
+
+        oninit: function(){
+            this._super();
+        },
+
+        selectContainer: function(event, index){
+            $('#'+index).toggleClass('selected');
+        },
+
+        navigateDown: function(event, index){
+            var clickedContainer = window.app.get('data.container.'+index);
+            var subContainer = clickedContainer.subcontainer ;
+            $('#'+index).toggleClass('selected');
+            window.app.set('data.container', subContainer);
+
+            var pathContent = $('#path').text();
+            $('#path').text(pathContent + clickedContainer.name+'/') ;
+        }
+
+    })
+;
+
+$('.container-entry').click(function(){
+    console.log('Hallo');
+})

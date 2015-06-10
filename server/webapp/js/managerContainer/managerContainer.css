@@ -10,6 +10,9 @@
     box-shadow: 0px 1px 1px  grey;
 }
 
+p{
+    margin:0;
+}
 
 .attributes{
     display:inline;
@@ -28,4 +31,10 @@
 
 .no-padding {
     padding: 0px;
+}
+
+.selected{
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: 1px solid #3498db;
 }
