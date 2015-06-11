@@ -70,7 +70,7 @@ function Container(containerName)
         {
             if (this.attributes[i].getName() === attributeName)
             {
-                this.attributes = removeFromArray(this.attributes, i);
+                removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -91,13 +91,22 @@ function Container(containerName)
         }
     };
 
+    this.addSubContainers = function(subContainerPrefix, amount)
+    {
+        for (var i = 0; i < amount; i++)
+        {
+            var subContainer = new Container(subContainerPrefix + i);
+            this.addSubContainer(subContainer);
+        }
+    };
+
     this.removeSubContainer = function(subContainerID)
     {
         for (var i = 0; i < this.subContainers.length; i++)
         {
             if (this.subContainers[i].getID() === subContainerID)
             {
-                this.subContainers = removeFromArray(this.subContainers, i);
+                removeFromArray(this.subContainers, i);
                 break;
             }
         }
@@ -175,7 +184,7 @@ function Container(containerName)
             var subContainerSubID = subContainerIDAsArray.pop();
             subContainerSubIDs.push(subContainerSubID);
         }
-        subContainerSubIDs.sort();
+        subContainerSubIDs.sort(sortNumerically);
 
         for (var k = 0; k < subContainerSubIDs.length; k++)
         {
@@ -333,7 +342,7 @@ function Item(itemID, itemName)
         {
             if (this.attributes[i].getName() === attributeName)
             {
-                this.attributes = removeFromArray(this.attributes, i);
+                removeFromArray(this.attributes, i);
                 break;
             }
         }
@@ -389,28 +398,14 @@ function ItemAttribute(attributeName, value, unit, type)
 }
 
 // functions
-/*
-var removeFromArray = function(array, index)
-{
-    var result = [];
 
-    for (var i = 0; i < array.length; i++)
-    {
-        if (i !== index)
-        {
-            result.push(array[i])
-        }
-    }
-    return result;
-};
-*/
 var removeFromArray = function(array, index)
 {
     var hold = array[index];
     array[index] = array[array.length-1];
     array[array.length-1] = hold;
     array.pop();
-}
+};
 
 var copyArray = function(array)
 {
@@ -421,6 +416,11 @@ var copyArray = function(array)
         result.push(array[i]);
     }
     return result;
+};
+
+var sortNumerically = function (a, b)
+{
+    return a - b;
 };
 
 // test cases
@@ -470,9 +470,10 @@ testStorage.removeSubContainer(container1.getID());
 console.log(testStorage.getSubContainers().length === 0);
 
 console.log("Handling container items");
-container1.addItem(containerItem);
+container1.addItem(containerItem.getID(), 5);
 console.log(container1.getItems()[0].getID() === "0815");
-container1.removeItem(item.getID());
+console.log(container1.getItems()[0].getAmount() === 5);
+container1.removeItem(item.getID(), 5);
 console.log(container1.getItems().length === 0);
 
 console.log("Handling item attributes");
@@ -505,6 +506,8 @@ var testItem2 = new ContainerItem("A002", 3);
 var testItem3 = new ContainerItem("A003", 47);
 var testItem4 = new ContainerItem("A004", 9);
 var testItem5 = new ContainerItem("A005", 1);
+
+console.log("Representations");
 console.log(JSON.stringify(testContainer));
 console.log(testContainer);
 
@@ -516,7 +519,7 @@ subContainer3.addItem(testItem4);
 subContainer7.addItem(testItem5);
 console.log(testContainer.getAllItems());
 
-console.log("Adding amounts of items");
+console.log("Adding and removing amounts of items");
 testContainerB = new Container("Test container for items");
 testContainerB.addItem("0815", 7);
 testContainerB.addItem("0815", 7);
@@ -526,11 +529,17 @@ testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems()[0].getAmount() === 7);
 testContainerB.removeItem("0815", 7);
 console.log(testContainerB.getItems().length === 0);
+
+
+console.log("Adding amounts of sub containers");
+var testContainerC = new Container("Test container for sub containers");
+testContainerC.addSubContainers("sub",20);
+testContainerC.getSubContainers()[7].addSubContainers("subsub",45);
+console.log(testContainerC.toString());
  */
 
-// TODO: handling amout of sub containers
-// TODO: already exist checks
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
 // TODO: information hiding
 // TODO: link item id with items
+// TODO: plausi (already exists, etc.)
