@@ -9,7 +9,7 @@ var dashboardContainer = Ractive.extend({
             <div class="container">\
                 <div class="row">\
                     <div class="col-sm-3">\
-                        <div class="panel panel-default info-panel">\
+                        <div class="panel panel-default">\
                             <div class="panel-heading">{{panel.title.info}}</div>\
                             <div class="panel-body">\
                                 <div class="row">\
@@ -43,7 +43,7 @@ var dashboardContainer = Ractive.extend({
                     <div class="col-sm-9">\
                         <div class="panel panel-default">\
                             <table id="item-table" class="table table-bordered">\
-                                <thead class="item-table-header">\
+                                <thead>\
                                     <tr>\
                                         {{#each table.header:i}}\
                                             <th id="column_{{i}}" on-click="sortTable(this, i)">\

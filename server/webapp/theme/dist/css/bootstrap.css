@@ -5,6 +5,12 @@
  */
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,700);
+.main-screen-path-entry {
+  display: inline;
+}
+.main-screen-path-entry:hover {
+  color: #e74c3c;
+}
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -2289,6 +2295,12 @@ th {
 }
 .table > tbody + tbody {
   border-top: 2px solid #337ab7;
+}
+.table > thead {
+  color: #fff;
+  background: -webkit-linear-gradient(top, #337ab7 0px, #2e6da4 100%);
+  background:      -o-linear-gradient(top, #337ab7 0px, #2e6da4 100%);
+  background:         linear-gradient(to bottom, #337ab7 0px, #2e6da4 100%);
 }
 .table .table {
   background-color: #fff;
@@ -4832,7 +4844,7 @@ a.label:focus {
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  background-color: #777;
+  background-color: #3498db;
   border-radius: 10px;
 }
 .badge:empty {
@@ -5171,7 +5183,7 @@ a.list-group-item:hover,
 a.list-group-item:focus {
   color: #555;
   text-decoration: none;
-  background-color: #f5f5f5;
+  background-color: #e74c3c;
   border: 0;
 }
 .list-group-item.disabled,
@@ -5214,6 +5226,18 @@ a.list-group-item:focus {
 .list-group-item.active:hover .list-group-item-text,
 .list-group-item.active:focus .list-group-item-text {
   color: #c7ddef;
+}
+.list-group-item:hover {
+  color: #fff;
+  background-color: #e74c3c;
+  border: 1px solid #3498db;
+  -webkit-box-shadow: 0 1px 1px grey;
+          box-shadow: 0 1px 1px grey;
+}
+.list-group-item-selected {
+  color: #fff;
+  background-color: #e74c3c;
+  border: 1px solid #3498db;
 }
 .list-group-item-success {
   color: #3c763d;
