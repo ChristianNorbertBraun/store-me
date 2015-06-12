@@ -1,13 +1,13 @@
 var express = require('express');
 var app = express();
 
- /* serves main page */
+ /** serves main page */
  app.get("/", function(req, res) {
     res.sendfile('webapp/index.html')
  });
 
 
- /* serves all the static files */
+ /** serves all the static files */
  app.get(/^(.+)$/, function(req, res){
      console.log('static file request : ' + req.params[0]);
      if(req.params[0].indexOf(".") > -1){

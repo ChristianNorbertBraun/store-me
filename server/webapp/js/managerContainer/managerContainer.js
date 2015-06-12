@@ -13,7 +13,9 @@ var managerContainer = Ractive.extend(
                 <div class="row">\
                     <div class="container">\
                         <p>\
-                          {{#if pathElements.length > 4}}\
+                          {{#if pathElements.length == 0}}\
+                            <div class="path-entry" >/</div>\
+                          {{elseif pathElements.length > 4}}\
                             <div class="path-entry" >.../</div>\
                             {{#each pathElements:i}}\
                             {{#if i >= pathElements.length - 4}}\
