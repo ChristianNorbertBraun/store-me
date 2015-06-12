@@ -8,7 +8,35 @@
 // Table:
 @table-header-background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
 @table-header-text-color: #fff;
+@table-border-color-custom: #337AB7;
 
+// Buttons:
+@button-bg-color: #3498db;
+@button-border-color: #2980b9;
+
+// Navbar:
+@navbar-bg-color: #2980B9;
+@navbar-brand-text-color: #fff;
+
+// Badges:
+@badge-bg-custom: #3498db;
+
+// List Groups:
+@list-group-hover-bg-custom: #e74c3c;
+@list-group-hover-text-color-custom: #fff;
+@list-group-hover-border-custom: 1px solid #3498db;
+@list-group-hover-box-shadow-custom: 0px 1px 1px grey;
+
+
+// == Custom Classes
+
+.main-screen-path-entry {
+    display:inline;
+
+    &:hover {
+      color: @list-group-hover-bg-custom;
+    }
+}
 
 //== Colors
 //
@@ -142,7 +170,7 @@
 @table-bg-active:               @table-bg-hover;
 
 //** Border color for table and cell borders.
-@table-border-color:            #337AB7; //Before: #ddd;
+@table-border-color:            @table-border-color-custom; //Before: #ddd;
 
 
 //== Buttons
@@ -156,8 +184,8 @@
 @btn-default-border:             #ccc;
 
 @btn-primary-color:              #fff;
-@btn-primary-bg:                 #3498db; //Before: @brand-primary;
-@btn-primary-border:             #2980b9; // Before: darken(@btn-primary-bg, 5%);
+@btn-primary-bg:                 @button-bg-color; //Before: @brand-primary;
+@btn-primary-border:             @button-border-color; // Before: darken(@btn-primary-bg, 5%);
 
 @btn-success-color:              #fff;
 @btn-success-bg:                 @brand-success;
@@ -393,7 +421,7 @@
 // Inverted navbar
 // Reset inverted navbar basics
 @navbar-inverse-color:                      lighten(@gray-light, 15%);
-@navbar-inverse-bg:                         #2980B9; //Before: #222;
+@navbar-inverse-bg:                         @navbar-bg-color; //Before: #222;
 @navbar-inverse-border:                     darken(@navbar-inverse-bg, 10%);
 
 // Inverted navbar links
@@ -406,7 +434,7 @@
 @navbar-inverse-link-disabled-bg:           transparent;
 
 // Inverted navbar brand label
-@navbar-inverse-brand-color:                #fff; // Before: @navbar-inverse-link-color;
+@navbar-inverse-brand-color:                @navbar-brand-text-color; // Before: @navbar-inverse-link-color;
 @navbar-inverse-brand-hover-color:          #fff;
 @navbar-inverse-brand-hover-bg:             transparent;
 
@@ -677,7 +705,7 @@
 @list-group-border-radius:      @border-radius-base;
 
 //** Background color of single list items on hover
-@list-group-hover-bg:           #f5f5f5;
+@list-group-hover-bg:           @list-group-hover-bg-custom; // Before: #f5f5f5;
 //** Text color of active list items
 @list-group-active-color:       @component-active-color;
 //** Background color of active list items
@@ -772,7 +800,7 @@
 @badge-color:                 #fff;
 //** Linked badge text color on hover
 @badge-link-hover-color:      #fff;
-@badge-bg:                    @gray-light;
+@badge-bg:                    @badge-bg-custom;// Before: @gray-light;
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;

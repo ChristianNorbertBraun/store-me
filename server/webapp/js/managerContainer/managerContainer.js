@@ -25,7 +25,7 @@ var managerContainer = Ractive.extend(
                           \
                           {{else}}\
                           {{#each pathElements:i}}\
-                            <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                            <div id="path{{i}}" class="main-screen-path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
                           {{/each}}\
                           {{/if}}\
                        </p>\
@@ -82,7 +82,7 @@ var managerContainer = Ractive.extend(
         },
 
         selectContainer: function(event, index){
-            $('#'+index).toggleClass('selected');
+            $('#'+index).toggleClass('list-group-item-selected');
 
         },
 
@@ -100,7 +100,7 @@ var managerContainer = Ractive.extend(
             var clickedContainer = window.app.get('data.container.'+index);
             var subContainer = clickedContainer.subcontainer ;
 
-            $('#'+index).toggleClass('selected');
+            $('#'+index).toggleClass('list-group-item-selected');
             window.app.set('data.container', subContainer);
             
 
