@@ -2,6 +2,10 @@
  * Created by Waleska on 10.06.2015.
  */
 
+function onLoadItemAddOrEdit(){
+    itemTemp = new Item(itemInputField, markedCategory);
+}
+
 function addItem()
 {
     try
@@ -9,8 +13,9 @@ function addItem()
         checkIfCategoryIsMarked();
         getItemInput();
         checkItemInputField();
-        addItemToDB();
+        addItemToDB(item);
         addItemToTable(null);
+        itemTemp = null;
     }
     catch(err)
     {

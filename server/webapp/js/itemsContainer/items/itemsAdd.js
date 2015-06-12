@@ -30,15 +30,9 @@ function addItemToTable(name)
     }
 }
 
-function addItemToDB()
+function addItemToDB(item)
 {
     $.couch.urlPrefix = "http://localhost:5984";
-
-    var item =
-    {
-        _id: itemInputField,
-        "category_id": markedCategory
-    }
 
     try
     {

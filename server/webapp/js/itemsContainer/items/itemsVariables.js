@@ -41,3 +41,9 @@ function checkIfItemIsMarked()
         throw "no item marked";
     }
 }
+
+function loadNameIntoInput()
+{
+    var itemTableRow = document.getElementById(markedItem + "row");
+    document.getElementById("item-input").value = itemTableRow.cells[0].id;;
+}
