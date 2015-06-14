@@ -30,7 +30,20 @@ function loadCompleteStore(){
            if(created){
 
                console.log("ist geladen");
-               console.log(data.getSubContainers());
+               console.log(data);
+
+
+
+               var theContainer = new Container('default');
+
+               var res = theContainer.getSubContainers.apply(data);
+
+
+               console.dir(theContainer.getName.apply(res[0]));
+
+
+
+
            } else {
                console.log("nicht geladen");
            }
