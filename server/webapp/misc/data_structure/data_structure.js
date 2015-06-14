@@ -423,6 +423,13 @@ var sortNumerically = function (a, b)
     return a - b;
 };
 
+//default classes from container, item, ...
+var defaultContainer = new Container("default");
+var defaultItem = new Item(0815, "default");
+
+
+
+
 // test cases
 /*
 console.log("Construct Container");
