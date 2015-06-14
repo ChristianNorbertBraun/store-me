@@ -76,7 +76,7 @@ var inventoryContainer = Ractive.extend({
                 <div class="col-sm-9">\
                     <div class="panel panel-default">\
                         <table id="inventory-table" class="table table-bordered">\
-                            <thead class="item-table-header">\
+                            <thead>\
                                 <tr>\
                                     <th>hello</th>\
                                     <th>hello2</th>\

@@ -1,8 +1,3 @@
-.item-table-header {
-    background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
-    color: #FFF;
-}
-
 .criteria-add-button {
     margin-top: -5px;
 }
@@ -16,7 +11,7 @@
 }
 
 .same-height {
-    height: 40px;
+    height: 35px;
 }
 
 .disable-shadow {
@@ -25,7 +20,7 @@
 
 .glyphicons-small {
     font-size: 15px;
-    top: -2px;
+    top: -3px;
 }
 
 .criteria-input {

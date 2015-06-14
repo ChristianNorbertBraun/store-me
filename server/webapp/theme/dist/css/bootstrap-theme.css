@@ -4,6 +4,12 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 
+.main-screen-path-entry {
+  display: inline;
+}
+.main-screen-path-entry:hover {
+  color: #e74c3c;
+}
 .btn-default,
 .btn-primary,
 .btn-success,

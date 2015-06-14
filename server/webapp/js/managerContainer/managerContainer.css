@@ -1,19 +1,6 @@
 .badge{
     margin-right: 5px;
-    background-color: #3498db;
 }
-
-.list-group-item:hover{
-    background-color: #e74c3c;
-    color: #ffffff;
-    border: 1px solid #3498db;
-    box-shadow: 0px 1px 1px  grey;
-}
-
-.path-entry:hover{
-    color:#e74c3c;
-}
-
 
 .attributes{
     display:inline;
@@ -32,14 +19,4 @@
 
 .no-padding {
     padding: 0px;
-}
-
-.selected{
-    background-color: #e74c3c;
-    color: #ffffff;
-    border: 1px solid #3498db;
-}
-
-.path-entry{
-    display:inline;
 }

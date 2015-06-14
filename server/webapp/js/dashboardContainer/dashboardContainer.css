@@ -3,11 +3,6 @@
     margin-bottom: 10px;
 }
 
-.item-table-header {
-    background: linear-gradient(to bottom, #337AB7 0px, #2E6DA4 100%);
-    color: #FFF;
-}
-
 .table-icon {
     height:30px;
     width: auto;
