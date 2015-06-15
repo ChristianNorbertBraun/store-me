@@ -52,7 +52,7 @@ function checkIfDatabaseExists(callBackFunction){
 }
 
 function createDatabase(callBackFunction){
-    $.couch.db("container").create({
+    $.couch.db(strings.database.container).create({
         success: function(data) {
             console.log("db created");
             callBackFunction(true);
@@ -70,7 +70,7 @@ function loadStore(callBackFunction){
     var mapFunction = function(doc) {
         emit(null, doc);
     };
-    $.couch.db("container").query(mapFunction, "_count", "javascript", {
+    $.couch.db(strings.database.container).query(mapFunction, "_count", "javascript", {
     success: function(data) {
         try {
             var containerObject = data["rows"][0].value;
@@ -90,7 +90,7 @@ function loadStore(callBackFunction){
 
 //example for saveStore function
 
-/*
+
 function createStore() {
     try {
         var store = initStore();
@@ -107,30 +107,51 @@ function createStore() {
  };
 
  function initStore(){
-    var storage = new Container("Storage");
-    var shelf1 = new Container("Shelf1");
-    var shelf2 = new Container("Shelf2");
 
-     storage.addSubContainer(shelf1);
-     storage.addSubContainer(shelf2);
 
-    return storage;
+ var store = new Container("store");
+ var shelf1 = new Container("shelf1");
+ var shelf2 = new Container("shelf2");
+ var subshelf1_1 = new Container("subschelf1_1");
+ var subshelf1_2 = new Container("subschelf1_2");
+ var subshelf2_1 = new Container("subschelf2_1");
+ var subshelf2_2 = new Container("subschelf2_2");
+
+
+ store.addSubContainer(shelf1);
+ store.addSubContainer(shelf2);
+
+ shelf1.addSubContainer(subshelf1_1);
+ shelf1.addSubContainer(subshelf1_2);
+
+ shelf2.addSubContainer(subshelf2_1);
+ shelf2.addSubContainer(subshelf2_2);
+
+
+
+     subshelf1_1.addItem(01, 5);
+     subshelf1_1.addItem(02, 6);
+     subshelf1_2.addItem(03, 6);
+     subshelf2_1.addItem(04, 5);
+     subshelf2_2.addItem(05, 5);
+
+    return store;
+
  };
- */
+
 
 
 //example for loadStore function
-/*
+
  function loadCompleteStore(){
  try {
  return loadStore(function(created, data){
  if(created){
 
- console.log(data);
-
+    console.log(data);
  //getting access to the attributes of the container-class do it like this
- var res = defaultContainer.getSubContainers.apply(data);
-
+ //var res = defaultContainer.getSubContainers.apply(data);
+//console.log(res);
  } else {
  console.log("nothing loaded");
  }
@@ -139,7 +160,9 @@ function createStore() {
  console.log(err);
  }
  };
- */
+
+//createStore();
+loadCompleteStore();
 
 
 

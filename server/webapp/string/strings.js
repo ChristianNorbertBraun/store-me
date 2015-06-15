@@ -18,6 +18,10 @@ var english = {
         dbConnection:"http://localhost:5984"
     },
 
+    database:{
+        container:"container"
+    },
+
     registration:{
         noUsername:"Missing username!",
         noPassword:"Missing password!",
