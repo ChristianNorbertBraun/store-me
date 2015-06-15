@@ -150,7 +150,7 @@ var english = {
         pathElements:[],
 
         data:{
-            container:[{
+            container:[/*{
                 name:'Test Container',
                 parentid:'',
                 attributes:[{
@@ -283,7 +283,7 @@ var english = {
                             }]
                         }]
                     }]
-                }]
+                }*/]
         }
     },
 
