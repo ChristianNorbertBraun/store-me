@@ -206,6 +206,25 @@ function Container(containerName)
             result += this.subContainers[i].toString();
         }
         return result;
+    };
+
+    this.getContainerById = function(searchedContainerId)
+    {
+        var result = null;
+        if(this.containerID === searchedContainerId){
+            result = this;
+        }
+        else {
+            var subContainers = this.getSubContainers();
+            for (var i = 0; i < subContainers.length; i++){
+
+                 if(subContainers[i].getID() == searchedContainerId.substring(0, subContainers[i].getID().length)){
+                        result = subContainers[i].getContainerById(searchedContainerId);
+                        break;
+                    }
+            }
+        }
+        return result;
     }
 }
 
@@ -544,6 +563,28 @@ testContainerC.addSubContainers("sub",20);
 testContainerC.getSubContainers()[7].addSubContainers("subsub",45);
 console.log(testContainerC.toString());
  */
+
+/*var containername = "0-0-1";
+console.log("Get Container by ID "+ containername);
+var store = new Container("store");
+var shelf1 = new Container("shelf1");
+var shelf2 = new Container("shelf2");
+var subshelf1_1 = new Container("subschelf1_1");
+var subshelf1_2 = new Container("subschelf1_2");
+var subshelf2_1 = new Container("subschelf2_1");
+var subshelf2_2 = new Container("subschelf2_2");
+
+
+store.addSubContainer(shelf1);
+store.addSubContainer(shelf2);
+
+shelf1.addSubContainer(subshelf1_1);
+shelf1.addSubContainer(subshelf1_2);
+
+shelf2.addSubContainer(subshelf2_1);
+shelf2.addSubContainer(subshelf2_2);
+
+console.log(store.getContainerById(containername));*/
 
 // TODO: what if I somehow use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
