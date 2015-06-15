@@ -27,6 +27,68 @@ getAllItems = function(container)
     return allItems;
 };
 
+getAllItemAttributes = function(container)
+{
+    var allAttributes = [];
+    var allItems = getAllItems(container);
+    var allDataItems = getDataItems(allItems);
+
+    // special contains function for internal usage only
+    var containsAttribute = function(attributes, attribute)
+    {
+        var result = false;
+
+        for (var i = 0; i < attributes.length; i++)
+        {
+            if (attributes[i].attributeName === attribute.attributeName)
+            {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    };
+
+    for (var i = 0; i < allDataItems.length; i++)
+    {
+        var currentItem = allDataItems[i];
+
+        for (var k = 0; k < currentItem.attributes.length; k++)
+        {
+            var currentAttribute = currentItem.attributes[k];
+
+            if (!containsAttribute(allAttributes, currentAttribute))
+            {
+                allAttributes.push(currentAttribute);
+            }
+        }
+    }
+    return allAttributes;
+};
+
+getDataItems = function(containerItems)
+{
+    var dataItems = [];
+
+    for (var i = 0; i < containerItems.length; i++)
+    {
+        var currentContainerItem = containerItems[i];
+        var dataItem = getDataItemFromCouch(currentContainerItem.itemID);
+        dataItems.push(dataItem);
+    }
+    return dataItems;
+};
+
+getDataItemFromCouch = function(itemID)
+{
+    // TODO: implement data base connection
+    // TODO: replace the following test code
+    var dataItem = new Item(itemID, "NOT A DB ITEM! DELETE THIS TESTCODE!");
+    var attribute = new ItemAttribute("Testattribute", 123, "no unit", "no type");
+    addItemAttribute(dataItem, attribute);
+    return dataItem;
+};
+
 addContainerAttribute = function(container, attribute)
 {
     container.attributes.push(attribute);
@@ -306,7 +368,8 @@ var sortNumerically = function (a, b)
     return a - b;
 };
 
-// TODO: what if I somehow use an object which has been successfully removed from the data structure
+// TODO: contains item von außen aufrufbar??
+// TODO: what if I someone use an object which has been successfully removed from the data structure
 // TODO: think about parent managing
 // TODO: information hiding
 // TODO: link item id with items

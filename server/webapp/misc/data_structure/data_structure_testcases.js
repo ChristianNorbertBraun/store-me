@@ -117,7 +117,6 @@ addSubContainers(testContainerC, "sub", 20);
 addSubContainers(testContainerC.subContainers[7], "subsub", 45);
 console.log(print(testContainerC));
 
-
 console.log("Get Container by ID");
 var searchID = "0-0-1";
 var store = new Container("store");
@@ -134,3 +133,11 @@ addSubContainer(shelf1, subshelf1_2);
 addSubContainer(shelf2, subshelf2_1);
 addSubContainer(shelf2, subshelf2_2);
 console.log(getContainerById(store, searchID).containerID === searchID);
+
+console.log("Get all attributes");
+var anotherTestContainer = new Container("Woop Woop");
+addSubContainers(anotherTestContainer, "Subby-o-", 7);
+addItem(anotherTestContainer, "1337", 2);
+addItem(anotherTestContainer.subContainers[0], "1337", 2);
+addItem(anotherTestContainer.subContainers[1], "1337", 2);
+console.log(getAllItemAttributes(anotherTestContainer));
