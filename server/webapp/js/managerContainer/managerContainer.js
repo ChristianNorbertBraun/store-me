@@ -3,6 +3,7 @@
  */
 
 //ToDo remove all hardcoded strings
+//ToDO check if it is possible to load data even earlier then when the manager screen loads
 var clickedContainerHistory = [];
 
 var managerContainer = Ractive.extend(
@@ -19,13 +20,13 @@ var managerContainer = Ractive.extend(
                             <div class="path-entry" >.../</div>\
                             {{#each pathElements:i}}\
                             {{#if i >= pathElements.length - 4}}\
-                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
                             {{/if}}\
                             {{/each}}\
                           \
                           {{else}}\
                           {{#each pathElements:i}}\
-                            <div id="path{{i}}" class="main-screen-path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{name}}/</div>\
+                            <div id="path{{i}}" class="main-screen-path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
                           {{/each}}\
                           {{/if}}\
                        </p>\
@@ -43,7 +44,7 @@ var managerContainer = Ractive.extend(
                                         <li id = {{i}} intro-outro="slideh" class="list-group-item list-group-border container-entry" on-click="selectContainer(this,i)">\
                                            <div  class="row">\
                                                 <div class="col-xs-10">\
-                                                    <h4 class="list-group-item-heading">{{name}}</h4>\
+                                                    <h4 class="list-group-item-heading">{{containerName}}</h4>\
                                                     {{#each attributes}}\
                                                         <div class="list-group-item-text attributes">\
                                                             <span class=" badge">{{name}} {{value}} {{unit}}</span>\
@@ -79,6 +80,12 @@ var managerContainer = Ractive.extend(
 
         oninit: function(){
             this._super();
+
+
+        },
+
+        oncomplete:function(){
+            loadStore(this.getStoreFromDb);
         },
 
         selectContainer: function(event, index){
@@ -98,7 +105,7 @@ var managerContainer = Ractive.extend(
         navigateDown: function(event, index){
             var parentContainers = window.app.get('data.container');
             var clickedContainer = window.app.get('data.container.'+index);
-            var subContainer = clickedContainer.subcontainer ;
+            var subContainer = clickedContainer.subContainers ;
 
             $('#'+index).toggleClass('list-group-item-selected');
             window.app.set('data.container', subContainer);
@@ -109,9 +116,17 @@ var managerContainer = Ractive.extend(
 
         },
 
-        loadItems: function(){
+       getStoreFromDb: function(error, result){
+           if(result) {
+               var subContainer = result.subContainers;
+               window.app.set('data.container', subContainer);
+           }
+           else{
+               console.log('noData');
+           }
+       }
 
-        }
+
 
 
 
