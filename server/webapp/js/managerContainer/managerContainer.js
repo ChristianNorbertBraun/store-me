@@ -79,6 +79,8 @@ var managerContainer = Ractive.extend(
 
         oninit: function(){
             this._super();
+            loadStore(this.getStoreFromDb());
+
         },
 
         selectContainer: function(event, index){
@@ -109,9 +111,17 @@ var managerContainer = Ractive.extend(
 
         },
 
-        loadItems: function(){
+       getStoreFromDb: function(error, result){
+           if(result) {
+               var subContainer = result.subcontainer;
+               window.app.set('data.container', subContainer);
+           }
+           else{
+               console.log('noData');
+           }
+       }
 
-        }
+
 
 
 
