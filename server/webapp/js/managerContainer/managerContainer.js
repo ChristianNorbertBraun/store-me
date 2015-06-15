@@ -5,6 +5,7 @@
 //ToDo remove all hardcoded strings
 //ToDO check if it is possible to load data even earlier then when the manager screen loads
 var clickedContainerHistory = [];
+var currentTableState;
 
 var managerContainer = Ractive.extend(
     {
@@ -64,7 +65,25 @@ var managerContainer = Ractive.extend(
                     <div class="col-sm-4">\
                         <div id="item-list" class="panel panel-primary info-panel">\
                             <div class="panel-heading">{{panels[1].title}}</div>\
-                            <div class="panel-body">Bye Chris</div>\
+                            <div class="panel-body no-padding">\
+                             <ul class="list-group" id="item-list">\
+                                    {{#each items:i}}\
+                                        <li id = item{{i}} intro-outro="slideh" class="list-group-item list-group-border item-entry" on-click="selectItem(this,i)">\
+                                           <div  class="row">\
+                                                <div class="col-xs-10">\
+                                                    <h4 class="list-group-item-heading">{{itemID}}</h4>\
+                                                    \
+                                                        <div class="list-group-item-text attributes">\
+                                                            <span class=" badge">{{amount}} pieces</span>\
+                                                        </div>\
+                                                    \
+                                                </div>\
+                                            </div>\
+                                        </li>\
+                                    {{/each}}\
+                                </ul>\
+                                \
+                            </div>\
                         </div>\
                    </div>\
                    \
@@ -80,8 +99,6 @@ var managerContainer = Ractive.extend(
 
         oninit: function(){
             this._super();
-
-
         },
 
         oncomplete:function(){
@@ -95,11 +112,20 @@ var managerContainer = Ractive.extend(
 
         navigateUp: function(event, index){
             window.app.set('data.container',clickedContainerHistory[index]);
-
+            var latestClickedcontainer = clickedContainerHistory[clickedContainerHistory.length-1][0];
+            //toDO pretify it!!
+            var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-2);
+            var parentContainer = getContainerById(currentTableState, parentId);
+            window.app.set('items', getAllItems(parentContainer));
+            var parrentContainer = getContainerById(currentTableState, parentId);
             while(clickedContainerHistory.length > index){
                 window.app.pop('pathElements');
                 clickedContainerHistory.pop();
             }
+
+
+          /*  var allItems = getAllItems(container);
+            window.app.set('items',allItems);*/
         },
 
         navigateDown: function(event, index){
@@ -114,17 +140,25 @@ var managerContainer = Ractive.extend(
             window.app.push('pathElements', clickedContainer);
             clickedContainerHistory.push(parentContainers);
 
+            var allItems = getAllItems(clickedContainer);
+            window.app.set('items',allItems);
+
         },
 
        getStoreFromDb: function(error, result){
            if(result) {
+               currentTableState = result;
                var subContainer = result.subContainers;
                window.app.set('data.container', subContainer);
+               var allItems = getAllItems(result);
+               window.app.set('items',allItems);
            }
            else{
                console.log('noData');
            }
        }
+
+
 
 
 

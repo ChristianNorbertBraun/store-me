@@ -88,15 +88,5 @@ function prepareAuthentication(req){
 }
 
 
-db.save('_design/storemeusers', {
-    views: {
-        byUsername: {
-            map: function( doc ) {
-                if ( doc.name === 'christian' ) {
-                    emit( doc.name, doc );
-                }
-            }
-        }
-    }
-});
+
 
