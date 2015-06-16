@@ -80,16 +80,6 @@ getDataItems = function(containerItems)
     return dataItems;
 };
 
-getDataItemFromCouch = function(itemID)
-{
-    // TODO: implement data base connection
-    // TODO: replace the following test code
-    var dataItem = new Item(itemID, "NOT A DB ITEM! DELETE THIS TESTCODE!");
-    var attribute = new ItemAttribute("Testattribute", 123, "no unit", "no type");
-    addItemAttribute(dataItem, attribute);
-    return dataItem;
-};
-
 addContainerAttribute = function(container, attribute)
 {
     container.attributes.push(attribute);

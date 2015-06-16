@@ -6,7 +6,23 @@ function onLoadItemAddOrEdit(){
     itemTemp = new Item(itemInputField, markedCategory);
 }
 
-function addItem()
+function getDataItemFromCouch(itemID)
+{
+    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+
+    $.couch.db("items").openDoc(itemID, {
+        success: function(data) {
+            console.log(data);
+            return data;
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
+};
+
+
+function createItem()
 {
     try
     {
