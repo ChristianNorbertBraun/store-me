@@ -2,7 +2,7 @@
  * Created by Waleska on 09.06.2015.
  */
 
-function categoryAdd(categoryId)
+function categoryAdd(categoryId,cbFn)
 {
     try
     {
@@ -10,12 +10,13 @@ function categoryAdd(categoryId)
         addCategoryToDB(categoryId, function (ready, data){
         if(ready)
         {
-            return data;
+            cbFn(true,data);
         }
         });
     }
     catch(err)
     {
+        console.log(err);
     }
 }
 

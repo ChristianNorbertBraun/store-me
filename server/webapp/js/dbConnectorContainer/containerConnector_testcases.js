@@ -1,7 +1,7 @@
 /**
  * Created by Marcel on 15.06.2015.
  */
-/*
+
  function createStore() {
  try {
  var store = initStore();
@@ -38,10 +38,19 @@
  addSubContainer(shelf2, subshelf2_1);
  addSubContainer(shelf2, subshelf2_2);
 
+ addItem(shelf1,0,200);
+ addItem(subshelf1_1,1,200);
+ addItem(subshelf1_2,2,30);
+ addItem(subshelf2_1,3,100);
+ addItem(subshelf2_2,4,82);
+ addItem(subshelf1_1,5,200);
+ addItem(subshelf1_1,6,200);
+
+
  return store;
 
  };
- */
+
 
 /*
  function loadCompleteStore(){
@@ -65,5 +74,5 @@
 
 
 
-//createStore();
+createStore();
 //loadCompleteStore();
