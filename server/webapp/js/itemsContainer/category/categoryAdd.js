@@ -2,7 +2,7 @@
  * Created by Waleska on 10.06.2015.
  */
 
-function addCategoryToDB(categoryId)
+function addCategoryToDB(categoryId, cbFn)
 {
     var category =
     {
@@ -12,7 +12,7 @@ function addCategoryToDB(categoryId)
     $.couch.db("categorys").saveDoc(category, {
         success: function(data) {
             console.log(data);
-            return data;
+            cbFn(true, data);
         },
         error: function(status) {
             console.log(status);

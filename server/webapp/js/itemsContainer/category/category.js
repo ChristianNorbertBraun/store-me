@@ -7,7 +7,12 @@ function categoryAdd(categoryId)
     try
     {
         $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
-        return addCategoryToDB(categoryId);
+        addCategoryToDB(categoryId, function (ready, data){
+        if(ready)
+        {
+            return data;
+        }
+        });
     }
     catch(err)
     {
