@@ -1,3 +1,16 @@
 .coredata-button {
-    width: 32%;
+    width: 49%;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+#category-panel {
+    height: 450px;
+    overflow-y: auto;
+}
+
+span {
+    cursor:pointer;
 }

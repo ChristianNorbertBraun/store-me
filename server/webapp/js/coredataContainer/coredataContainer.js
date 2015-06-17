@@ -9,19 +9,32 @@ var coredataContainer = Ractive.extend({
             <div class="row">\
             \
                 <div class="col-sm-3">\
-                    <div class="panel panel-default">\
+                    <div id="category-panel" class="panel panel-default">\
                         <div class="panel-heading">\
                             {{panel.title.category}}\
                         </div>\
                         \
-                        <div class="panel-body">\
-                        \
+                        <div class="panel-body no-padding">\
+                            <ul class="list-group">\
+                                {{#each category:i}}\
+                                    <li id={{i}} class="list-group-item list-group-border" on-click="selectContainer(i)">\
+                                        <div class="row">\
+                                            <div class="col-xs-10">\
+                                                <h4 class="list-group-item-heading">{{id}}</h4>\
+                                            </div>\
+                                            \
+                                            <div class="col-xs-2">\
+                                                <span class="glyphicon glyphicon-remove" on-click="deleteCategory(i)" aria-hidden="true"></span>\
+                                            </div>\
+                                        </div>\
+                                    </li>\
+                                {{/each}}\
+                            </ul>\
                         </div>\
                     </div>\
                     \
-                    <button class="btn btn-primary coredata-button" data-toggle="modal" data-target="#add-category-modal" on-click="">Add</button>\
-                    <button type="button" class="btn btn-primary coredata-button" on-click="">Delete</button>\
-                    <button type="button" class="btn btn-primary coredata-button" data-toggle="modal" data-target="#edit-category-modal" on-click="">Edit</button>\
+                    <button class="btn btn-primary coredata-button" data-toggle="modal" data-target="#add-category-modal">Add</button>\
+                    <button type="button" class="btn btn-primary coredata-button" data-toggle="modal" data-target="#edit-category-modal" on-click="saveCurrentCategory()">Edit</button>\
                 \
                 </div>\
                 \
@@ -85,13 +98,13 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Category Name</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <input id="add-category-input" type="text" class="form-control" placeholder="Input Category Name">\
+                                <input id="edit-category-input" type="text" class="form-control" placeholder="Input Category Name">\
                             </div>\
                         </div>\
                     </div>\
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
-                        <button type="button" class="btn btn-primary" on-click="editCategory()">Add</button>\
+                        <button type="button" class="btn btn-primary" on-click="editCategory()">Edit</button>\
                     </div>\
                 </div>\
             </div>\
@@ -101,22 +114,85 @@ var coredataContainer = Ractive.extend({
     data: {},
 
     oninit: function() {
+        this.refreshCategories();
+        window.currentRactive = this;
+    },
 
+    selectContainer: function(index) {
+        $('li.list-group-item').each(function() {
+            if ($(this).attr('id') != (index + '')) {
+                $(this).removeClass('list-group-item-selected');
+            }
+        });
+
+        $('#' + index).toggleClass('list-group-item-selected');
+
+        var selectedCategoryName = this.get('category.' + index).id
+
+        $('#edit-category-input').val(selectedCategoryName);
     },
 
     addCategory: function() {
 
         var newCategoryName = $('#add-category-input').val();
 
+        var ret = categoryAdd(newCategoryName, function (ready, data){
+            if(ready) {
+                window.currentRactive.refreshCategories();
+            }
+        });
+
+        $('#add-category-input').val("");
         $('#add-category-modal').modal('hide');
     },
 
     editCategory: function() {
 
-        var newCategoryName = $('#add-category-input').val();
+        var newCategoryName = $('#edit-category-input').val();
 
-        $('#add-category-modal').modal('hide');
+        categoryEdit(window.app.selectedCategoryName, newCategoryName, function(ready, data) {
+            if (ready) {
+                window.currentRactive.refreshCategories();
+            }
+        })
 
+        $('#edit-category-modal').modal('hide');
+
+    },
+
+    deleteCategory: function(index) {
+        var deletedCategoryName = this.get('category.' + index).id;
+
+        categoryDelete(deletedCategoryName, function(status) {
+            if (status) {
+                window.currentRactive.refreshCategories();
+            }
+            else {
+                alert('Error while deleting');
+            }
+        });
+    },
+
+    refreshCategories: function() {
+        getAllCategorys(function(ready, data) {
+            if (ready) {
+                var categories = data.rows;
+                window.app.set('category', categories);
+            }
+        });
+    },
+
+    saveCurrentCategory: function() {
+        var currentContainerIndex = $('li.list-group-item-selected').attr('id');
+
+        if (currentContainerIndex != null) {
+            console.log('hello');
+            var selectedCategoryName = this.get('category.' + currentContainerIndex).id;
+            window.app.selectedCategoryName = selectedCategoryName;
+        } else {
+            window.app.selectedCategoryName = '';
+            $('#edit-category-input').val('');
+        }
     }
 
 });
