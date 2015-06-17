@@ -4,14 +4,14 @@
 
 function loadTable()
 {
-    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+    $.couch.urlPrefix = strings.link.dbConnection;
 
     var mapFunction = function (doc)
     {
         emit();
     };
 
-    $.couch.db("categorys").query(mapFunction, "_count", "javascript", {
+    $.couch.db(strings.database.category).query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
             var rows = data["rows"];

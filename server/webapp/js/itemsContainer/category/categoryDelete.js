@@ -4,10 +4,10 @@
 
 function deleteCategoryId(oldCategory, cbFn)
 {
-    $.couch.db("categorys").openDoc(oldCategory, {
+    $.couch.db(strings.database.category).openDoc(oldCategory, {
         success: function(data) {
             console.log(data);
-            $.couch.db("categorys").removeDoc(data, {
+            $.couch.db(strings.database.category).removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
                     cbFn(true);
@@ -30,7 +30,7 @@ function checkIfCategoryHasItems(categoryId, cbFn)
         emit("category_id", doc.category_id);
     };
 
-    $.couch.db("items").query(mapFunction, "_count", "javascript", {
+    $.couch.db(strings.database.category).query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
             var rows = data["rows"];
@@ -53,10 +53,10 @@ function checkIfCategoryHasItems(categoryId, cbFn)
 
 function deleteCategoryFromDB(categoryId, cbFn)
 {
-    $.couch.db("categorys").openDoc(categoryId, {
+    $.couch.db(strings.database.category).openDoc(categoryId, {
         success: function(data) {
             console.log(data);
-            $.couch.db("categorys").removeDoc(data, {
+            $.couch.db(strings.database.category).removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
                     cbFn(true);

@@ -32,11 +32,11 @@ function addItemToTable(name)
 
 function addItemToDB(item)
 {
-    $.couch.urlPrefix = "http://localhost:5984";
+    $.couch.urlPrefix = strings.link.dbConnection;
 
     try
     {
-        $.couch.db("items").saveDoc(item, {
+        $.couch.db(strings.database.items).saveDoc(item, {
             success: function(data) {
                 console.log(data);
             },

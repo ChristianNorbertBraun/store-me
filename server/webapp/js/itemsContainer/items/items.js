@@ -8,9 +8,9 @@ function onLoadItemAddOrEdit(){
 
 function getDataItemFromCouch(itemID)
 {
-    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+    $.couch.urlPrefix = strings.link.dbConnection;
 
-    $.couch.db("items").openDoc(itemID, {
+    $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
             console.log(data);
             return data;
@@ -40,7 +40,7 @@ function createItem()
 
 function deleteItem()
 {
-    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+    $.couch.urlPrefix = strings.link.dbConnection;
 
     checkIfItemIsMarked();
     deleteItemFromDB();

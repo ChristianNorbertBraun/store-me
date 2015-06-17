@@ -11,7 +11,7 @@ function setItemsToNewCategory(oldCategory, newCategory, cbFn)
             emit("category_id", doc.category_id);
         };
 
-        $.couch.db("items").query(mapFunction, "_count", "javascript", {
+        $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
             success: function (data) {
                 console.log(data);
                 var rows = data["rows"];
@@ -35,11 +35,11 @@ function setItemsToNewCategory(oldCategory, newCategory, cbFn)
 
 function setNewCategory(id, newCategory)
 {
-    $.couch.db("items").openDoc(id, {
+    $.couch.db(strings.database.items).openDoc(id, {
         success: function(data) {
             console.log(data);
             data.category_id = newCategory;
-            $.couch.db("items").saveDoc(data, {
+            $.couch.db(strings.database.items).saveDoc(data, {
                 success: function(data2) {
                     console.log(data2);
                 },
