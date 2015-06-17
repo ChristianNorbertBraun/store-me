@@ -3,8 +3,8 @@ var app = express();
 
 var cradle = require('cradle');
 
-var dbStoremeusers = new(cradle.Connection)('http://127.0.0.1', 5984).database(strings.database.storemeuser);
-var dbContainer = new(cradle.Connection)('http://127.0.0.1', 5984).database(strings.database.container);
+var dbStoremeusers = new(cradle.Connection)('http://127.0.0.1', 5984).database("storemeusers");
+var dbContainer = new(cradle.Connection)('http://127.0.0.1', 5984).database("storemecontainer");
 
 dbStoremeusers.exists(function(error,exists){
     if(error){

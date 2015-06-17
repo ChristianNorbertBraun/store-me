@@ -7,7 +7,8 @@ var templates = {
     register: "design/register.tpl",
     dashboard: "design/dashboard.tpl",
     manager: "design/manager.tpl",
-    inventory: "design/inventory.tpl"
+    inventory: "design/inventory.tpl",
+    coredata: "design/coredata.tpl"
 };
 
 var english = {
@@ -19,8 +20,10 @@ var english = {
     },
 
     database:{
-        container:"container",
-        storemeuser:"storemeusers"
+        container:"storemecontainer",
+        user:"storemeusers",
+        items:"storemeitems",
+        category:"storemecategory"
     },
 
     registration:{
@@ -294,6 +297,14 @@ var english = {
                 criteria: 'Criterias',
                 attribute: 'Attributes',
                 inventorytable: 'Inventory Table'
+            }
+        }
+    },
+
+    coredata: {
+        panel: {
+            title: {
+                category: 'Categories'
             }
         }
     }
