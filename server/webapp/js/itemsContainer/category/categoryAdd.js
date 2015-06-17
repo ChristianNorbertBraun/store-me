@@ -2,17 +2,17 @@
  * Created by Waleska on 10.06.2015.
  */
 
-function addCategoryToDB(cbFn)
+function addCategoryToDB(categoryId)
 {
     var category =
     {
-        _id: categoryInputField
+        _id: categoryId
     };
 
     $.couch.db("categorys").saveDoc(category, {
         success: function(data) {
             console.log(data);
-            cbFn(true);
+            return data;
         },
         error: function(status) {
             console.log(status);

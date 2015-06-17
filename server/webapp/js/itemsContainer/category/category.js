@@ -2,55 +2,43 @@
  * Created by Waleska on 09.06.2015.
  */
 
-function categoryAdd()
+function categoryAdd(categoryId)
 {
     try
     {
         $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
-        getCategoryInput();
-        checkCategoryInputField();
-        addCategoryToDB();
-        addCategoryToTable(null);
+        return addCategoryToDB(categoryId);
     }
     catch(err)
     {
     }
 }
 
-function categoryEdit()
+function categoryEdit(oldCategory, newCategory)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
-    getCategoryInput();
-    checkCategoryInputField();
-    setItemsToNewCategory(function (itemsReady){
+
+    setItemsToNewCategory(oldCategory, newCategory, function (itemsReady){
         if(itemsReady)
         {
-            deleteCategoryId(function (categroyReady){
+            deleteCategoryId(oldCategory, function (categroyReady){
                 if(categroyReady)
                 {
-                    addCategoryToDB(function (ready){
-                        if(ready)
-                        {
-                            refreshTable();
-                            cleanItemTable();
-                        };
-                    });
+                    return addCategoryToDB(newCategory);
                 }
             });
         }
     });
 }
 
-function categoryDelete()
+function categoryDelete(categoryId)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
-    checkIfCategoryIsMarked();
-    checkIfCategoryHasItems(function (checked){
+    checkIfCategoryHasItems(categoryId ,function (checked){
         if(checked)
         {
-            deleteCategoryFromDB();
-            deleteCategoryFromTable();
+            deleteCategoryFromDB(categoryId);
         }
     });
 }

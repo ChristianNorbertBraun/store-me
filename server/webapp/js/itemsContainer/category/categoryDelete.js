@@ -2,9 +2,9 @@
  * Created by Waleska on 10.06.2015.
  */
 
-function deleteCategoryId(cbFn)
+function deleteCategoryId(oldCategory, cbFn)
 {
-    $.couch.db("categorys").openDoc(markedCategory, {
+    $.couch.db("categorys").openDoc(oldCategory, {
         success: function(data) {
             console.log(data);
             $.couch.db("categorys").removeDoc(data, {
@@ -23,7 +23,7 @@ function deleteCategoryId(cbFn)
     });
 }
 
-function checkIfCategoryHasItems(cbFn)
+function checkIfCategoryHasItems(categoryId, cbFn)
 {
     var mapFunction = function (doc)
     {
@@ -37,9 +37,8 @@ function checkIfCategoryHasItems(cbFn)
             var i;
             for(i = 0; i < data["total_rows"] ; i++)
             {
-                if(rows[i].value == markedCategory)
+                if(rows[i].value == categoryId)
                 {
-                    window.alert("cannot delete an category wit items");
                     throw "delete error";
                 }
             }
@@ -52,9 +51,9 @@ function checkIfCategoryHasItems(cbFn)
     });
 }
 
-function deleteCategoryFromDB()
+function deleteCategoryFromDB(categoryId)
 {
-    $.couch.db("categorys").openDoc(markedCategory, {
+    $.couch.db("categorys").openDoc(categoryId, {
         success: function(data) {
             console.log(data);
             $.couch.db("categorys").removeDoc(data, {
