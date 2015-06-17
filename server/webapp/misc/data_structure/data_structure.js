@@ -588,7 +588,7 @@ var copyArray = function(array)
 };
 
 /**
- * Helping function to compare two objects (numbers). Used in the
+ * Helping function to compare two objects (numbers). Used in the sorting algorithm.
  * @param {Number} a    - A number
  * @param {Number} b    - Another number
  * @returns {number} The difference between a and b.
