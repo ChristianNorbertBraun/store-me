@@ -1,96 +1,51 @@
 /**
  * Created by Marcel on 17.06.2015.
  */
-
 var cradle = require('cradle');
-var stringsFile = require('../webapp/string/strings');
+var stringsFile = require('../webapp/string/strings.js');
+var dbSettings = {
+    url:"http://127.0.0.1",
+    port: 5984
+};
 
+prepareDB();
 
-var dbStoremeusers = new(cradle.Connection)('http://127.0.0.1', 5984).database(stringsFile.database.user);
-var dbContainers = new(cradle.Connection)('http://127.0.0.1', 5984).database(stringsFile.database.container);
-var dbItems = new(cradle.Connection)('http://127.0.0.1', 5984).database(stringsFile.database.items);
-var dbCategory = new(cradle.Connection)('http://127.0.0.1', 5984).database(stringsFile.databse.category);
+function prepareDB() {
 
-
-dbStoremeusers.exists(function(error,exists){
-    if(error){
-        console.log('error', error);
-    }
-    else if(exists){
-        console.log('Connected to database storemeusers');
-    }
-    else{
-        console.log('Database storemeUsers doesn\'t exist. Create...');
-        dbStoremeusers.create(function(error){
-            if(error){
-                console.log(error);
-            }
-            else{
-                console.log('Database created');
+    for(var name in stringsFile.database){
+        var tempDb = new(cradle.Connection)(dbSettings.url, dbSettings.port).database(stringsFile.database[name]);
+        initDB(stringsFile.database[name], tempDb, function(created){
+            if(created){
+                //TODO change active waiting into a better way
+                while(!created){}
             }
         });
     }
-});
 
-dbContainers.exists(function(error, exists){
-    if(error){
-        console.log('error', error);
-    }
-    else if(exists){
-        console.log('Connected to database dbContainer');
+};
 
-    }
-    else{
-        console.log('Database dbContainer doesn\'t exist. Create...');
-        dbContainers.create(function(error){
-            if(error){
-                console.log(error);
-            }
-            else{
-                console.log('Database created');
-            }
-        });
-    }
-});
-
-dbItems.exists(function(error,exists){
-    if(error){
-        console.log('error', error);
-    }
-    else if(exists){
-        console.log('Connected to database storemeItems');
-
-    }
-    else{
-        console.log('Database storemeItems doesn\'t exist. Create...');
-        dbItems.create(function(error){
-            if(error){
-                console.log(error);
-            }
-            else{
-                console.log('Database created');
-            }
-        });
-    }
-});
-
-dbCategory.exists(function(error,exists){
-    if(error){
-        console.log('error', error);
-    }
-    else if(exists){
-        console.log('Connected to database storemeCategory');
-
-    }
-    else{
-        console.log('Database storemeCategory doesn\'t exist. Create...');
-        dbCategory.create(function(error){
-            if(error){
-                console.log(error);
-            }
-            else{
-                console.log('Database created');
-            }
-        });
-    }
-});
+function initDB(dbName, db, callbackFunction){
+    db.exists(function(error,exists){
+        if(error){
+            console.log('error', error);
+            callbackFunction(false);
+        }
+        else if(exists){
+            console.log('Connected to database '+ dbName);
+            callbackFunction(true);
+        }
+        else{
+            console.log('Database '+ dbName +' doesn\'t exist. Create...');
+            db.create(function(error){
+                if(error){
+                    console.log(error);
+                    callbackFunction(false);
+                }
+                else{
+                    console.log('Database created');
+                    callbackFunction(true);
+                }
+            })
+        }
+    })
+}

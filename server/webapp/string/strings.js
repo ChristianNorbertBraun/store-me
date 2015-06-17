@@ -311,3 +311,5 @@ var english = {
 };
 
 var strings = english;
+
+module.exports = strings;
