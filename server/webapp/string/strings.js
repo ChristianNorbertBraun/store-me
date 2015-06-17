@@ -20,8 +20,10 @@ var english = {
     },
 
     database:{
-        container:"container",
-        storemeuser:"storemeusers"
+        container:"storemecontainer",
+        user:"storemeusers",
+        items:"storemeitems",
+        category:"storemecategory"
     },
 
     registration:{
