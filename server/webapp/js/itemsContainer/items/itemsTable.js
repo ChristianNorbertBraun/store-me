@@ -6,14 +6,14 @@ function loadCategoryItems()
 {
     try
     {
-        $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+        $.couch.urlPrefix = strings.link.dbConnection;
 
         var mapFunction = function (doc)
         {
             emit("category_id", doc.category_id);
         };
 
-        $.couch.db("items").query(mapFunction, "_count", "javascript", {
+        $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
             success: function (data) {
                 console.log(data);
                 var rows = data["rows"];

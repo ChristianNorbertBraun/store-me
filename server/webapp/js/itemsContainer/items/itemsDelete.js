@@ -11,10 +11,10 @@ function deleteItemFromTable()
 
 function deleteItemFromDB()
 {
-    $.couch.db("items").openDoc(markedItem, {
+    $.couch.db(strings.database.items).openDoc(markedItem, {
         success: function(data) {
             console.log(data);
-            $.couch.db("items").removeDoc(data, {
+            $.couch.db(strings.database.items).removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
                 },

@@ -9,7 +9,7 @@ function addCategoryToDB(categoryId, cbFn)
         _id: categoryId
     };
 
-    $.couch.db("categorys").saveDoc(category, {
+    $.couch.db(strings.database.category).saveDoc(category, {
         success: function(data) {
             console.log(data);
             cbFn(true, data);

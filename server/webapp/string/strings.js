@@ -312,4 +312,6 @@ var english = {
 
 var strings = english;
 
-module.exports = strings;
+if (typeof module !== "undefined"){
+    module.exports = strings
+}
