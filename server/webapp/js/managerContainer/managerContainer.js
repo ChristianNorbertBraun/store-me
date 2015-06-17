@@ -49,7 +49,7 @@ var managerContainer = Ractive.extend(
                                                     <h4 class="list-group-item-heading">{{containerName}}</h4>\
                                                     {{#each attributes}}\
                                                         <div class="list-group-item-text attributes">\
-                                                            <span class=" badge">{{name}} {{value}} {{unit}}</span>\
+                                                            <span class=" badge">{{attributeName}}: {{value}} {{unit}}</span>\
                                                         </div>\
                                                     {{/each}}\
                                                 </div>\
@@ -129,7 +129,7 @@ var managerContainer = Ractive.extend(
                             {{#each data.currentAttributes:i}}\
                             <div class="row popup-entry">\
                                 <div class="col-md-4 attribute-entry"><input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}"></div>\
-                                <div class="col-md-6 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{attributeValue}}"></div>\
+                                <div class="col-md-6 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{value}}"></div>\
                                 <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
@@ -148,7 +148,7 @@ var managerContainer = Ractive.extend(
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                        <button type="button" class="btn btn-default" data-dismiss="modal" on-click="cleanCurrentAttributes(true)">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="saveContainer()">Add</button>\
                     </div>\
                 </div>\
@@ -173,15 +173,20 @@ var managerContainer = Ractive.extend(
         navigateUp: function(event, index){
             window.app.set('data.container',clickedContainerHistory[index]);
             var latestClickedcontainer = clickedContainerHistory[clickedContainerHistory.length-1][0];
+            console.log(latestClickedcontainer);
             //toDO pretify it!!
-            var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-2);
-            parentContainer = getContainerById(currentTableState, parentId);
-            window.app.set('items', getAllItems(parentContainer));
 
+
+            var substringLength = 0;
             while(clickedContainerHistory.length > index){
+                substringLength +=2;
                 window.app.pop('pathElements');
                 clickedContainerHistory.pop();
             }
+
+            var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
+            parentContainer = getContainerById(currentTableState, parentId);
+            window.app.set('items', getAllItems(parentContainer));
 
 
           /*  var allItems = getAllItems(container);
@@ -189,6 +194,7 @@ var managerContainer = Ractive.extend(
         },
 
         navigateDown: function(event, index){
+
             var parentContainers = window.app.get('data.container');
             var clickedContainer = window.app.get('data.container.'+index);
             var subContainer = clickedContainer.subContainers ;
@@ -221,6 +227,7 @@ var managerContainer = Ractive.extend(
            }
        },
 
+        //TODO need method to add attriubutes to multiple container
         saveContainer:function(){
             //TODO add validation
             var containerAmount = $("#container-amount").val();
@@ -231,25 +238,34 @@ var managerContainer = Ractive.extend(
             else{
                 var subContainer = new Container($("#container-name").val());
                 addSubContainer(parentContainer, subContainer);
+                this.cleanCurrentAttributes();
+                this.attachAttributesToContainer(subContainer,this.get('data.currentAttributes'));
+                console.log(subContainer);
             }
 
             this.set("data.container", parentContainer.subContainers );
             $('#add-container-modal').modal('hide');
-            window.currentRactive = this;
+            this.cleanCurrentAttributes(true);
             this.writeToDb();
         },
 
         deleteContainer:function(){
-            var allSelectedItems = $(".list-group-item-selected").get();
+            var GUIallSelectedContainer = $(".list-group-item-selected").get();
             var allIds = [];
+            var allSelectedContainer = [];
 
-            for(i = 0; i < allSelectedItems.length; ++i){
-                var subContainer = this.get("data.container."+$(allSelectedItems[i]).attr('id'));
+            for(i = 0; i < GUIallSelectedContainer.length;++i){
+                allSelectedContainer.push(this.get("data.container."+$(GUIallSelectedContainer[i]).attr('id')));
+            }
+            for(i = 0; i < GUIallSelectedContainer.length; ++i){
+                var subContainer = allSelectedContainer[i];
 
                 removeSubContainer(parentContainer, subContainer.containerID);
-                this.set("data.container", parentContainer.subContainers);
             }
+            this.set("data.container", parentContainer.subContainers);
             this.writeToDb();
+            var allItems = getAllItems(parentContainer);
+            window.app.set('items',allItems);
 
         },
 
@@ -260,7 +276,7 @@ var managerContainer = Ractive.extend(
         addLine:function(){
             var dummy = {
                 attributeName:"",
-                attributeValue:""
+                value:""
             };
 
             if (this.get('data.currentAttributes') == null) {
@@ -285,7 +301,7 @@ var managerContainer = Ractive.extend(
 
             if(attrName != "" || attrValue !=""){
                 changedAttribute.attributeName = attrName;
-                changedAttribute.attributeValue = attrValue;
+                changedAttribute.value = attrValue;
             }
 
             this.set('data.currentAttributes.'+index,changedAttribute);
@@ -296,8 +312,33 @@ var managerContainer = Ractive.extend(
             saveStore(function(boolean){
                 loadStore(window.currentRactive.getStoreFromDb);
             }, currentTableState);
-        }
+        },
 
-    })
+        cleanCurrentAttributes:function(cleanAll){
+            var currentAttributes = this.get('data.currentAttributes')
+            if(currentAttributes) {
+                if (cleanAll) {
+                    this.splice('data.currentAttributes', 0, currentAttributes.length);
+                }
+                else {
+                    for (i = 0; i < currentAttributes.length; ++i) {
+                        if (currentAttributes[i].attributeName == "" || currentAttributes[i].value == "") {
+                            this.splice('data.currentAttributes', i, 1);
+                        }
+                    }
+                }
+            }
+
+        },
+
+        attachAttributesToContainer:function(container, attributes){
+            if(attributes){
+                for(i = 0; i < attributes.length; ++i){
+                    addContainerAttribute(container,attributes[i]);
+                }
+            }
+
+
+    }})
 ;
 
