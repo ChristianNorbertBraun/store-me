@@ -20,7 +20,7 @@ function categoryAdd(categoryId,cbFn)
     }
 }
 
-function categoryEdit(oldCategory, newCategory)
+function categoryEdit(oldCategory, newCategory, cbFn)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
@@ -33,7 +33,7 @@ function categoryEdit(oldCategory, newCategory)
                     addCategoryToDB(newCategory, function (ready, data){
                         if(ready)
                         {
-                            return data;
+                            cbFn(true, data);
                         }
                     });
                 }
@@ -54,7 +54,7 @@ function categoryDelete(categoryId)
     });
 }
 
-function getAllCategorys()
+function getAllCategorys(cbFn)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
@@ -66,7 +66,7 @@ function getAllCategorys()
     $.couch.db("categorys").query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
-            return data;
+            cbFn(true, data);
         },
         error: function (status) {
             console.log(status);
