@@ -26,10 +26,15 @@ function categoryEdit(oldCategory, newCategory)
     setItemsToNewCategory(oldCategory, newCategory, function (itemsReady){
         if(itemsReady)
         {
-            deleteCategoryId(oldCategory, function (categroyReady){
-                if(categroyReady)
+            deleteCategoryId(oldCategory, function (categoryReady){
+                if(categoryReady)
                 {
-                    return addCategoryToDB(newCategory);
+                    addCategoryToDB(newCategory, function (ready, data){
+                        if(ready)
+                        {
+                            return data;
+                        }
+                    });
                 }
             });
         }
@@ -45,6 +50,27 @@ function categoryDelete(categoryId)
         {
             deleteCategoryFromDB(categoryId);
         }
+    });
+}
+
+function getAllCategorys()
+{
+    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+
+    var mapFunction = function (doc)
+    {
+        emit();
+    };
+
+    $.couch.db("categorys").query(mapFunction, "_count", "javascript", {
+        success: function (data) {
+            console.log(data);
+            return data;
+        },
+        error: function (status) {
+            console.log(status);
+        },
+        reduce: false
     });
 }
 
