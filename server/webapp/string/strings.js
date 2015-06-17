@@ -7,7 +7,8 @@ var templates = {
     register: "design/register.tpl",
     dashboard: "design/dashboard.tpl",
     manager: "design/manager.tpl",
-    inventory: "design/inventory.tpl"
+    inventory: "design/inventory.tpl",
+    coredata: "design/coredata.tpl"
 };
 
 var english = {

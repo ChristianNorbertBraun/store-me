@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <title>StoreMe</title>
+
+    <!--string resources-->
+    <script src="string/strings.js"></script>
+
+    <!--Main Stylesheet-->
+    <link rel="stylesheet" href="design/main.css">
+
+    <!--Ractive Framework-->
+    <script src="http://cdn.ractivejs.org/latest/ractive.min.js"></script>
+
+    <!--jQuery-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+    <!-- custom bootstrap theme css -->
+    <link rel="stylesheet" href="theme/dist/css/bootstrap.min.css">
+
+    <!--Components-->
+    <script src="js/coredataContainer/coredataContainer.js"></script>
+    <link rel="stylesheet" href="js/coredataContainer/coredataContainer.css">
+
+    <script src="js/navbarContainer/navbarContainer.js"></script>
+    <link rel="stylesheet" href="js/navbarContainer/navbarContainer.css">
+
+    <!-- bootstrap js -->
+    <script src="theme/dist/js/bootstrap.min.js"></script>
+
+    <!-- Plugins -->
+    <script src="js/tablesorter/tablesorter.js"></script>
+</head>
+
+<body>
+<div id='container'></div>
+
+<!--calling main js-->
+<script src='js/app.js'></script>
+<script>
+    var components = {
+        coredataContainer: coredataContainer,
+        navbarContainer: navbarContainer
+    };
+    loadTemplate(templates.coredata,components);
+</script>
+</body>
+</html>
