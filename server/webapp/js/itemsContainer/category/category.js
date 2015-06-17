@@ -42,16 +42,23 @@ function categoryEdit(oldCategory, newCategory, cbFn)
     });
 }
 
-function categoryDelete(categoryId)
+function categoryDelete(categoryId, cbFn)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
-
-    checkIfCategoryHasItems(categoryId ,function (checked){
-        if(checked)
-        {
-            deleteCategoryFromDB(categoryId);
-        }
-    });
+    try
+    {
+        checkIfCategoryHasItems(categoryId, function (checked) {
+            if (checked) {
+                deleteCategoryFromDB(categoryId, function (deleted){
+                    if(deleted) cbFn(true);
+                });
+            }
+        });
+    }
+    catch(err)
+    {
+        cbFn(false);
+    }
 }
 
 function getAllCategorys(cbFn)
