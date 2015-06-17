@@ -51,7 +51,7 @@ function checkIfCategoryHasItems(categoryId, cbFn)
     });
 }
 
-function deleteCategoryFromDB(categoryId)
+function deleteCategoryFromDB(categoryId, cbFn)
 {
     $.couch.db("categorys").openDoc(categoryId, {
         success: function(data) {
@@ -59,6 +59,7 @@ function deleteCategoryFromDB(categoryId)
             $.couch.db("categorys").removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
+                    cbFn(true);
                 },
                 error: function(status) {
                     console.log(status);

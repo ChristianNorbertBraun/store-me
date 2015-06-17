@@ -20,32 +20,65 @@ function categoryAdd(categoryId,cbFn)
     }
 }
 
-function categoryEdit(oldCategory, newCategory)
+function categoryEdit(oldCategory, newCategory, cbFn)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
     setItemsToNewCategory(oldCategory, newCategory, function (itemsReady){
         if(itemsReady)
         {
-            deleteCategoryId(oldCategory, function (categroyReady){
-                if(categroyReady)
+            deleteCategoryId(oldCategory, function (categoryReady){
+                if(categoryReady)
                 {
-                    return addCategoryToDB(newCategory);
+                    addCategoryToDB(newCategory, function (ready, data){
+                        if(ready)
+                        {
+                            cbFn(true, data);
+                        }
+                    });
                 }
             });
         }
     });
 }
 
-function categoryDelete(categoryId)
+function categoryDelete(categoryId, cbFn)
+{
+    $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
+    try
+    {
+        checkIfCategoryHasItems(categoryId, function (checked) {
+            if (checked) {
+                deleteCategoryFromDB(categoryId, function (deleted){
+                    if(deleted) cbFn(true);
+                });
+            }
+        });
+    }
+    catch(err)
+    {
+        cbFn(false);
+    }
+}
+
+function getAllCategorys(cbFn)
 {
     $.couch.urlPrefix = "http://localhost:5984";//strings.link.dbConnection;
 
-    checkIfCategoryHasItems(categoryId ,function (checked){
-        if(checked)
-        {
-            deleteCategoryFromDB(categoryId);
-        }
+    var mapFunction = function (doc)
+    {
+        emit();
+    };
+
+    $.couch.db("categorys").query(mapFunction, "_count", "javascript", {
+        success: function (data) {
+            console.log(data);
+            cbFn(true, data);
+        },
+        error: function (status) {
+            console.log(status);
+        },
+        reduce: false
     });
 }
 
