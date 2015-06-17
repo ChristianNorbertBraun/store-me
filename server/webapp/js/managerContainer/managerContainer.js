@@ -17,12 +17,12 @@ var managerContainer = Ractive.extend(
                     <div class="container">\
                         <p>\
                           {{#if pathElements.length == 0}}\
-                            <div class="path-entry" >/</div>\
+                            <div class="main-screen-path-entry" >/</div>\
                           {{elseif pathElements.length > 4}}\
-                            <div class="path-entry" >.../</div>\
+                            <div class="main-screen-path-entry" >.../</div>\
                             {{#each pathElements:i}}\
                             {{#if i >= pathElements.length - 4}}\
-                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
+                                <div id="path{{i}}" class="main-screen-path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
                             {{/if}}\
                             {{/each}}\
                           \
