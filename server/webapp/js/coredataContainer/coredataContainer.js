@@ -21,7 +21,7 @@ var coredataContainer = Ractive.extend({
                     \
                     <button class="btn btn-primary coredata-button" data-toggle="modal" data-target="#add-category-modal" on-click="">Add</button>\
                     <button type="button" class="btn btn-primary coredata-button" on-click="">Delete</button>\
-                    <button type="button" class="btn btn-primary coredata-button" on-click="">Edit</button>\
+                    <button type="button" class="btn btn-primary coredata-button" data-toggle="modal" data-target="#edit-category-modal" on-click="">Edit</button>\
                 \
                 </div>\
                 \
@@ -54,7 +54,14 @@ var coredataContainer = Ractive.extend({
                     </div>\
                     \
                     <div class="modal-body">\
-                        <input id="add-category-input" type="text" class="form-control" placeholder="Criteria Name">\
+                        <div class="row">\
+                            <div class="col-sm-4">\
+                                <label class="modal-label">Category Name</label>\
+                            </div>\
+                            <div class="col-sm-8">\
+                                <input id="add-category-input" type="text" class="form-control" placeholder="Input Category Name">\
+                            </div>\
+                        </div>\
                     </div>\
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
@@ -63,6 +70,32 @@ var coredataContainer = Ractive.extend({
                 </div>\
             </div>\
         </div> \
+        \
+        <div class="modal fade" id="edit-category-modal" tabindex="-1" role="dialog" aria-labelledby="add-criteria" aria-hidden="true">\
+            <div class="modal-dialog">\
+                <div class="modal-content">\
+                    <div class="modal-header">\
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
+                        <h4 class="modal-title modal-title-color" id="add-criteria">Edit category</h4>\
+                    </div>\
+                    \
+                    <div class="modal-body">\
+                        <div class="row">\
+                            <div class="col-sm-4">\
+                                <label class="modal-label">Category Name</label>\
+                            </div>\
+                            <div class="col-sm-8">\
+                                <input id="add-category-input" type="text" class="form-control" placeholder="Input Category Name">\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <div class="modal-footer">\
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                        <button type="button" class="btn btn-primary" on-click="editCategory()">Add</button>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
     ',
 
     data: {},
@@ -76,6 +109,14 @@ var coredataContainer = Ractive.extend({
         var newCategoryName = $('#add-category-input').val();
 
         $('#add-category-modal').modal('hide');
+    },
+
+    editCategory: function() {
+
+        var newCategoryName = $('#add-category-input').val();
+
+        $('#add-category-modal').modal('hide');
+
     }
 
 });
