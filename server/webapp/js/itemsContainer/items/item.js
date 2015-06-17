@@ -2,11 +2,12 @@
  * Created by Waleska on 12.06.2015.
  */
 
-function Item(itemID, category_id)
+function Item(itemID, category_id, itemName)
 {
     this._id = itemID;
     this.category_id = category_id;
     this.attributes = [];
+    this.name = itemName;
 
     this.getID = function()
     {
@@ -15,7 +16,12 @@ function Item(itemID, category_id)
 
     this.setName = function(itemName)
     {
-        this._id = itemName;
+        this.name = itemName;
+    };
+
+    this.getName = function()
+    {
+        return this.name;
     };
 
     this.setCategory_id = function(category_id)

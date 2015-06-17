@@ -123,7 +123,20 @@ var managerContainer = Ractive.extend(
                         </div>\
                         \
                         <div id="attribute-container">\
-                            \
+                            {{#if data.currentAttributes}}\
+                                <h3 id="attribute-heading">Attributes</h3>\
+                            {{/if}}\
+                            {{#each data.currentAttributes:i}}\
+                            <div class="row popup-entry">\
+                                <div class="col-md-4 attribute-entry"><input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}"></div>\
+                                <div class="col-md-6 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{attributeValue}}"></div>\
+                                <div class="col-md-2">\
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine(this,i)">\
+                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
+                                    </button>\
+                                </div>\
+                            </div>\
+                            {{/each}}\
                         </div>\
                         <button class="btn btn-primary btn-sm criteria-add-button popup-entry" data-toggle="modal" on-click="addLine()">\
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
@@ -201,7 +214,6 @@ var managerContainer = Ractive.extend(
                var subContainer = result.subContainers;
                window.app.set('data.container', subContainer);
                var allItems = getAllItems(result);
-               console.log(allItems);
                window.app.set('items',allItems);
            }
            else{
@@ -223,6 +235,8 @@ var managerContainer = Ractive.extend(
 
             this.set("data.container", parentContainer.subContainers );
             $('#add-container-modal').modal('hide');
+            window.currentRactive = this;
+            this.writeToDb();
         },
 
         deleteContainer:function(){
@@ -235,6 +249,7 @@ var managerContainer = Ractive.extend(
                 removeSubContainer(parentContainer, subContainer.containerID);
                 this.set("data.container", parentContainer.subContainers);
             }
+            this.writeToDb();
 
         },
 
@@ -243,25 +258,45 @@ var managerContainer = Ractive.extend(
         },
 
         addLine:function(){
-            var attributeEntries = $(".attribute-entry").get();
-            console.log(attributeEntries.length);
-            if(attributeEntries.length == 0){
-                $("#attribute-container").append('<h3 id="attribute-heading">Attributes</h3>');
+            var dummy = {
+                attributeName:"",
+                attributeValue:""
+            };
+
+            if (this.get('data.currentAttributes') == null) {
+                this.set('data.currentAttributes[0]', dummy);
             }
-            $("#attribute-container").append(this.containerAttribute);
+            else {
+
+                this.push('data.currentAttributes', dummy);
+            }
         },
 
+        removeLine:function(event,index){
+            console.log(index);
+            this.splice('data.currentAttributes',index,1);
+            console.log(this.get('data.currentAttributes'))
+        },
 
+        storeAttributeChanges:function(event,index){
+            var changedAttribute ={};
+            var attrName = $('#attribute-name'+index).val();
+            var attrValue = $('#attribute-value'+index).val();
 
-        containerAttribute: '<div class="row popup-entry">\
-                            <div class="col-md-4 attribute-entry"><input id="container-name" type="text" class="form-control" placeholder="Attribute Name"></div>\
-                            <div class="col-md-6 attribute-entry"><input id="container-name" type="text" class="form-control" placeholder="Attribute Value"></div>\
-                            <div class="col-md-2"><button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine()">\
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
-                        </button></div>\
-                        </div>\ '
+            if(attrName != "" || attrValue !=""){
+                changedAttribute.attributeName = attrName;
+                changedAttribute.attributeValue = attrValue;
+            }
 
+            this.set('data.currentAttributes.'+index,changedAttribute);
+        },
 
+        writeToDb:function(){
+            window.currentRactive = this;
+            saveStore(function(boolean){
+                loadStore(window.currentRactive.getStoreFromDb);
+            }, currentTableState);
+        }
 
     })
 ;
