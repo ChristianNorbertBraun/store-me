@@ -9,7 +9,10 @@
 @media (min-width:700px) {
     .panel {
         height: 500px;
+        overflow-y: auto;
     }
+
+
 
     #item-info{
         height: 500px;
@@ -21,3 +24,19 @@
     padding: 0px;
 }
 
+.manager-button {
+    width: 33%;
+    margin-bottom: 10px;
+}
+
+.popup-entry{
+    margin-bottom: 10px;
+}
+
+#attribute-heading{
+    margin-bottom: 10px;
+}
+
+#attribute-container{
+
+}
