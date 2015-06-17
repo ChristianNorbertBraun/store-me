@@ -19,7 +19,8 @@ var english = {
     },
 
     database:{
-        container:"container"
+        container:"container",
+        storemeuser:"storemeusers"
     },
 
     registration:{

@@ -3,9 +3,10 @@ var app = express();
 
 var cradle = require('cradle');
 
-var db = new(cradle.Connection)('http://127.0.0.1', 5984).database('storemeusers');
+var dbStoremeusers = new(cradle.Connection)('http://127.0.0.1', 5984).database(strings.database.storemeuser);
+var dbContainer = new(cradle.Connection)('http://127.0.0.1', 5984).database(strings.database.container);
 
-db.exists(function(error,exists){
+dbStoremeusers.exists(function(error,exists){
     if(error){
         console.log('error', error);
     }
@@ -15,7 +16,7 @@ db.exists(function(error,exists){
     }
     else{
         console.log('Database storemeUsers doesn\'t exist. Create...');
-        db.create(function(error){
+        dbStoremeusers.create(function(error){
             if(error){
                 console.log(error);
             }
@@ -26,6 +27,28 @@ db.exists(function(error,exists){
 
     }
 
+});
+
+dbContainer.exists(function(error, exists){
+    if(error){
+        console.log('error', error);
+    }
+    else if(exists){
+        console.log('Connected to database dbContainer');
+
+    }
+    else{
+        console.log('Database dbContainer doesn\'t exist. Create...');
+        dbContainer.create(function(error){
+            if(error){
+                console.log(error);
+            }
+            else{
+                console.log('Database created');
+            }
+        });
+
+    }
 });
 
  /** serves main page */
