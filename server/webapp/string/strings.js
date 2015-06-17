@@ -297,6 +297,14 @@ var english = {
                 inventorytable: 'Inventory Table'
             }
         }
+    },
+
+    coredata: {
+        panel: {
+            title: {
+                category: 'Categories'
+            }
+        }
     }
 };
 

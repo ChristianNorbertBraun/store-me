@@ -25,6 +25,12 @@
     <script src="js/navbarContainer/navbarContainer.js"></script>
     <link rel="stylesheet" href="js/navbarContainer/navbarContainer.css">
 
+    <!-- custom js files -->
+    <script src="js/itemsContainer/category/category.js"></script>
+    <script src="js/itemsContainer/category/categoryAdd.js"></script>
+    <script src="js/itemsContainer/category/categoryDelete.js"></script>
+    <script src="js/itemsContainer/category/categoryEdit.js"></script>
+
     <!-- bootstrap js -->
     <script src="theme/dist/js/bootstrap.min.js"></script>
 
@@ -42,7 +48,7 @@
         coredataContainer: coredataContainer,
         navbarContainer: navbarContainer
     };
-    loadTemplate(templates.coredata,components);
+    loadTemplate(templates.coredata,components, strings.coredata);
 </script>
 </body>
 </html>
