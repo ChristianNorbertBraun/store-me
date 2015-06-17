@@ -17,12 +17,12 @@ var managerContainer = Ractive.extend(
                     <div class="container">\
                         <p>\
                           {{#if pathElements.length == 0}}\
-                            <div class="path-entry" >/</div>\
+                            <div class="main-screen-path-entry" >/</div>\
                           {{elseif pathElements.length > 4}}\
-                            <div class="path-entry" >.../</div>\
+                            <div class="main-screen-path-entry" >.../</div>\
                             {{#each pathElements:i}}\
                             {{#if i >= pathElements.length - 4}}\
-                                <div id="path{{i}}" class="path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
+                                <div id="path{{i}}" class="main-screen-path-entry" value="{{i}}" on-click="navigateUp(this,i)" >{{containerName}}/</div>\
                             {{/if}}\
                             {{/each}}\
                           \
@@ -114,11 +114,11 @@ var managerContainer = Ractive.extend(
                     <div id="add-container-body" class="modal-body">\
                     \
                         <div class="row popup-entry">\
-                            <label class="col-md-4">Parent Container</label>\
+                            <label class="col-md-4 modal-label">Parent Container</label>\
                             <div class="col-md-8"><input id="parent-id" type="text" class="form-control" placeholder="Parent-Id" readonly></div>\
                         </div>\
                          <div class="row popup-entry">\
-                            <label class="col-md-4">Name</label>\
+                            <label class="col-md-4 modal-label">Name</label>\
                             <div class="col-md-8"><input id="container-name" type="text" class="form-control" placeholder="Container Name"></div>\
                         </div>\
                         \
@@ -129,7 +129,7 @@ var managerContainer = Ractive.extend(
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
                         </button>\
                         <div class="row popup-entry">\
-                            <label class="col-md-4">Amount of Containers</label>\
+                            <label class="col-md-4 modal-label">Amount of Containers</label>\
                             <div class="col-md-8"><input id="container-amount" type="number" class="form-control" placeholder="Container Amount"></div>\
                         </div>\
                     \

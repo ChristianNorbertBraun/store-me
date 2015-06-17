@@ -2,7 +2,7 @@
  * Created by Waleska on 10.06.2015.
  */
 
-function setItemsToNewCategory(cbFn)
+function setItemsToNewCategory(oldCategory, newCategory, cbFn)
 {
     try
     {
@@ -18,7 +18,7 @@ function setItemsToNewCategory(cbFn)
                 var i;
                 for(i = 0; i < data["total_rows"] ; i++)
                 {
-                    if(rows[i].value == markedCategory) setNewCategory(rows[i].id);
+                    if(rows[i].value == oldCategory) setNewCategory(rows[i].id, newCategory);
                 }
                 cbFn(true);
             },
@@ -33,12 +33,12 @@ function setItemsToNewCategory(cbFn)
     }
 }
 
-function setNewCategory(id)
+function setNewCategory(id, newCategory)
 {
     $.couch.db("items").openDoc(id, {
         success: function(data) {
             console.log(data);
-            data.category_id = categoryInputField;
+            data.category_id = newCategory;
             $.couch.db("items").saveDoc(data, {
                 success: function(data2) {
                     console.log(data2);

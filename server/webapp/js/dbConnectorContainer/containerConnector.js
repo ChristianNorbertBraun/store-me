@@ -9,7 +9,7 @@ function saveStore(callBackFunction, container){
         if (created){
             container["_id"] = id;
             container["_rev"] = rev;
-            $.couch.db("container").saveDoc(container, {
+            $.couch.db(strings.database.container).saveDoc(container, {
                 success: function(data) {
                     callBackFunction(true);
                     console.log(data);

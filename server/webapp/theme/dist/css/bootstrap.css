@@ -5874,6 +5874,10 @@ button.close {
     width: 900px;
   }
 }
+.modal-label {
+  position: relative;
+  top: 6px;
+}
 .tooltip {
   position: absolute;
   z-index: 1070;
