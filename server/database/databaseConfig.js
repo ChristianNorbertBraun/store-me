@@ -10,6 +10,14 @@ var dbSettings = {
 
 prepareDB();
 
+
+/**
+ * Get all needed databases by reading the database object from strings.js
+ * Iterate through all databases and create a new cradle connection
+ *
+ * @function
+ * @author Marcel Groﬂ
+ */
 function prepareDB() {
 
     for(var name in stringsFile.database){
@@ -22,10 +30,18 @@ function prepareDB() {
         });
     }
 
-};
+}
 
-function initDB(dbName, db, callbackFunction){
-    db.exists(function(error,exists){
+/**
+ * Checks if database exists, if not create database
+ *
+ * @param {String} dbName                          - Name of the database to be initialised
+ * @param {cradle.Connection} cradleConnection     - Connection to the database
+ * @param {Function} callbackFunction              - Necessary callbackFunction
+ * @author Marcel Groﬂ
+ */
+function initDB(dbName, cradleConnection, callbackFunction){
+    cradleConnection.exists(function(error,exists){
         if(error){
             console.log('error', error);
             callbackFunction(false);
@@ -36,7 +52,7 @@ function initDB(dbName, db, callbackFunction){
         }
         else{
             console.log('Database '+ dbName +' doesn\'t exist. Create...');
-            db.create(function(error){
+            cradleConnection.create(function(error){
                 if(error){
                     console.log(error);
                     callbackFunction(false);
