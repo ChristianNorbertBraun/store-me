@@ -1,61 +1,57 @@
 /**
- * Created by Marcel on 10.06.2015.
+ * Created by Marcel on 22.06.2015.
  */
+/**
+ * Load the root container and its subcontainers from database identified by its storeName
+ *
+ * @param {String} storeName    - the name which identifies the database
+ * @returns {Container}         - the container identified by the given storeName
+ * @author Marcel Gross
+ */
+function loadStoreByName(storeName){
+    try{
+        var link = strings.link.dbConnection+"/"+strings.database.container+"/"+storeName;
+        var result = $.ajax({type: "GET", url: link, async: false});
+    } catch(err){
+        console.log(err);
+    }
 
+    if(result.status !== 200){
+        console.log("not Found");
+        result = null;
+    } else {
+        result = result.responseText;
+    }
+
+    return result;
+}
 
 /**
- * Saves or update the given container in the database
- * @function
- * @param {Function} callBackFunction   - Necessary callBackFunction
- * @param {Container} container         - Complete store
- * @author Marcel Groﬂ
+ * Checks if there is a database file with the name of the given container, if yes update this container otherwise create a new database file with the given container
+ *
+ * @param {Container} container         - given Container object
+ * @param {Function} callBackFunction   - necessary callBackFunction
+ * @author Marcel Gross
  */
-function saveStore(callBackFunction, container) {
+function saveStore(container, callBackFunction){
     $.couch.urlPrefix = strings.link.dbConnection;
-
-
-    loadStore(function (created, data, id, rev) {
-        if (created) {
-            container["_id"] = id;
-            container["_rev"] = rev;
-            $.couch.db(strings.database.container).saveDoc(container, {
-                success: function (data) {
-                    callBackFunction(true);
-                },
-                error: function (status) {
-                    console.log(status);
-                    callBackFunction(false);
-                }
-            });
+    var storeName = container.containerName;
+    var db = loadStoreByName(storeName);
+    if(db !== null){
+        db = JSON.parse(db);
+        container["_id"] = db._id;
+        container["_rev"] = db._rev;
+    } else {
+        container["_id"] = storeName;
+    }
+    $.couch.db(strings.database.container).saveDoc(container, {
+        success: function (data) {
+            callBackFunction(true);
+        },
+        error: function (status) {
+            console.log(status);
+            callBackFunction(false);
         }
     });
 }
 
-/**
- * Load complete store from database
- *
- * @param {Function} callBackFunction   - Necessary callBackFunction
- * @author Marcel Groﬂ
- */
-function loadStore(callBackFunction){
-    $.couch.urlPrefix = strings.link.dbConnection;
-
-    var mapFunction = function(doc) {
-        emit(null, doc);
-    };
-    $.couch.db(strings.database.container).query(mapFunction, "_count", "javascript", {
-        success: function(data) {
-            try {
-                var containerObject = data["rows"][0].value;
-                callBackFunction(true, containerObject, containerObject["_id"], containerObject["_rev"]);
-            } catch(err){
-                callBackFunction(true);
-            }
-        },
-        error: function(status) {
-            console.log(status);
-            callBackFunction(false);
-        },
-        reduce: false
-    });
-}

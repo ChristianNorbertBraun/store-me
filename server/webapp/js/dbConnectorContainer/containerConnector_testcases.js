@@ -5,13 +5,13 @@
 function createStore() {
  try {
   var store = initStore();
-  saveStore(function (created) {
+  saveStore(store, function (created) {
    if (created) {
     console.log("is created");
    } else {
     console.log("could not create");
    }
-  }, store);
+  });
  } catch (err) {
   console.log(err);
  }
@@ -20,7 +20,7 @@ function createStore() {
 function initStore() {
 
  var store = new Container("store");
- var shelf1 = new Container("shelf1");
+ var shelf1 = new Container("shelf10");
  var shelf2 = new Container("shelf2");
  var subshelf1_1 = new Container("subschelf1_1");
  var subshelf1_2 = new Container("subschelf1_2");
@@ -45,20 +45,8 @@ function initStore() {
  return store;
 };
 
-function loadCompleteStore() {
- try {
-  return loadStore(function (created, data) {
-   if (created) {
-    console.log(data);
-   } else {
-    console.log("nothing loaded");
-   }
-  });
- } catch (err) {
-  console.log(err);
- }
-};
 
 
-//createStore();
-//loadCompleteStore();
+createStore();
+
+
