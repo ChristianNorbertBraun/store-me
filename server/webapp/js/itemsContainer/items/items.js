@@ -46,6 +46,27 @@ function deleteItem(itemID, cbFn)
     });
 }
 
+function getAllItems(cbFn)
+{
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var mapFunction = function (doc)
+    {
+        emit();
+    };
+
+    $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
+        success: function (data) {
+            console.log(data);
+            cbFn(true, data);
+        },
+        error: function (status) {
+            console.log(status);
+        },
+        reduce: false
+    });
+}
+
 function keyHandlerItems(event)
 {
     var key = event.keyCode;
