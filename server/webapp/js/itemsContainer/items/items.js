@@ -22,11 +22,11 @@ function getDataItemFromCouch(itemID)
 };
 
 
-function createItem(itemID, itemName, categoryID, att, cbFn)
+function createItem(itemID, itemName, categoryID, attributes, cbFn)
 {
     try
     {
-        var item = new item(itemID, itemName, categoryID, att);
+        var item = new item(itemID, itemName, categoryID, attributes);
         addItemToDB(item, function(ready, data){
             if(ready) cbFn(true, data);
         });
