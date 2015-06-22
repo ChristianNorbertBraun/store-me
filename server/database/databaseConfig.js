@@ -25,7 +25,8 @@ function prepareDB() {
         initDB(stringsFile.database[name], tempDb, function(created){
             if(created){
                 //TODO change active waiting into a better way
-                while(!created){}
+                while(!created){
+                }
             }
         });
     }
@@ -44,7 +45,7 @@ function initDB(dbName, cradleConnection, callbackFunction){
     cradleConnection.exists(function(error,exists){
         if(error){
             console.log('error', error);
-            callbackFunction(false);
+            callbackFunction(true);
         }
         else if(exists){
             console.log('Connected to database '+ dbName);
@@ -55,7 +56,7 @@ function initDB(dbName, cradleConnection, callbackFunction){
             cradleConnection.create(function(error){
                 if(error){
                     console.log(error);
-                    callbackFunction(false);
+                    callbackFunction(true);
                 }
                 else{
                     console.log('Database created');

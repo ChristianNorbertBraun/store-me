@@ -160,6 +160,50 @@ removeAllContainerAttributes = function(container)
 };
 
 /**
+ * Returns all container attributes contained by the given container and its sub containers. The returned array is an array of
+ * ContainerAttributes objects.
+ * @function
+ * @param {Container} container     - Container from where to start gathering items
+ * @returns {Array} Array of ContainerAttributes
+ * @author Marcel Groß
+ */
+getAllContainerAttributes = function(container)
+{
+    var allAttributes = container.attributes;
+
+    for (var i = 0; i < container.subContainers.length; i++)
+    {
+        var subContainer = container.subContainers[i];
+        allAttributes = allAttributes.concat(getAllContainerAttributes(subContainer));
+    }
+    return allAttributes;
+};
+
+/**
+ * Returns all compulsory container attributes contained by the given container and its sub containers. The returned array is an array of
+ * ContainerAttributes objects.
+ * @function
+ * @param {Container} container     - Container from where to start gathering items
+ * @returns {Array} Array of ContainerAttributes
+ * @author Marcel Groß
+ */
+getAllCompulsoryContainerAttributes = function(container){
+    var allAttributes = [];
+    var allContainerAttributes = getAllContainerAttributes(container);
+
+
+    for (var i = 0; i < allContainerAttributes.length; i++)
+    {
+        var currentContainerAttribute = allContainerAttributes[i];
+        if (allContainerAttributes.compulsory){
+            allAttributes.push(currentContainerAttribute);
+        }
+    }
+    return allAttributes;
+};
+
+
+/**
  * Adds a sub container to a container.
  * @function
  * @param {Container} container     - Container to add sub container to
