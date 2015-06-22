@@ -191,11 +191,10 @@ getAllCompulsoryContainerAttributes = function(container){
     var allAttributes = [];
     var allContainerAttributes = getAllContainerAttributes(container);
 
-
     for (var i = 0; i < allContainerAttributes.length; i++)
     {
         var currentContainerAttribute = allContainerAttributes[i];
-        if (allContainerAttributes.compulsory){
+        if (currentContainerAttribute.compulsory){
             allAttributes.push(currentContainerAttribute);
         }
     }

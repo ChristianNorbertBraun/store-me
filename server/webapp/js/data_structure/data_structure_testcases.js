@@ -141,3 +141,17 @@ addItem(anotherTestContainer, "1337", 2);
 addItem(anotherTestContainer.subContainers[0], "1337", 2);
 addItem(anotherTestContainer.subContainers[1], "1337", 2);
 console.log(getAllItemAttributes(anotherTestContainer));
+
+console.log("Get all compulsory attributes");
+var compulsoryTestContainer = new Container("Store");
+addSubContainers(compulsoryTestContainer, "SubContainer-", 2);
+var compulsoryAttributes = new ContainerAttribute("compulsoryAttribute", 5, "m", "test", true);
+var nonCompulsoryAttributes = new ContainerAttribute("nonCompulsoryAttribute", 6, "l", "test", false);
+
+addContainerAttribute(compulsoryTestContainer, compulsoryAttributes);
+addContainerAttribute(compulsoryTestContainer, nonCompulsoryAttributes);
+
+addContainerAttribute(compulsoryTestContainer.subContainers[0], compulsoryAttributes);
+addContainerAttribute(compulsoryTestContainer.subContainers[0], compulsoryAttributes);
+addContainerAttribute(compulsoryTestContainer.subContainers[1], nonCompulsoryAttributes);
+console.log(getAllCompulsoryContainerAttributes(compulsoryTestContainer).length == 3);
