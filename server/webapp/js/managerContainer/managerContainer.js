@@ -12,6 +12,7 @@ var firstLoad = true;
 var managerContainer = Ractive.extend(
     {
         template : '\
+        {{#if stockExists}}\
         <div class="manager-container">\
             <div class="container">\
                 <div class="row">\
@@ -122,7 +123,7 @@ var managerContainer = Ractive.extend(
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">Name</label>\
-                            <div class="col-md-8"><input id="container-name" type="text" classs="form-control" placeholder="Container Name"></div>\
+                            <div class="col-md-8"><input id="container-name" type="text" class="form-control" placeholder="Container Name"></div>\
                         </div>\
                         \
                         <div id="attribute-container">\
@@ -156,15 +157,23 @@ var managerContainer = Ractive.extend(
                     </div>\
                 </div>\
             </div>\
-        </div> \
+        </div>\
+        {{else}}\
+        <noStockContainer></noStockContainer>\
+        {{/if}}\
         ',
+
+        components:{
+            noStockContainer:noStockContainer
+        },
 
         oninit: function(){
             this._super();
+            window.currentRactive = this;
+            loadStore(this.getStoreFromDb);
         },
 
         oncomplete:function(){
-            loadStore(this.getStoreFromDb);
 
         },
 
@@ -218,6 +227,7 @@ var managerContainer = Ractive.extend(
 
        getStoreFromDb: function(error, result){
            if(result) {
+               window.app.set('stockExists',true);
                var subContainer;
                currentTableState = result;
 
@@ -235,7 +245,7 @@ var managerContainer = Ractive.extend(
                window.app.set('items',allItems);
            }
            else{
-               console.log('noData');
+
            }
        },
 
@@ -318,11 +328,17 @@ var managerContainer = Ractive.extend(
             this.set('data.currentAttributes.'+index,changedAttribute);
         },
 
-        writeToDb:function(){
-            window.currentRactive = this;
-            saveStore(function(boolean){
-                loadStore(window.currentRactive.getStoreFromDb);
-            }, currentTableState);
+        writeToDb:function(stock){
+           if(stock){
+               saveStore(function(boolean){
+                   loadStore(window.currentRactive.getStoreFromDb);
+               }, stock);
+           }
+           else{
+               saveStore(function(boolean){
+                   loadStore(window.currentRactive.getStoreFromDb);
+               }, currentTableState);
+           }
         },
 
         cleanContainerValues:function(cleanAll){
