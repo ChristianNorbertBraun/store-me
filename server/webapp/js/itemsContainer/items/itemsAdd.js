@@ -30,7 +30,7 @@ function addItemToTable(name)
     }
 }
 
-function addItemToDB(item)
+function addItemToDB(item, cbFn)
 {
     $.couch.urlPrefix = strings.link.dbConnection;
 
@@ -39,6 +39,7 @@ function addItemToDB(item)
         $.couch.db(strings.database.items).saveDoc(item, {
             success: function(data) {
                 console.log(data);
+                cbFn(true, data);
             },
             error: function(status) {
                 console.log(status);

@@ -2,11 +2,12 @@
  * Created by Waleska on 12.06.2015.
  */
 
-function Item(itemID, category_id, itemName)
+function Item(itemID, itemName, category_id, attributes)
 {
     this._id = itemID;
     this.category_id = category_id;
-    this.attributes = [];
+    if(attributes) this.attributes = attributes;
+    else this.attributes = [];
     this.name = itemName;
 
     this.getID = function()
