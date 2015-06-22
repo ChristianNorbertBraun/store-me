@@ -3,10 +3,11 @@
  */
 
 //ToDo remove all hardcoded strings
-//ToDO check if it is possible to load data even earlier then when the manager screen loads
+
 var clickedContainerHistory = [];
 var currentTableState;
-var parentContainer;
+var firstLoad = true;
+
 
 var managerContainer = Ractive.extend(
     {
@@ -90,6 +91,8 @@ var managerContainer = Ractive.extend(
                                 \
                             </div>\
                         </div>\
+                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal" on-click="fillParentId()">Add</button>\
+                        <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Delete</button>\
                    </div>\
                    \
                    <div class="col-sm-4">\
@@ -114,7 +117,7 @@ var managerContainer = Ractive.extend(
                     <div id="add-container-body" class="modal-body">\
                     \
                         <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Parent Container</label>\
+                            <label class="col-md-4 modal-label">Parent ContainerID</label>\
                             <div class="col-md-8"><input id="parent-id" type="text" class="form-control" placeholder="Parent-Id" readonly></div>\
                         </div>\
                          <div class="row popup-entry">\
@@ -148,7 +151,7 @@ var managerContainer = Ractive.extend(
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal" on-click="cleanCurrentAttributes(true)">Close</button>\
+                        <button type="button" class="btn btn-default" data-dismiss="modal" on-click="cleanContainerValues(true)">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="saveContainer()">Add</button>\
                     </div>\
                 </div>\
@@ -185,12 +188,10 @@ var managerContainer = Ractive.extend(
             }
 
             var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
-            parentContainer = getContainerById(currentTableState, parentId);
-            window.app.set('items', getAllItems(parentContainer));
+            window.parentContainer = getContainerById(currentTableState, parentId);
+            window.app.set('items', getAllItems(window.parentContainer));
+            this.removeSelection();
 
-
-          /*  var allItems = getAllItems(container);
-            window.app.set('items',allItems);*/
         },
 
         navigateDown: function(event, index){
@@ -199,11 +200,10 @@ var managerContainer = Ractive.extend(
             var clickedContainer = window.app.get('data.container.'+index);
             var subContainer = clickedContainer.subContainers ;
 
-            parentContainer = clickedContainer;
+            window.parentContainer = clickedContainer;
 
-            $('#'+index).toggleClass('list-group-item-selected');
             window.app.set('data.container', subContainer);
-            
+
 
             window.app.push('pathElements', clickedContainer);
             clickedContainerHistory.push(parentContainers);
@@ -211,15 +211,27 @@ var managerContainer = Ractive.extend(
             var allItems = getAllItems(clickedContainer);
             window.app.set('items',allItems);
 
+            this.removeSelection();
+            $('#'+index).toggleClass('list-group-item-selected');
+
         },
 
        getStoreFromDb: function(error, result){
            if(result) {
+               var subContainer;
                currentTableState = result;
-               parentContainer = currentTableState;
-               var subContainer = result.subContainers;
+
+               if(firstLoad) {
+                   window.parentContainer = currentTableState;
+                   subContainer = currentTableState.subContainers;
+                   firstLoad = false;
+               }
+               else{
+                   subContainer = window.parentContainer.subContainers;
+               }
+
                window.app.set('data.container', subContainer);
-               var allItems = getAllItems(result);
+               var allItems = getAllItems(window.parentContainer);
                window.app.set('items',allItems);
            }
            else{
@@ -233,19 +245,19 @@ var managerContainer = Ractive.extend(
             var containerAmount = $("#container-amount").val();
             var containerName = $("#container-name").val();
             if(containerAmount > 0){
-                addSubContainers(parentContainer,containerName, containerAmount);
+                addSubContainers(window.parentContainer,containerName, containerAmount);
             }
             else{
                 var subContainer = new Container($("#container-name").val());
-                addSubContainer(parentContainer, subContainer);
-                this.cleanCurrentAttributes();
+                addSubContainer(window.parentContainer, subContainer);
+                this.cleanContainerValues();
                 this.attachAttributesToContainer(subContainer,this.get('data.currentAttributes'));
                 console.log(subContainer);
             }
 
-            this.set("data.container", parentContainer.subContainers );
+            this.set("data.container", window.parentContainer.subContainers );
             $('#add-container-modal').modal('hide');
-            this.cleanCurrentAttributes(true);
+            this.cleanContainerValues(true);
             this.writeToDb();
         },
 
@@ -260,17 +272,17 @@ var managerContainer = Ractive.extend(
             for(i = 0; i < GUIallSelectedContainer.length; ++i){
                 var subContainer = allSelectedContainer[i];
 
-                removeSubContainer(parentContainer, subContainer.containerID);
+                removeSubContainer(window.parentContainer, subContainer.containerID);
             }
-            this.set("data.container", parentContainer.subContainers);
+            this.set("data.container", window.parentContainer.subContainers);
             this.writeToDb();
-            var allItems = getAllItems(parentContainer);
+            var allItems = getAllItems(window.parentContainer);
             window.app.set('items',allItems);
 
         },
 
         fillParentId:function(){
-            $("#parent-id").val(parentContainer.containerID);
+            $("#parent-id").val(window.parentContainer.containerID);
         },
 
         addLine:function(){
@@ -291,7 +303,6 @@ var managerContainer = Ractive.extend(
         removeLine:function(event,index){
             console.log(index);
             this.splice('data.currentAttributes',index,1);
-            console.log(this.get('data.currentAttributes'))
         },
 
         storeAttributeChanges:function(event,index){
@@ -314,7 +325,7 @@ var managerContainer = Ractive.extend(
             }, currentTableState);
         },
 
-        cleanCurrentAttributes:function(cleanAll){
+        cleanContainerValues:function(cleanAll){
             var currentAttributes = this.get('data.currentAttributes')
             if(currentAttributes) {
                 if (cleanAll) {
@@ -329,6 +340,9 @@ var managerContainer = Ractive.extend(
                 }
             }
 
+            $('#container-name').val('');
+            $('#container-amount').val('');
+
         },
 
         attachAttributesToContainer:function(container, attributes){
@@ -339,6 +353,15 @@ var managerContainer = Ractive.extend(
             }
 
 
-    }})
+        },
+
+        removeSelection: function(){
+            var GUIallSelectedContainer = $(".list-group-item-selected").get();
+
+            for(i = 0; i < GUIallSelectedContainer.length; ++i){
+                $(GUIallSelectedContainer[i]).toggleClass('list-group-item-selected');
+            }
+        }
+    })
 ;
 
