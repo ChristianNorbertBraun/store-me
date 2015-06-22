@@ -23,7 +23,8 @@ var english = {
         container:"storemecontainer",
         user:"storemeusers",
         items:"storemeitems",
-        category:"storemecategory"
+        category:"storemecategory",
+        attributes: "storemeattributes"
     },
 
     registration:{
