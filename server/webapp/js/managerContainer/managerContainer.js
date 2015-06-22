@@ -122,7 +122,7 @@ var managerContainer = Ractive.extend(
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">Name</label>\
-                            <div class="col-md-8"><input id="container-name" type="text" class="form-control" placeholder="Container Name"></div>\
+                            <div class="col-md-8"><input id="container-name" type="text" classs="form-control" placeholder="Container Name"></div>\
                         </div>\
                         \
                         <div id="attribute-container">\
