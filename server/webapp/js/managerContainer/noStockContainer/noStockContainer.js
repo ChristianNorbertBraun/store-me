@@ -33,4 +33,4 @@ var noStockContainer = Ractive.extend({
 
     }
 
-})
+});
