@@ -3,9 +3,9 @@
  */
 function addAttributes() {
     console.log("addAttributes");
-    var names =["length", "width", "height"];
-    var unit = ["m", "m", "m"];
-    var type = ["unit of length", "unit of length", "unit of length"];
+    var names =["length", "width", "height", "line"];
+    var unit = ["m", "m", "m", "m"];
+    var type = ["unit of length", "unit of length", "unit of length", "unit of length"];
 
     try {
        for(var i = 0; i < names.length; i++){
@@ -27,7 +27,7 @@ function getAllAttributes() {
     try {
         return loadAllAttributes(function (created, data) {
             if (created) {
-                console.log(data);
+                //console.log(data);
             } else {
                 console.log("nothing loaded");
             }
