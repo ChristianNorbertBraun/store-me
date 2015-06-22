@@ -59,6 +59,15 @@ function loadCompleteStore() {
  }
 };
 
-
+function loadStoreby(){
+ loadStoreByName("store", function(created, data){
+  if (created) {
+   console.log(data);
+  } else {
+   console.log("nothing loaded");
+  }
+ });
+}
+loadStoreby();
 //createStore();
 //loadCompleteStore();

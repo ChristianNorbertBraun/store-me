@@ -12,23 +12,51 @@
  */
 function saveStore(callBackFunction, container) {
     $.couch.urlPrefix = strings.link.dbConnection;
-
-
-    loadStore(function (created, data, id, rev) {
-        if (created) {
-            container["_id"] = id;
-            container["_rev"] = rev;
-            $.couch.db(strings.database.container).saveDoc(container, {
-                success: function (data) {
-                    callBackFunction(true);
-                },
-                error: function (status) {
-                    console.log(status);
-                    callBackFunction(false);
-                }
-            });
+    var storeName = container.containerName;
+    var db = loadStoreByName(storeName, function(){});
+    if(db !== null){
+        db = JSON.parse(db);
+        container["_id"] = db._id;
+        container["_rev"] = db._rev;
+    } else {
+        container["_id"] = storeName;
+    }
+    $.couch.db(strings.database.container).saveDoc(container, {
+        success: function (data) {
+            callBackFunction(true);
+        },
+        error: function (status) {
+            console.log(status);
+            callBackFunction(false);
         }
     });
+}
+
+/**
+ * Load the root container and its subcontainers from database identified by its storeName
+ *
+ * @param {String} storeName    - the name which identifies the database
+ * @returns {Container}         - the container identified by the given storeName
+ * @author Marcel Gross
+ */
+function loadStoreByName(storeName, callBackFunction){
+    try{
+        var link = strings.link.dbConnection+"/"+strings.database.container+"/"+storeName;
+        var result = $.ajax({type: "GET", url: link, async: false});
+    } catch(err){
+        console.log(err);
+    }
+
+    if(result.status !== 200){
+        console.log("not Found");
+        result = null;
+        callBackFunction(false);
+    } else {
+        result = result.responseText;
+        callBackFunction(true, result);
+    }
+
+    return result;
 }
 
 /**
