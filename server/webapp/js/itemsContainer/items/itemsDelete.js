@@ -9,14 +9,15 @@ function deleteItemFromTable()
     markedItem = null;
 }
 
-function deleteItemFromDB()
+function deleteItemFromDB(itemID, cbFn)
 {
-    $.couch.db(strings.database.items).openDoc(markedItem, {
+    $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
             console.log(data);
             $.couch.db(strings.database.items).removeDoc(data, {
                 success: function(data2) {
                     console.log(data2);
+                    cbFn(true, data2);
                 },
                 error: function(status) {
                     console.log(status);

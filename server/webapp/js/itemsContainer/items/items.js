@@ -22,29 +22,27 @@ function getDataItemFromCouch(itemID)
 };
 
 
-function createItem()
+function createItem(itemID, itemName, categoryID, attributes, cbFn)
 {
     try
     {
-        checkIfCategoryIsMarked();
-        getItemInput();
-        checkItemInputField();
-        addItemToDB(item);
-        addItemToTable(null);
-        itemTemp = null;
+        var item = new item(itemID, itemName, categoryID, attributes);
+        addItemToDB(item, function(ready, data){
+            if(ready) cbFn(true, data);
+        });
     }
     catch(err)
     {
     }
 }
 
-function deleteItem()
+function deleteItem(itemID, cbFn)
 {
     $.couch.urlPrefix = strings.link.dbConnection;
 
-    checkIfItemIsMarked();
-    deleteItemFromDB();
-    deleteItemFromTable();
+    deleteItemFromDB(itemID, function(ready, data){
+        if(ready) cbFn(true, data);
+    });
 }
 
 function keyHandlerItems(event)
