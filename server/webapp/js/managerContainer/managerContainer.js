@@ -106,65 +106,15 @@ var managerContainer = Ractive.extend(
         </div>\
         \
         \
-        \
-        <div class="modal fade" id="add-container-modal" tabindex="-1" role="dialog" aria-labelledby="add-container" aria-hidden="true">\
-            <div class="modal-dialog">\
-                <div class="modal-content">\
-                    <div class="modal-header">\
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
-                        <h4 class="modal-title modal-title-color" id="add-container">Add a new Container</h4>\
-                    </div>\
-                       \
-                    <div id="add-container-body" class="modal-body">\
-                    \
-                        <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Parent ContainerID</label>\
-                            <div class="col-md-8"><input id="parent-id" type="text" class="form-control" placeholder="Parent-Id" readonly></div>\
-                        </div>\
-                         <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Name</label>\
-                            <div class="col-md-8"><input id="container-name" type="text" class="form-control" placeholder="Container Name"></div>\
-                        </div>\
-                        \
-                        <div id="attribute-container">\
-                            {{#if data.currentAttributes}}\
-                                <h3 id="attribute-heading">Attributes</h3>\
-                            {{/if}}\
-                            {{#each data.currentAttributes:i}}\
-                            <div class="row popup-entry">\
-                                <div class="col-md-4 attribute-entry"><input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}"></div>\
-                                <div class="col-md-6 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{value}}"></div>\
-                                <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine(this,i)">\
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
-                                    </button>\
-                                </div>\
-                            </div>\
-                            {{/each}}\
-                        </div>\
-                        <button class="btn btn-primary btn-sm criteria-add-button popup-entry" data-toggle="modal" on-click="addLine()">\
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
-                        </button>\
-                        <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Amount of Containers</label>\
-                            <div class="col-md-8"><input id="container-amount" type="number" class="form-control" placeholder="Container Amount"></div>\
-                        </div>\
-                    \
-                    </div>\
-                    <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal" on-click="cleanContainerValues(true)">Close</button>\
-                        <button type="button" class="btn btn-primary" on-click="saveContainer()">Add</button>\
-                    </div>\
-                </div>\
-            </div>\
-        </div>\
+        <addContainerPopup></addContainerPopup>\
         {{else}}\
-        <noStockContainer></noStockContainer>\
+        <noStockContainer entry="{{data}}" class="modal fade" id="add-container-modal" ></noStockContainer>\
         {{/if}}\
         ',
 
         components:{
-            noStockContainer:noStockContainer
+            noStockContainer:noStockContainer,
+            addContainerPopup:addContainerPopup
         },
 
         oninit: function(){
@@ -249,27 +199,6 @@ var managerContainer = Ractive.extend(
            }
        },
 
-        //TODO need method to add attriubutes to multiple container
-        saveContainer:function(){
-            //TODO add validation
-            var containerAmount = $("#container-amount").val();
-            var containerName = $("#container-name").val();
-            if(containerAmount > 0){
-                addSubContainers(window.parentContainer,containerName, containerAmount);
-            }
-            else{
-                var subContainer = new Container($("#container-name").val());
-                addSubContainer(window.parentContainer, subContainer);
-                this.cleanContainerValues();
-                this.attachAttributesToContainer(subContainer,this.get('data.currentAttributes'));
-                console.log(subContainer);
-            }
-
-            this.set("data.container", window.parentContainer.subContainers );
-            $('#add-container-modal').modal('hide');
-            this.cleanContainerValues(true);
-            this.writeToDb();
-        },
 
         deleteContainer:function(){
             var GUIallSelectedContainer = $(".list-group-item-selected").get();
@@ -295,39 +224,6 @@ var managerContainer = Ractive.extend(
             $("#parent-id").val(window.parentContainer.containerID);
         },
 
-        addLine:function(){
-            var dummy = {
-                attributeName:"",
-                value:""
-            };
-
-            if (this.get('data.currentAttributes') == null) {
-                this.set('data.currentAttributes[0]', dummy);
-            }
-            else {
-
-                this.push('data.currentAttributes', dummy);
-            }
-        },
-
-        removeLine:function(event,index){
-            console.log(index);
-            this.splice('data.currentAttributes',index,1);
-        },
-
-        storeAttributeChanges:function(event,index){
-            var changedAttribute ={};
-            var attrName = $('#attribute-name'+index).val();
-            var attrValue = $('#attribute-value'+index).val();
-
-            if(attrName != "" || attrValue !=""){
-                changedAttribute.attributeName = attrName;
-                changedAttribute.value = attrValue;
-            }
-
-            this.set('data.currentAttributes.'+index,changedAttribute);
-        },
-
         writeToDb:function(stock){
            if(stock){
                saveStore(function(boolean){
@@ -339,36 +235,6 @@ var managerContainer = Ractive.extend(
                    loadStore(window.currentRactive.getStoreFromDb);
                }, currentTableState);
            }
-        },
-
-        cleanContainerValues:function(cleanAll){
-            var currentAttributes = this.get('data.currentAttributes')
-            if(currentAttributes) {
-                if (cleanAll) {
-                    this.splice('data.currentAttributes', 0, currentAttributes.length);
-                }
-                else {
-                    for (i = 0; i < currentAttributes.length; ++i) {
-                        if (currentAttributes[i].attributeName == "" || currentAttributes[i].value == "") {
-                            this.splice('data.currentAttributes', i, 1);
-                        }
-                    }
-                }
-            }
-
-            $('#container-name').val('');
-            $('#container-amount').val('');
-
-        },
-
-        attachAttributesToContainer:function(container, attributes){
-            if(attributes){
-                for(i = 0; i < attributes.length; ++i){
-                    addContainerAttribute(container,attributes[i]);
-                }
-            }
-
-
         },
 
         removeSelection: function(){
