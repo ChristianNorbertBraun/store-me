@@ -26,13 +26,14 @@ function createItem(itemID, itemName, categoryID, attributes, cbFn)
 {
     try
     {
-        var item = new item(itemID, itemName, categoryID, attributes);
+        var item = new Item(itemID, itemName, categoryID, attributes);
         addItemToDB(item, function(ready, data){
             if(ready) cbFn(true, data);
         });
     }
     catch(err)
     {
+        console.log(err);
     }
 }
 
