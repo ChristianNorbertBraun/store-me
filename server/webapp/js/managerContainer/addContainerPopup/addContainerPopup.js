@@ -35,7 +35,7 @@ var addContainerPopup = Ractive.extend({
                                  <div class="col-md-5 attribute-entry">\
                                     <div class="input-group">\
                                         <span class="input-group-addon">\
-                                            <input id="compulsory{{i}}" type="checkbox" value={{compulsory}} on-click="toggleCheckbox(this,i)">\
+                                            <input id="compulsory{{i}}" type="checkbox" value=false on-click="toggleCheckbox(this,i)">\
                                         </span>\
                                         <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}">\
                                     </div>\
@@ -103,6 +103,8 @@ var addContainerPopup = Ractive.extend({
         }
 
         window.currentRactive.set('data.currentAttributes.'+index,changedAttribute);
+        console.log(window.currentRactive.get('data.currentAttributes'));
+
     },
 
     removeLine:function(event,index){
@@ -121,7 +123,6 @@ var addContainerPopup = Ractive.extend({
             window.currentRactive.set('data.currentAttributes[0]', dummy);
         }
         else {
-
             window.currentRactive.push('data.currentAttributes', dummy);
         }
     },
@@ -163,7 +164,7 @@ var addContainerPopup = Ractive.extend({
         var containerAmount = $("#container-amount").val();
         var containerName = $("#container-name").val();
         if(containerAmount > 0){
-            addSubContainers(window.parentContainer,containerName, containerAmount);
+            addSubContainers(window.parentContainer,containerName, containerAmount, window.currentRactive.get('data.currentAttributes'));
         }
         else{
             var subContainer = new Container($("#container-name").val());

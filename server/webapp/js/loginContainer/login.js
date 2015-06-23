@@ -39,8 +39,8 @@ function tryLogin(){
             type: "GET",
             headers: {'authorization': base64},
             success: function(res, status, xhr) {
-                console.log(res);
-                location.href = strings.link.toDashboard;
+                //console.log(res.sessionID);
+                location.href = strings.link.toDashboard + "?" + strings.fixeddata.queryparams + "=" + res.sessionID;
             },
             error: function(res, status, xhr) {
                 //wrongPassword
