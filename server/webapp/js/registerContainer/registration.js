@@ -87,7 +87,7 @@ function checkIfUserAlreadyExist(cbFn)
         }
     };
 
-    $.couch.db("storeme").query(mapFunction, "_count", "javascript", {
+    $.couch.db(strings.database.user).query(mapFunction, "_count", "javascript", {
         success: function (data) {
             console.log(data);
             var x = data["rows"];
@@ -138,7 +138,7 @@ function createUser(cbFn)
         "username": this.name,
         "password": this.pass
     };
-    $.couch.db("storeme").saveDoc(user, {
+    $.couch.db(strings.database.user).saveDoc(user, {
         success: function(data) {
             cbFn(true);
             console.log(data);

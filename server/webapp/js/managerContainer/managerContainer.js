@@ -5,8 +5,7 @@
 //ToDo remove all hardcoded strings
 
 var clickedContainerHistory = [];
-var currentTableState;
-var firstLoad = true;
+
 
 
 var managerContainer = Ractive.extend(
@@ -106,9 +105,9 @@ var managerContainer = Ractive.extend(
         </div>\
         \
         \
-        <addContainerPopup></addContainerPopup>\
+        <addContainerPopup entry="{{data}}" ></addContainerPopup>\
         {{else}}\
-        <noStockContainer entry="{{data}}" class="modal fade" id="add-container-modal" ></noStockContainer>\
+        <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
         ',
 
@@ -121,6 +120,7 @@ var managerContainer = Ractive.extend(
             this._super();
             window.currentRactive = this;
             loadStore(this.getStoreFromDb);
+            window.firstLoad = true;
         },
 
         oncomplete:function(){
@@ -141,13 +141,13 @@ var managerContainer = Ractive.extend(
 
             var substringLength = 0;
             while(clickedContainerHistory.length > index){
-                substringLength +=2;
+                substringLength += 2;
                 window.app.pop('pathElements');
                 clickedContainerHistory.pop();
             }
 
             var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
-            window.parentContainer = getContainerById(currentTableState, parentId);
+            window.parentContainer = getContainerById(window.currentTableState, parentId);
             window.app.set('items', getAllItems(window.parentContainer));
             this.removeSelection();
 
@@ -179,12 +179,12 @@ var managerContainer = Ractive.extend(
            if(result) {
                window.app.set('stockExists',true);
                var subContainer;
-               currentTableState = result;
+               window.currentTableState = result;
 
-               if(firstLoad) {
-                   window.parentContainer = currentTableState;
-                   subContainer = currentTableState.subContainers;
-                   firstLoad = false;
+               if(window.firstLoad) {
+                   window.parentContainer = window.currentTableState;
+                   subContainer = window.currentTableState.subContainers;
+                   window.firstLoad = false;
                }
                else{
                    subContainer = window.parentContainer.subContainers;
@@ -233,7 +233,7 @@ var managerContainer = Ractive.extend(
            else{
                saveStore(function(boolean){
                    loadStore(window.currentRactive.getStoreFromDb);
-               }, currentTableState);
+               }, window.currentTableState);
            }
         },
 

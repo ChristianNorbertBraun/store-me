@@ -27,7 +27,7 @@ function createItem(itemID, itemName, categoryID, attributes, cbFn)
     try
     {
         var item = new Item(itemID, itemName, categoryID, attributes);
-        addItemToDB(item, function(ready, data){
+        addOrUpdateItemToDB(item, function(ready, data){
             if(ready) cbFn(true, data);
         });
     }
@@ -46,9 +46,37 @@ function deleteItem(itemID, cbFn)
     });
 }
 
+function getAllItems(cbFn)
+{
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var mapFunction = function (doc)
+    {
+        emit();
+    };
+
+    $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
+        success: function (data) {
+            console.log(data);
+            cbFn(true, data);
+        },
+        error: function (status) {
+            console.log(status);
+        },
+        reduce: false
+    });
+}
+
 function keyHandlerItems(event)
 {
     var key = event.keyCode;
     if(key == 13) addItem();
 }
 
+function updateItem(oldItemId, itemName, categoryID, attributes, cbFn)
+{
+    var item = new item(oldItemId,itemName, categoryID, attributes);
+    addOrUpdateItemToDB(item, function (ready, data){
+        if(ready) cbFn(true, data);
+    })
+}
