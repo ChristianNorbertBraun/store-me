@@ -234,13 +234,15 @@ addSubContainer = function(container, subContainer)
  * @param {Container} container         - Container to add sub containers to
  * @param {String} subContainerPrefix   - Prefix after which sub containers are named
  * @param {Number} amount               - Amount of sub containers to created and add
+ * @param {Array} attributes            - Array of ContainerAttribute objects (may be null)
  * @author Marvin Therolf
  */
-addSubContainers = function(container, subContainerPrefix, amount)
+addSubContainers = function(container, subContainerPrefix, amount, attributes)
 {
     for (var i = 0; i < amount; i++)
     {
         var subContainer = new Container(subContainerPrefix + i);
+        subContainer.attributes = attributes;
         addSubContainer(container, subContainer);
     }
 };
