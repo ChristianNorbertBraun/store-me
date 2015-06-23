@@ -22,15 +22,15 @@ var inventoryContainer = Ractive.extend({
                                         <div class="modal-dialog">\
                                             <div class="modal-content">\
                                                 <div class="modal-header">\
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
+                                                    <button type="button" class="close" data-dismiss="modal" on-click="resetCriteriaName()" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
                                                     <h4 class="modal-title modal-title-color" id="add-criteria">Add a new criteria</h4>\
                                                 </div>\
                                                 \
                                                 <div class="modal-body">\
-                                                    <input id="add-criteria-input" type="text" class="form-control" placeholder="Criteria Name">\
+                                                    <input id="add-criteria-input" type="text" class="form-control" value={{newCriteriaName}} placeholder="Criteria Name">\
                                                 </div>\
                                                 <div class="modal-footer">\
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                                                    <button type="button" class="btn btn-default" on-click="resetCriteriaName()" data-dismiss="modal">Close</button>\
                                                     <button type="button" class="btn btn-primary" on-click="addCriteria()">Add</button>\
                                                 </div>\
                                             </div>\
@@ -78,16 +78,18 @@ var inventoryContainer = Ractive.extend({
                         <table id="inventory-table" class="table table-bordered">\
                             <thead>\
                                 <tr>\
-                                    <th>hello</th>\
-                                    <th>hello2</th>\
+                                    <th>ID</th>\
+                                    <th>Name</th>\
                                 </tr>\
                             </thead>\
                             \
                             <tbody>\
-                                <tr>\
-                                    <td>value</td>\
-                                    <td>value2</td>\
-                                </tr>\
+                                {{#each items:i}}\
+                                    <tr id="item_{{i}}">\
+                                        <td>{{id}}</td>\
+                                        <td>{{value.name}}</td>\
+                                    </tr>\
+                                {{/each}}\
                             </tbody>\
                         </table>\
                     </div>\
@@ -97,33 +99,61 @@ var inventoryContainer = Ractive.extend({
         ',
 
     data: {
-
+        newCriteriaName: '', // saves value of the new criteria modal input
+        items: null          // all items for item table
     },
 
     oninit: function() {
+        window.currentRactive = this;           // often can't access this so we save it using a global var
+        window.currentRactive.refreshItems();
+    },
 
+    oncomplete: function() {
+
+        /* TODO Does not work
+
+        $('#inventory-table').tablesorter({
+            textExtraction:function(s){
+                if($(s).find('img').length == 0) return $(s).text();
+                return $(s).find('img').attr('alt');
+            }
+        });*/
     },
 
     addCriteria: function() {
-        var criteriaName = $('#add-criteria-input').val();
+        var criteriaName = window.currentRactive.get('newCriteriaName');
 
-        if (this.get('criteria') == null) {
-            this.set('criteria[0]', criteriaName);
+        /* Create an array if it does not exist yet */
+        if (window.currentRactive.get('criteria') == null) {
+            window.currentRactive.set('criteria[0]', criteriaName);
         }
         else {
-            this.push('criteria', criteriaName);
+            window.currentRactive.push('criteria', criteriaName);
         }
 
-        $('#add-criteria-input').val("");
+        window.currentRactive.resetCriteriaName();
 
         $('#add-criteria-modal').modal('hide');
     },
 
     deleteCriteria: function(element, index) {
-        this.splice('criteria', index, 1);
+        window.currentRactive.splice('criteria', index, 1);
     },
 
     searchCriteria: function() {
         console.log('called search criteria');
+    },
+
+    resetCriteriaName: function() {
+        window.currentRactive.set('newCriteriaName', '');
+    },
+
+    refreshItems: function() {
+        getAllItems(function(ready, data) {
+            if (ready) {
+                var items = data.rows;
+                window.currentRactive.set('items', items);
+            }
+        });
     }
 });
