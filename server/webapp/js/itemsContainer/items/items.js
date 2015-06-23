@@ -27,7 +27,7 @@ function createItem(itemID, itemName, categoryID, attributes, cbFn)
     try
     {
         var item = new Item(itemID, itemName, categoryID, attributes);
-        addItemToDB(item, function(ready, data){
+        addOrUpdateItemToDB(item, function(ready, data){
             if(ready) cbFn(true, data);
         });
     }
@@ -73,3 +73,10 @@ function keyHandlerItems(event)
     if(key == 13) addItem();
 }
 
+function updateItem(oldItemId, itemName, categoryID, attributes, cbFn)
+{
+    var item = new item(oldItemId,itemName, categoryID, attributes);
+    addOrUpdateItemToDB(item, function (ready, data){
+        if(ready) cbFn(true, data);
+    })
+}
