@@ -9,10 +9,13 @@ var templates = {
     manager: "design/manager.tpl",
     inventory: "design/inventory.tpl",
     coredata: "design/coredata.tpl"
+
 };
 
 var english = {
-
+    fixeddata:{
+        queryparams: "sessionid"
+    },
     link:{
         toDashboard:"dashboard",
         toManager:"manager",
@@ -157,140 +160,7 @@ var english = {
         pathElements:[],
 
         data:{
-            container:[/*{
-                name:'Test Container',
-                parentid:'',
-                attributes:[{
-                    name:'width',
-                    value:'200',
-                    unit:'cm',
-                    type:'quantity',
-                    must:true
-                },
-                {
-                    name:'height',
-                    value:'300',
-                    unit:'cm',
-                    type:'quantity',
-                    must:true
-                }],
-                items:[{
-                    name:'Nothing',
-                    id:'2',
-                    amount:20,
-                    attributes:[{
-                        name:'height',
-                        value:'300'
-                    }]
-                }],
-                subcontainer:[{
-                    name:'Sub Container',
-                    parentid:'',
-                    attributes:[{
-                        name:'width',
-                        value:'200',
-                        unit:'cm',
-                        type:'quantity',
-                        must:true
-                    },
-                        {
-                            name:'height',
-                            value:'300',
-                            unit:'cm',
-                            type:'quantity',
-                            must:true
-                        }],
-                    items:[{
-                        name:'Nothing',
-                        id:'2',
-                        amount:20,
-                        attributes:[{
-                            name:'height',
-                            value:'300'
-                        }]
-                    }]
-                },
-                    {
-                        name:'Sub Container 2',
-                        parentid:'',
-                        attributes:[{
-                            name:'width',
-                            value:'200',
-                            unit:'cm',
-                            type:'quantity',
-                            must:true
-                        },
-                            {
-                                name:'height',
-                                value:'300',
-                                unit:'cm',
-                                type:'quantity',
-                                must:true
-                            }],
-                        items:[{
-                            name:'Nothing',
-                            id:'2',
-                            amount:20,
-                            attributes:[{
-                                name:'height',
-                                value:'300'
-                            }]
-                        }]
-                    }]
-            },
-                {
-                    name:'Test Container2',
-                    parentid:'',
-                    attributes:[{
-                        name:'liquid',
-                        value:'true',
-                        type:'boolean',
-                        must:true
-                        },
-                        {
-                            name:'weight',
-                            value:'300',
-                            unit:'kg',
-                            type:'quantity',
-                            must:true
-                        }],
-                    items:[{
-                        name:'Nothing',
-                        id:'2',
-                        amount:20,
-                        attributes:[{
-                            name:'height',
-                            value:'300'
-                        }]
-                    }],
-                    subcontainer:[{
-                        name:'Sub Container',
-                        parentid:'',
-                        attributes:[{
-                            name:'width',
-                            value:'200',
-                            unit:'cm',
-                            type:'quantity',
-                            must:true
-                        },
-                            {
-                                name:'weight',
-                                value:'300',
-                                unit:'kg',
-                                type:'quantity',
-                                must:true
-                            }],
-                        items:[{
-                            name:'Nothing',
-                            id:'2',
-                            amount:20,
-                            attributes:[{
-                                name:'height',
-                                value:'300'
-                            }]
-                        }]
-                    }]
-                }*/]
+            container:[]
         }
     },
 
@@ -316,5 +186,5 @@ var english = {
 var strings = english;
 
 if (typeof module !== "undefined"){
-    module.exports = strings
+    module.exports = strings;
 }

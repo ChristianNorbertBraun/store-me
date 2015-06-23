@@ -62,13 +62,28 @@ function loadAllAttributes(callBackFunction){
 }
 
 /**
+ * /**
  * Returns an attribute object identified by its name
  *
+ * @param {Function} callBackFunction            - necessary callBackFunction
  * @param {String} attributeName                 - name which identifies the needed attribute object
+ * @returns {Attribute}                          - returns the attribute, which is identified by attributeName
  * @author Marcel Gross
  */
-function loadAttributeByName(attributeName){
-    var link = strings.link.dbConnection+"/"+strings.database.attributes+"/"+attributeName;
-    var result = $.ajax({type: "GET", url: link, async: false}).responseText;
+function loadAttributeByName(attributeName, callBackFunction){
+    try{
+        var link = strings.link.dbConnection+"/"+strings.database.attributes+"/"+attributeName;
+        var result = $.ajax({type: "GET", url: link, async: false});
+    } catch (err){
+        console.log(err);
+    }
+    if(result.status !== 200){
+        console.log("not Found");
+        callBackFunction(false);
+    } else {
+        result = result.responseText;
+        callBackFunction(true, result);
+    }
+
     return result;
 }

@@ -4,7 +4,8 @@
 
 var currentSessions = [];
 var EXPIRE_TIME = 600000; //milliseconds
-
+var CHECK_STAMP_LENGTH = 2;
+var HASH_CODE_LENGTH = 8;
 
 function Session(userName, password)
 {
@@ -17,11 +18,12 @@ function Session(userName, password)
 var getSessionID = function(userName, password, timeStamp)
 {
     var key = userName + password;
-    var seed = timeStamp;
-    return hashCode(key, seed);
+    var hashCode = getHashCode(key, timeStamp);
+    var prefix = getCheckStamp(userName);
+    return prefix + hashCode;
 };
 
-var hashCode = function(key, seed)
+var getHashCode = function(key, seed)
 {
     var hashCode = "";
     var offSet = digitSum(seed);
@@ -30,18 +32,35 @@ var hashCode = function(key, seed)
     {
         hashCode += (key.charCodeAt(i) + offSet) % 10;
     }
-    return hashCode;
+    hashCode %= 9 * Math.pow(10, HASH_CODE_LENGTH - 1);
+    hashCode += Math.pow(10, HASH_CODE_LENGTH - 1);
+    return "" + hashCode;
 };
 
-var digitSum = function(seed)
+var digitSum = function(number)
 {
+    var rest = number;
     var digitSum = 0;
 
-    for (var i = 0; i < seed.length; i++)
+    while (rest > 0)
     {
-        digitSum += seed.charCodeAt(i);
+        digitSum += rest % 10;
+        rest = Math.floor(rest/10);
     }
     return digitSum;
+};
+
+var getCheckStamp = function(userName)
+{
+    var checkStamp = 0;
+
+    for (var i = 0; i < userName.length; i++)
+    {
+        checkStamp += userName.charCodeAt(i);
+    }
+    checkStamp %= 9 * Math.pow(10, CHECK_STAMP_LENGTH - 1);
+    checkStamp += Math.pow(10, CHECK_STAMP_LENGTH - 1);
+    return "" + checkStamp;
 };
 
 var getExpireTimeStamp = function(timeStamp)
@@ -57,27 +76,48 @@ var isValidSession = function(sessionID)
     {
         var currentSession = currentSessions[i];
 
+        if (currentSession.expires < Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+
         if (currentSession.sessionID === sessionID)
         {
-            if (currentSession.expires < Date.now())
-            {
-                removeFromArray(currentSessions, i);
-            }
-            else
-            {
-                valid = true;
-                currentSession.expires = getExpireTimeStamp(Date.now());
-            }
+            valid = true;
+            currentSession.expires = getExpireTimeStamp(Date.now());
             break;
         }
     }
     return valid;
 };
 
-var getSessionIDFromURL = function()
+var urlBuilder = function(page, sessionID)
 {
-    console.dir(location);
+    return page + "?" + strings.fixeddata.queryparams + "=" + sessionID;
 };
+
+var endSession = function(sessionID)
+{
+    for (var i = 0; i < currentSessions.length; i++)
+    {
+        var currentSession = currentSessions[i];
+
+        if (currentSession.expires < Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+
+        if (currentSession.sessionID === sessionID)
+        {
+            removeFromArray(currentSessions, i);
+            break;
+        }
+    }
+}
 
 if (typeof exports !== "undefined")
 {
