@@ -39,7 +39,7 @@ function tryLogin(){
             type: "GET",
             headers: {'authorization': base64},
             success: function(res, status, xhr) {
-                console.log(res);
+                console.dir(res.sessionID);
                 location.href = strings.link.toDashboard;
             },
             error: function(res, status, xhr) {

@@ -26,7 +26,7 @@ var hashCode = function(seed)
 
     for (var i = 0; i < seed.length; i++)
     {
-        hashCode = (seed.charCodeAt(i) + i) % 10;
+        hashCode += (seed.charCodeAt(i) + i) % 10;
     }
     return hashCode;
 };
