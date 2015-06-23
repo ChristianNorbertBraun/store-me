@@ -8,7 +8,8 @@ var templates = {
     dashboard: "design/dashboard.tpl",
     manager: "design/manager.tpl",
     inventory: "design/inventory.tpl",
-    coredata: "design/coredata.tpl"
+    coredata: "design/coredata.tpl",
+    expireTime: 600000 //milliseconds
 };
 
 var english = {
