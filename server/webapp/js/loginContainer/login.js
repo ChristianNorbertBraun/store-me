@@ -3,7 +3,8 @@
  */
 var loginName, loginPassword;
 
-function tryLogin()
+//todo delete tryLogin_old
+function tryLogin_old()
 {
     try {
         $.couch.urlPrefix = strings.link.dbConnection;
@@ -25,6 +26,35 @@ function tryLogin()
     }
     catch(err)
     {
+    }
+}
+
+function tryLogin(){
+    try{
+        getLoginValues();
+        checkNullLoginValues();
+        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
+        $.ajax({
+            url: strings.link.backendConnection+"/login",
+            type: "GET",
+            headers: {'authorization': base64},
+            success: function() { location.href = strings.link.toDashboard; },
+            error: function(res, status, xhr) {
+                //wrongPassword
+                if(res.status == 400){
+                    window.alert(strings.login.wrongPassword);
+                }
+                //user does not exists
+                else if(res.status == 404){
+                    window.alert(strings.login.noUser);
+                } else {
+                    window.alert(strings.login.loginfailed);
+                }
+            }
+        });
+
+    } catch(err){
+
     }
 }
 

@@ -1,8 +1,10 @@
 var express = require('express');
 var app = express();
+var cradle = require('cradle');
+var stringsFile = require('./webapp/string/strings.js');
+var db = new(cradle.Connection)().database(stringsFile.database.user);
 
 var databaseInit = require('./database/databaseConfig.js');
-
  app.get("/", function(req, res) {
      console.log(req.headers);
     res.sendfile('webapp/index.html')
@@ -27,6 +29,24 @@ app.get("/register(.html)?", function(req,res){
 
 app.get("/inventory(.html)?", function(req,res){
     res.sendfile('webapp/inventory.html');
+});
+
+app.get("/login", function (req, res) {
+    var userInfo = prepareAuthentication(req);
+    db.get(userInfo[0], function(err, doc){
+        if(doc == undefined){
+            res.statusCode = err.headers.status;
+            res.send("user does not exits");
+        } else if (userInfo[1] !== doc.password){
+            res.statusCode = 400;
+            res.send("login failed");
+        } else if (userInfo[1] === doc.password){
+            res.statusCode = 200;
+            res.setHeader("username", userInfo[0]);
+            res.setHeader("password", userInfo[1]);
+            res.sendfile('webapp/dashboard.html');
+        }
+     })
 });
 
  /** serves all the static files */
