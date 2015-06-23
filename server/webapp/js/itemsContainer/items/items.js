@@ -52,7 +52,7 @@ function getAllItems(cbFn)
 
     var mapFunction = function (doc)
     {
-        emit();
+        emit(null,doc);
     };
 
     $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
