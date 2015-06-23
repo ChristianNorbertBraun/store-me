@@ -96,7 +96,7 @@ var isValidSession = function(sessionID)
 var urlBuilder = function(page, sessionID)
 {
     return page + "?" + strings.fixeddata.queryparams + "=" + sessionID;
-}
+};
 
 if (typeof exports !== "undefined")
 {
