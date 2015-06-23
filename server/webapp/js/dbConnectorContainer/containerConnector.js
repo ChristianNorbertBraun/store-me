@@ -8,7 +8,7 @@
  * @function
  * @param {Function} callBackFunction   - Necessary callBackFunction
  * @param {Container} container         - Complete store
- * @author Marcel Groß
+ * @author Marcel Groï¿½
  */
 function saveStore(callBackFunction, container) {
     $.couch.urlPrefix = strings.link.dbConnection;
@@ -63,7 +63,7 @@ function loadStoreByName(storeName, callBackFunction){
  * Load complete store from database
  *
  * @param {Function} callBackFunction   - Necessary callBackFunction
- * @author Marcel Groß
+ * @author Marcel Groï¿½
  */
 function loadStore(callBackFunction){
     $.couch.urlPrefix = strings.link.dbConnection;
