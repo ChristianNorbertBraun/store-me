@@ -34,9 +34,7 @@ var dashboardContainer = Ractive.extend({
                             </div>\
                         </div>\
                         \
-                        <a href="/manager">\
-                        <button type="button" class="btn btn-primary dashboard-button">{{button.stock}}</button>\
-                        </a>\
+                        <button type="button" class="btn btn-primary dashboard-button" on-click="loadManager()">{{button.stock}}</button>\
                         <button type="button" class="btn btn-primary dashboard-button">{{button.overview}}</button>\
                     </div>\
                     \
@@ -140,5 +138,9 @@ var dashboardContainer = Ractive.extend({
         else {
             $('#column_' + index + ' span.dropup').removeClass('hidden');
         }
+    },
+
+    loadManager: function() {
+        location.href = urlBuilder(strings.link.toManager, getSessionIDFromURL());
     }
 });
