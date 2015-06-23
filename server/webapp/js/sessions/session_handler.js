@@ -66,7 +66,7 @@ var getSessionIDFromURL = function()
     console.dir(location);
 };
 
-if (typeof exports != undefined)
+if (typeof exports !== "undefined")
 {
     exports.newSession = function(username, password)
     {
