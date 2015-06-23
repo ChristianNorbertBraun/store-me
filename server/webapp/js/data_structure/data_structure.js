@@ -190,7 +190,7 @@ getAllContainerAttributes = function(container)
 getAllCompulsoryContainerAttributes = function(container)
 {
     var allCompulsoryAttributes = [];
-    var allContainerAttributes = getAllContainerAttributes(container);
+    var allContainerAttributes = container.attributes;
 
     for (var i = 0; i < allContainerAttributes.length; i++)
     {

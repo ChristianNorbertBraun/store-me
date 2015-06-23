@@ -35,15 +35,15 @@ var addContainerPopup = Ractive.extend({
                                  <div class="col-md-5 attribute-entry">\
                                     <div class="input-group">\
                                         <span class="input-group-addon">\
-                                            <input id="compulsory{{i}}" type="checkbox" value=false on-click="toggleCheckbox(this,i)">\
+                                            <input id="compulsory{{i}}"  type="checkbox" {{#if compulsory}} disabled="true" checked=true{{/if}}>\
                                         </span>\
-                                        <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}">\
+                                        <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" {{#if compulsory}} readonly {{/if}}>\
                                     </div>\
                                  </div>\
-                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{value}}"></div>\
-                                <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control" placeholder="Unit" on-change="storeAttributeChanges(this,i)" value=""></div>\
+                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" {{#if compulsory}}placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" value=""></div>\
+                                <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control" {{#if compulsory}} readonly {{/if}} placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                                 <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine(this,i)">\
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" {{#if compulsory}} disabled="true" {{/if}}  on-click="removeLine(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                     </button>\
                                 </div>\
@@ -68,32 +68,13 @@ var addContainerPopup = Ractive.extend({
         </div>\ ',
 
 
-
-    toggleCheckbox:function(event,index){
-        var checkboxValue = $('#compulsory'+index).val();
-
-        if(checkboxValue == 'false'){
-            $('#compulsory'+index).val('true');
-        }
-        else{
-            $('#compulsory'+index).val('false');
-        }
-
-    },
-
     storeAttributeChanges:function(event,index){
         var changedAttribute ={};
         var attrName = $('#attribute-name'+index).val();
         var attrValue = $('#attribute-value'+index).val();
         var attrUnit = $('#attribute-unit'+index).val();
-        var compulsory = $('#compulsory'+index).val();
+        var compulsory = $('#compulsory'+index).prop('checked');
 
-        if(compulsory == 'true'){
-            compulsory = true;
-        }
-        else{
-            compulsory = false;
-        }
 
         if(attrName != "" || attrValue !="" || attrUnit !=""){
             changedAttribute.attributeName = attrName;
@@ -136,7 +117,7 @@ var addContainerPopup = Ractive.extend({
             }
             else {
                 for (i = 0; i < currentAttributes.length; ++i) {
-                    if (currentAttributes[i].attributeName == "" || currentAttributes[i].value == "") {
+                    if (currentAttributes[i].attributeName == "" || currentAttributes[i].value == "" || currentAttributes[i].unit =="") {
                         window.currentRactive.splice('data.currentAttributes', i, 1);
                     }
                 }
@@ -158,29 +139,44 @@ var addContainerPopup = Ractive.extend({
 
     },
 
+    noCompulsoryAttributes:function(){
+        var currentAttributes =  window.currentRactive.get('data.currentAttributes');
+        for(i = 0; i < currentAttributes.length; ++i){
+            if(currentAttributes[i].compulsory){
+                return false;
+            }
+        }
+        return true;
+    },
 
     saveContainer:function(){
         //TODO add validation
         var containerAmount = $("#container-amount").val();
         var containerName = $("#container-name").val();
-        if(containerAmount > 0){
-            addSubContainers(window.parentContainer,containerName, containerAmount, window.currentRactive.get('data.currentAttributes'));
+
+        if(this.noCompulsoryAttributes()){
+            this.cleanContainerValues();
+            if(containerAmount > 0){
+                addSubContainers(window.parentContainer,containerName, containerAmount, window.currentRactive.get('data.currentAttributes'));
+            }
+            else{
+                var subContainer = new Container($("#container-name").val());
+
+                this.attachAttributesToContainer(subContainer,window.currentRactive.get('data.currentAttributes'));
+                addSubContainer(window.parentContainer, subContainer);
+
+
+            }
+            window.currentRactive.set("data.container", window.parentContainer.subContainers );
+            $('#add-container-modal').modal('hide');
+
+            window.currentRactive.writeToDb();
+
+            this.cleanContainerValues(true);
         }
         else{
-            var subContainer = new Container($("#container-name").val());
-
-            this.cleanContainerValues();
-            this.attachAttributesToContainer(subContainer,window.currentRactive.get('data.currentAttributes'));
-            addSubContainer(window.parentContainer, subContainer);
-
-
+            $('<h4 class="validation-message text-center">You have to fill all compulsory attributes!</h4>').insertAfter('#attribute-heading');
         }
 
-        window.currentRactive.set("data.container", window.parentContainer.subContainers );
-        $('#add-container-modal').modal('hide');
-
-        window.currentRactive.writeToDb();
-
-        this.cleanContainerValues(true);
     }
 });

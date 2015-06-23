@@ -48,7 +48,7 @@ var managerContainer = Ractive.extend(
                                                     <h4 class="list-group-item-heading">{{containerName}}</h4>\
                                                     {{#each attributes}}\
                                                         <div class="list-group-item-text attributes">\
-                                                            <span class=" badge">{{attributeName}}: {{value}} {{unit}}</span>\
+                                                            <span class=" {{#if compulsory}} badge-compulsory{{/if}} badge">{{attributeName}}: {{value}} {{unit}}</span>\
                                                         </div>\
                                                     {{/each}}\
                                                 </div>\
@@ -221,6 +221,9 @@ var managerContainer = Ractive.extend(
 
         fillParentId:function(){
             $("#parent-id").val(window.parentContainer.containerID);
+            var compulsaryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
+
+            window.currentRactive.set('data.currentAttributes',compulsaryAttributes);
         },
 
             writeToDb:function(stock){
