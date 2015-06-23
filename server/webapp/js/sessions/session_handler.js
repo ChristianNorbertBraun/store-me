@@ -85,4 +85,9 @@ if (typeof exports !== "undefined")
     {
         return new Session(username, password);
     };
+
+    exports.isValidSession = function(sessionID)
+    {
+        return isValidSession(sessionID);
+    }
 }
