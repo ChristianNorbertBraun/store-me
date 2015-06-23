@@ -11,6 +11,9 @@ console.log(digitSum(timeStamp) === 0);
 console.log(getCheckStamp("marvintherolf") === "69");
 console.log(getHashCode("marvintherolfcherrybanana", timeStamp) === "39111936");
 console.log(getSessionID("marvintherolf", "cherrybanana", timeStamp) === "6939111936");
+console.log(getSessionIDFromURL());
+
 
 // TODO: test multiple sessions
 // TODO: test end session
+// TODO: write docu for session handler
