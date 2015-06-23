@@ -62,7 +62,7 @@ var coredataContainer = Ractive.extend({
                     \
                     </div>\
                     \
-                    <button class="btn btn-primary coredata-table-button" data-toggle="modal" on-click="" data-target="#add-item-modal">Add</button>\
+                    <button class="btn btn-primary coredata-table-button" data-toggle="modal" on-click="prepareItem()" data-target="#add-item-modal">Add</button>\
                     <button type="button" class="btn btn-primary coredata-table-button" {{#unless itemSelected}}disabled="true"{{/unless}} on-click="deleteItemFromTable()">Delete</button>\
                     <button type="button" class="btn btn-primary coredata-table-button" {{#unless itemSelected}}disabled="true"{{/unless}} data-toggle="modal" data-target="#edit-item-modal" on-click="saveCurrentItemEntry()">Edit</button>\
                     \
@@ -137,7 +137,7 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Item ID</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <input id="add-item-id" type="text" class="form-control" placeholder="Input Item ID">\
+                                <input id="add-item-id" type="text" class="form-control" value={{newItem.id}} placeholder="Input Item ID">\
                             </div>\
                         </div>\
                         \
@@ -146,7 +146,7 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Item Name</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <input id="add-item-name" type="text" class="form-control" placeholder="Input Item Name">\
+                                <input id="add-item-name" type="text" class="form-control" value={{newItem.name}} placeholder="Input Item Name">\
                             </div>\
                         </div>\
                         \
@@ -155,7 +155,8 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Category</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <select id="add-category-select" class="form-control">\
+                                <select id="add-category-select" value={{newItem.category}} class="form-control">\
+                                    <option value="" disabled selected>Nothing selected</option>\
                                     {{#each category}}\
                                         <option>{{id}}</option>\
                                     {{/each}}\
@@ -164,33 +165,38 @@ var coredataContainer = Ractive.extend({
                         </div>\
                         \
                         <div id="attribute-container">\
-                            {{#if currentAttributes}}\
+                            {{#if newItem.attributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             \
-                            <div class="row popup-entry" intro-outro="slideh">\
-                                <div class="col-md-4 attribute-entry">\
-                                    <input type="text" class="form-control" placeholder="Attribute Name">\
+                            {{#each newItem.attributes:i}}\
+                                <div id="attribute_row_{{i}}" class="row modal-row" intro-outro="slideh">\
+                                    <div class="col-md-3 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{attributeName}}" placeholder="Attribute Name">\
+                                    </div>\
+                                    \
+                                    <div class="col-md-3 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{value}}" placeholder="Attribute Value">\
+                                    </div>\
+                                    \
+                                    <div class="col-md-2 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{unit}}" placeholder="Unit">\
+                                    </div>\
+                                    \
+                                    <div class="col-md-2 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{type}}" placeholder="Type">\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <button class="btn btn-primary btn-sm" on-click="removeAttributeRow(i)">\
+                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
+                                        </button>\
+                                    </div>\
                                 </div>\
-                                \
-                                <div class="col-md-4 attribute-entry">\
-                                    <input type="text" class="form-control" placeholder="Attribute Value">\
-                                </div>\
-                                \
-                                <div class="col-md-2 attribute-entry">\
-                                    <input type="text" class="form-control" placeholder="Unit">\
-                                </div>\
-                                \
-                                <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal">\
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
-                                    </button>\
-                                </div>\
-                            </div>\
+                            {{/each}}\
                             \
                         </div>\
                         \
-                        <button class="btn btn-primary btn-sm criteria-add-button popup-entry" data-toggle="modal">\
+                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewAttribute()">\
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
                         </button>\
                     </div>\
@@ -225,21 +231,61 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Item Name</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <input id="edit-item-name" type="text" class="form-control" value={{currentItem.value.name}}>\
+                                <input type="text" class="form-control" value={{currentItem.value.name}} {{#unless edit_enabled}}disabled{{/unless}}>\
                             </div>\
                         </div>\
                         \
-                        <div class="row">\
+                        <div class="row modal-row">\
                             <div class="col-sm-4">\
                                 <label class="modal-label">Category</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <select id="add-category-select" class="form-control" value={{currentItem.value.category_id}}>\
+                                <select class="form-control" value={{currentItem.value.category_id}} {{#unless edit_enabled}}disabled{{/unless}}>\
                                     {{#each category}}\
                                         <option>{{id}}</option>\
                                     {{/each}}\
                                 </select>\
                             </div>\
+                        </div>\
+                        \
+                        <div id="attribute-container">\
+                            {{#if currentItem.attributes}}\
+                                <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
+                            {{/if}}\
+                            \
+                            {{#each currentItem.value.attributes:i}}\
+                                <div id="attribute_row_{{i}}" class="row modal-row" intro-outro="slideh">\
+                                    <div class="col-md-3 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{attributeName}}" placeholder="Attribute Name" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                    </div>\
+                                    \
+                                    <div class="col-md-3 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{value}}" placeholder="Attribute Value" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                    </div>\
+                                    \
+                                    <div class="col-md-2 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{unit}}" placeholder="Unit" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                    </div>\
+                                    \
+                                    <div class="col-md-2 attribute-entry">\
+                                        <input type="text" class="form-control" value="{{type}}" placeholder="Type" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                    </div>\
+                                    <div class="col-md-2">\
+                                        <button class="btn btn-primary btn-sm" on-click="">\
+                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
+                                        </button>\
+                                    </div>\
+                                </div>\
+                            {{/each}}\
+                            \
+                        </div>\
+                        \
+                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="">\
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
+                        </button>\
+                        \
+                        <div class="checkbox pull-right">\
+                            <input checked="{{edit_enabled}}" type="checkbox"><p class="checkbox-label">  Enable Editing<p>\
                         </div>\
                     </div>\
                     <div class="modal-footer">\
@@ -257,6 +303,7 @@ var coredataContainer = Ractive.extend({
         this.refreshCategories();
         this.refreshItems();
         window.currentRactive = this;
+        window.currentRactive.set('edit_enabled', false);
     },
 
     /* Category Methods */
@@ -345,20 +392,48 @@ var coredataContainer = Ractive.extend({
         this.updateTableEditButton();
     },
 
-    addItem: function() {
-        var newItemId = $('#add-item-id').val();
-        var newItemName = $('#add-item-name').val();
-        var newCategoryName = $('#add-category-select').val();
+    prepareItem: function() {
+        window.currentRactive.set('newItem', '');
+    },
 
-        var ret = createItem(newItemId, newItemName, newCategoryName, [], function (ready, data) {
+    addItem: function() {
+        var newItemId = window.currentRactive.get('newItem.id');
+        var newItemName = window.currentRactive.get('newItem.name');
+        var newCategoryName = window.currentRactive.get('newItem.category');
+
+        var attributes = window.currentRactive.get('newItem.attributes');
+
+        if (newItemId == null || newItemName == null || newCategoryName == null) {
+            alert('error with creating item');
+            this.prepareItem();
+            return;
+        }
+
+        var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
-                window.currentRactive.refreshItems();
+                attributes.map(function(item) {
+                    saveAttribute(function(success) {
+                        window.currentRactive.refreshItems();
+                    }, item.attributeName, item.unit, item.type);
+                });
             }
         });
 
-        $('#add-item-id').val("");
-        $('#add-item-name').val("");
+        this.prepareItem();
         $('#add-item-modal').modal('hide');
+    },
+
+    addNewAttribute: function() {
+        if (window.currentRactive.get('newItem.attributes') == null) {
+            window.currentRactive.set('newItem.attributes.0', new ItemAttribute("", "", "", ""));
+        }
+        else {
+            window.currentRactive.push('newItem.attributes', new ItemAttribute("","","",""));
+        }
+    },
+
+    removeAttributeRow: function(index) {
+        window.currentRactive.splice('newItem.attributes', index, 1);
     },
 
     editItem: function() {
@@ -396,6 +471,8 @@ var coredataContainer = Ractive.extend({
                 alert('Error while deleting');
             }
         });
+
+        this.updateTableEditButton();
     },
 
     refreshItems: function() {
@@ -440,6 +517,8 @@ var coredataContainer = Ractive.extend({
         else {
             this.set('currentItem', '');
         }
+
+        this.set('edit_enabled', false);
     },
 
     updateTableEditButton: function() {

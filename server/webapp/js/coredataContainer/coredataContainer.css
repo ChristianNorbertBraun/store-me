@@ -31,3 +31,13 @@ span {
 .dropdown-toggle {
     font-size: inherit;
 }
+
+#add-new-attribute-button {
+    margin-top: 10px;
+}
+
+.checkbox-label {
+    position:relative;
+    top: 2.5px;
+    margin-left:5px;
+}
