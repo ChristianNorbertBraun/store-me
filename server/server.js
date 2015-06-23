@@ -3,6 +3,7 @@ var app = express();
 var cradle = require('cradle');
 var stringsFile = require('./webapp/string/strings.js');
 var db = new(cradle.Connection)().database(stringsFile.database.user);
+var sessionScript = require('./webapp/js/sessions/session_handler.js');
 
 var databaseInit = require('./database/databaseConfig.js');
  app.get("/", function(req, res) {
@@ -30,6 +31,10 @@ app.get("/inventory(.html)?", function(req,res){
     res.sendfile('webapp/inventory.html');
 });
 
+app.get("/coredata(.html)?", function(req,res){
+    res.sendfile('webapp/coredata.html');
+});
+
 app.get("/login", function (req, res) {
     var userInfo = prepareAuthentication(req);
     db.get(userInfo[0], function(err, doc){
@@ -43,7 +48,8 @@ app.get("/login", function (req, res) {
             res.statusCode = 200;
             res.setHeader("username", userInfo[0]);
             res.setHeader("password", userInfo[1]);
-            res.sendfile('webapp/dashboard.html');
+            var session = sessionScript.newSession(userInfo[0], userInfo[1]);
+            res.send(session);
         }
      })
 });

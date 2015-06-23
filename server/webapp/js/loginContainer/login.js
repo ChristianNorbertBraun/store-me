@@ -38,7 +38,10 @@ function tryLogin(){
             url: strings.link.backendConnection+"/login",
             type: "GET",
             headers: {'authorization': base64},
-            success: function() { location.href = strings.link.toDashboard; },
+            success: function(res, status, xhr) {
+                console.log(res);
+                location.href = strings.link.toDashboard;
+            },
             error: function(res, status, xhr) {
                 //wrongPassword
                 if(res.status == 400){
