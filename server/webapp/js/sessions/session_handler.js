@@ -117,7 +117,17 @@ var endSession = function(sessionID)
             break;
         }
     }
-}
+};
+
+var getSessionIDFromURL = function()
+{
+    var query = location.search;
+    var queryParams = query.substring(1, query.length);
+    var queryParamsArray = queryParams.split('&');
+    var querySessionID = queryParamsArray[0].split('=');
+    var sessionID = querySessionID[1];
+    return sessionID;
+};
 
 if (typeof exports !== "undefined")
 {
