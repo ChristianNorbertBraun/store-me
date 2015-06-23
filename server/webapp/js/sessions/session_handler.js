@@ -34,6 +34,11 @@ var getExpireTimeStamp = function(timeStamp)
     return timeStamp + templates.expireTime;
 };
 
+var newSession = function(username, password)
+{
+    return new Session(username, password);
+};
+
 var isValidSession = function(sessionID)
 {
     var valid = false;
