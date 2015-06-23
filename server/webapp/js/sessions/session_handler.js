@@ -3,6 +3,8 @@
  */
 
 var currentSessions = [];
+var EXPIRE_TIME = 600000; //milliseconds
+
 
 function Session(userName, password)
 {
@@ -31,12 +33,7 @@ var hashCode = function(seed)
 
 var getExpireTimeStamp = function(timeStamp)
 {
-    return timeStamp + templates.expireTime;
-};
-
-var newSession = function(username, password)
-{
-    return new Session(username, password);
+    return timeStamp + EXPIRE_TIME;
 };
 
 var isValidSession = function(sessionID)
@@ -61,6 +58,18 @@ var isValidSession = function(sessionID)
             break;
         }
     }
-    console.log(valid);
     return valid;
 };
+
+var getSessionIDFromURL = function()
+{
+    console.dir(location);
+};
+
+if (typeof exports != undefined)
+{
+    exports.newSession = function(username, password)
+    {
+        return new Session(username, password);
+    };
+}
