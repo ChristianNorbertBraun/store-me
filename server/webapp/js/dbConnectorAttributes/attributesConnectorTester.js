@@ -38,15 +38,17 @@ function getAllAttributes() {
 }
 
 function getAttributeByName() {
-    try {
-        console.log(loadAttributeByName("height"))
-    } catch (err) {
-        console.log(err);
-    }
+    loadAttributeByName('width', function(created, data){
+        if(created){
+            console.dir(data);
+        } else {
+            console.log("nothing loaded");
+        }
+    });
 }
 
 
 //addAttributes();
 //getAllAttributes();
-//getAttributeByName();
+getAttributeByName();
 

@@ -1,3 +1,5 @@
+//todo change debugMode before release
+var debugMode = true;
 var express = require('express');
 var app = express();
 var cradle = require('cradle');
@@ -11,28 +13,8 @@ var databaseInit = require('./database/databaseConfig.js');
     res.sendfile('webapp/index.html')
  });
 
-app.get("/manager(.html)?",function(req, res){
-    /*var auth =  req.header('authorization');
-    var b = new Buffer(auth.split(" ")[1], 'base64');
-    var s = b.toString();
-    console.log(s);*/
-    res.sendfile('webapp/manager.html');
-});
-
-app.get("/dashboard(.html)?", function(req, res){
-    res.sendfile('webapp/dashboard.html');
-});
-
 app.get("/register(.html)?", function(req,res){
     res.sendfile('webapp/register.html');
-});
-
-app.get("/inventory(.html)?", function(req,res){
-    res.sendfile('webapp/inventory.html');
-});
-
-app.get("/coredata(.html)?", function(req,res){
-    res.sendfile('webapp/coredata.html');
 });
 
 app.get("/login", function (req, res) {
@@ -46,12 +28,59 @@ app.get("/login", function (req, res) {
             res.send("login failed");
         } else if (userInfo[1] === doc.password){
             res.statusCode = 200;
-            res.setHeader("username", userInfo[0]);
-            res.setHeader("password", userInfo[1]);
             var session = sessionScript.newSession(userInfo[0], userInfo[1]);
             res.send(session);
         }
-     })
+    })
+});
+
+app.get("/manager(.html)?",function(req, res){
+    if(debugMode){
+        res.sendfile('webapp/manager.html');
+    } else {
+        var session = req.query[stringsFile.fixeddata.queryparams];
+        if(sessionScript.isValidSession(session))
+            res.sendfile('webapp/manager.html');
+        else
+            res.sendfile('webapp/index.html');
+    }
+});
+
+app.get("/dashboard(.html)?", function(req, res){
+    if(debugMode){
+        res.sendfile('webapp/dashboard.html');
+    } else {
+        var session = req.query[stringsFile.fixeddata.queryparams];
+        if(sessionScript.isValidSession(session))
+            res.sendfile('webapp/dashboard.html');
+        else
+            res.sendfile('webapp/index.html');
+    }
+});
+
+
+app.get("/inventory(.html)?", function(req,res){
+    if(debugMode){
+        res.sendfile('webapp/inventory.html');
+    } else {
+        var session = req.query[stringsFile.fixeddata.queryparams];
+        if(sessionScript.isValidSession(session))
+            res.sendfile('webapp/inventory.html');
+        else
+            res.sendfile('webapp/index.html');
+    }
+});
+
+app.get("/coredata(.html)?", function(req,res){
+    if(debugMode){
+        res.sendfile('webapp/coredata.html');
+    } else {
+        var session = req.query[stringsFile.fixeddata.queryparams];
+        if(sessionScript.isValidSession(session))
+            res.sendfile('webapp/coredata.html');
+        else
+            res.sendfile('webapp/index.html');
+    }
 });
 
  /** serves all the static files */
