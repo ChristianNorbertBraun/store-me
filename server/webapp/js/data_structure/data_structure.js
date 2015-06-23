@@ -187,18 +187,21 @@ getAllContainerAttributes = function(container)
  * @returns {Array} Array of ContainerAttributes
  * @author Marcel Groß
  */
-getAllCompulsoryContainerAttributes = function(container){
-    var allAttributes = [];
+getAllCompulsoryContainerAttributes = function(container)
+{
+    var allCompulsoryAttributes = [];
     var allContainerAttributes = getAllContainerAttributes(container);
 
     for (var i = 0; i < allContainerAttributes.length; i++)
     {
         var currentContainerAttribute = allContainerAttributes[i];
-        if (currentContainerAttribute.compulsory){
-            allAttributes.push(currentContainerAttribute);
+
+        if (currentContainerAttribute.compulsory)
+        {
+            allCompulsoryAttributes.push(currentContainerAttribute);
         }
     }
-    return allAttributes;
+    return allCompulsoryAttributes;
 };
 
 
@@ -231,13 +234,15 @@ addSubContainer = function(container, subContainer)
  * @param {Container} container         - Container to add sub containers to
  * @param {String} subContainerPrefix   - Prefix after which sub containers are named
  * @param {Number} amount               - Amount of sub containers to created and add
+ * @param {Array} attributes            - Array of ContainerAttribute objects (may be null)
  * @author Marvin Therolf
  */
-addSubContainers = function(container, subContainerPrefix, amount)
+addSubContainers = function(container, subContainerPrefix, amount, attributes)
 {
     for (var i = 0; i < amount; i++)
     {
         var subContainer = new Container(subContainerPrefix + i);
+        subContainer.attributes = attributes;
         addSubContainer(container, subContainer);
     }
 };
@@ -417,7 +422,7 @@ print = function(container)
  * Finds and returns a container starting at a given container recursively checking the container id.
  * @function
  * @param {Container} container     - Container to start the search at
- * @param {String} searchedIT       - ContainerID of the searched container
+ * @param {String} searchedID       - ContainerID of the searched container
  * @returns {Container} Searched container, or null if container wasn't found
  * @author Marvin Therolf and Marcel Groß
  */

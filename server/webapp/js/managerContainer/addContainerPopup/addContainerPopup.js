@@ -1,6 +1,10 @@
 /**
  * Created by christian on 22.06.15.
  */
+
+
+
+
 var addContainerPopup = Ractive.extend({
     template:'\
       <div class="modal fade" id="add-container-modal" tabindex="-1" role="dialog" aria-labelledby="add-container" aria-hidden="true">\
@@ -23,13 +27,14 @@ var addContainerPopup = Ractive.extend({
                         </div>\
                         \
                         <div id="attribute-container">\
-                            {{#if data.currentAttributes}}\
+                            {{#if currentAttributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
-                            {{#each data.currentAttributes:i}}\
+                            {{#each currentAttributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
                                 <div class="col-md-4 attribute-entry"><input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}"></div>\
-                                <div class="col-md-6 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{value}}"></div>\
+                                <div class="col-md-4 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" on-change="storeAttributeChanges(this,i)" value="{{value}}"></div>\
+                                <div class="col-md-2 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                                 <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" on-click="removeLine(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
@@ -55,6 +60,8 @@ var addContainerPopup = Ractive.extend({
             </div>\
         </div>\ ',
 
+
+
     storeAttributeChanges:function(event,index){
         var changedAttribute ={};
         var attrName = $('#attribute-name'+index).val();
@@ -79,25 +86,25 @@ var addContainerPopup = Ractive.extend({
             value:""
         };
 
-        if (this.get('data.currentAttributes') == null) {
-            this.set('data.currentAttributes[0]', dummy);
+        if (this.get('currentAttributes') == null) {
+            this.set('currentAttributes[0]', dummy);
         }
         else {
 
-            this.push('data.currentAttributes', dummy);
+            this.push('currentAttributes', dummy);
         }
     },
 
     cleanContainerValues:function(cleanAll){
-        var currentAttributes = this.get('data.currentAttributes')
+        var currentAttributes = this.get('currentAttributes')
         if(currentAttributes) {
             if (cleanAll) {
-                this.splice('data.currentAttributes', 0, currentAttributes.length);
+                this.splice('currentAttributes', 0, currentAttributes.length);
             }
             else {
                 for (i = 0; i < currentAttributes.length; ++i) {
                     if (currentAttributes[i].attributeName == "" || currentAttributes[i].value == "") {
-                        this.splice('data.currentAttributes', i, 1);
+                        this.splice('currentAttributes', i, 1);
                     }
                 }
             }
@@ -118,6 +125,7 @@ var addContainerPopup = Ractive.extend({
 
     },
 
+
     saveContainer:function(){
         //TODO add validation
         var containerAmount = $("#container-amount").val();
@@ -127,15 +135,22 @@ var addContainerPopup = Ractive.extend({
         }
         else{
             var subContainer = new Container($("#container-name").val());
-            addSubContainer(window.parentContainer, subContainer);
+
             this.cleanContainerValues();
-            this.attachAttributesToContainer(subContainer,this.get('data.currentAttributes'));
-            console.log(subContainer);
+            this.attachAttributesToContainer(subContainer,this.get('currentAttributes'));
+            addSubContainer(window.parentContainer, subContainer);
+
+
         }
 
-        this.set("data.container", window.parentContainer.subContainers );
+        window.currentRactive.set("data.container", window.parentContainer.subContainers );
         $('#add-container-modal').modal('hide');
+        setTimeout(function(){
+            window.currentRactive.writeToDb();
+            console.log('wrote container to DB');
+        },200);
+
+
         this.cleanContainerValues(true);
-        window.currentRactive.writeToDb();
     }
 });
