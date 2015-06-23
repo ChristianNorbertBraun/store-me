@@ -75,7 +75,7 @@ function keyHandlerItems(event)
 
 function updateItem(oldItemId, itemName, categoryID, attributes, cbFn)
 {
-    var item = new item(oldItemId,itemName, categoryID, attributes);
+    var item = new Item(oldItemId,itemName, categoryID, attributes);
     addOrUpdateItemToDB(item, function (ready, data){
         if(ready) cbFn(true, data);
     })
