@@ -412,9 +412,16 @@ var coredataContainer = Ractive.extend({
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
                 attributes.map(function(item) {
-                    saveAttribute(function(success) {
-                        window.currentRactive.refreshItems();
-                    }, item.attributeName, item.unit, item.type);
+                    if (loadAttributeByName(item.attributeName, function(success, result) {
+                        if (success == false) {
+                            saveAttribute(function(success) {
+                                window.currentRactive.refreshItems();
+                            }, item.attributeName, item.unit, item.type);
+                        }
+                        else {
+                            window.currentRactive.refreshItems();
+                        }
+                    }));
                 });
             }
         });
