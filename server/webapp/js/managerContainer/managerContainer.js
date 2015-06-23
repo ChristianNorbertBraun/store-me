@@ -224,6 +224,7 @@ var managerContainer = Ractive.extend(
             var compulsaryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
 
             window.currentRactive.set('data.currentAttributes',compulsaryAttributes);
+            $('.validation-message').remove();
         },
 
             writeToDb:function(stock){
