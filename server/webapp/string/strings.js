@@ -8,7 +8,8 @@ var templates = {
     dashboard: "design/dashboard.tpl",
     manager: "design/manager.tpl",
     inventory: "design/inventory.tpl",
-    coredata: "design/coredata.tpl"
+    coredata: "design/coredata.tpl",
+    expireTime: 600000 //milliseconds
 };
 
 var english = {
@@ -16,7 +17,8 @@ var english = {
     link:{
         toDashboard:"dashboard",
         toManager:"manager",
-        dbConnection:"http://localhost:5984"
+        dbConnection:"http://localhost:5984",
+        backendConnection:"http://localhost:8080"
     },
 
     database:{
@@ -43,7 +45,8 @@ var english = {
         noUsername:"Please enter a Username",
         noPassword:"Please enter a Password",
         noUser:"There is no User with this Username",
-        wrongPassword:"Password is incorrect"
+        wrongPassword:"Password is incorrect",
+        loginfailed:"Login failed"
     },
 
     category:{

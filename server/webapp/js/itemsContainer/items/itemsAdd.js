@@ -30,7 +30,7 @@ function addItemToTable(name)
     }
 }
 
-function addItemToDB(item, cbFn)
+function addOrUpdateItemToDB(item, cbFn)
 {
     $.couch.urlPrefix = strings.link.dbConnection;
 

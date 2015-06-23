@@ -78,7 +78,8 @@ function ItemAttribute(attributeName, value, unit, type)
 }
 
 // functions
-
+// TODO: delete this code. bind in data_structure.js into your html test files to use these functions. thank you. :)
+/*
 var removeFromArray = function(array, index)
 {
     var hold = array[index];
@@ -86,7 +87,6 @@ var removeFromArray = function(array, index)
     array[array.length-1] = hold;
     array.pop();
 };
-
 var copyArray = function(array)
 {
     var result = [];
@@ -102,3 +102,4 @@ var sortNumerically = function (a, b)
 {
     return a - b;
 };
+ */

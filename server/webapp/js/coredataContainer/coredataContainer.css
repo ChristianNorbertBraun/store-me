@@ -1,5 +1,9 @@
-.coredata-button {
-    width: 49%;
+.coredata-category-button {
+    width: 49.22%;
+}
+
+.coredata-table-button {
+    width: 33%;
 }
 
 .no-padding {
@@ -13,4 +17,17 @@
 
 span {
     cursor:pointer;
+}
+
+#item-table {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.modal-row {
+    margin-bottom: 10px;
+}
+
+.dropdown-toggle {
+    font-size: inherit;
 }

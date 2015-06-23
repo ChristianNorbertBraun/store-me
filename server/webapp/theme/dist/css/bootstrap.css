@@ -2501,6 +2501,14 @@ table th[class*="col-"] {
     border-bottom: 0;
   }
 }
+.table-entry:hover {
+  color: #fff;
+  background-color: #e74c3c;
+}
+.table-entry-selected {
+  color: #fff;
+  background-color: #e74c3c;
+}
 fieldset {
   min-width: 0;
   padding: 0;
@@ -5230,14 +5238,14 @@ a.list-group-item:focus {
 .list-group-item:hover {
   color: #fff;
   background-color: #e74c3c;
-  border: 1px solid #3498db;
+  border: 1px solid #e74c3c;
   -webkit-box-shadow: 0 1px 1px grey;
           box-shadow: 0 1px 1px grey;
 }
 .list-group-item-selected {
   color: #fff;
   background-color: #e74c3c;
-  border: 1px solid #3498db;
+  border: 1px solid #e74c3c;
 }
 .list-group-item-success {
   color: #3c763d;
