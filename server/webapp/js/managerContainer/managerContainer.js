@@ -1,6 +1,4 @@
-/**
- * Created by captainluma on 02.06.15.
- */
+
 
 //ToDo remove all hardcoded strings
 
@@ -105,7 +103,7 @@ var managerContainer = Ractive.extend(
         </div>\
         \
         \
-        <addContainerPopup entry="{{data}}" ></addContainerPopup>\
+        <addContainerPopup></addContainerPopup>\
         {{else}}\
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
@@ -135,8 +133,6 @@ var managerContainer = Ractive.extend(
         navigateUp: function(event, index){
             window.app.set('data.container',clickedContainerHistory[index]);
             var latestClickedcontainer = clickedContainerHistory[clickedContainerHistory.length-1][0];
-            console.log(latestClickedcontainer);
-            //toDO pretify it!!
 
 
             var substringLength = 0;
@@ -187,6 +183,9 @@ var managerContainer = Ractive.extend(
                    window.firstLoad = false;
                }
                else{
+                   var currentParentId = window.parentContainer.containerID;
+                   //have to rebin the parentcontainer to the currenttable stort to make sure that cbr works fine
+                   window.parentContainer = getContainerById(window.currentTableState, currentParentId);
                    subContainer = window.parentContainer.subContainers;
                }
 
@@ -224,7 +223,7 @@ var managerContainer = Ractive.extend(
             $("#parent-id").val(window.parentContainer.containerID);
         },
 
-        writeToDb:function(stock){
+            writeToDb:function(stock){
            if(stock){
                saveStore(function(boolean){
                    loadStore(window.currentRactive.getStoreFromDb);

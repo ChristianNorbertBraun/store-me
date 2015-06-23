@@ -15,7 +15,6 @@ app.get("/manager(.html)?",function(req, res){
     var b = new Buffer(auth.split(" ")[1], 'base64');
     var s = b.toString();
     console.log(s);*/
-
     res.sendfile('webapp/manager.html');
 });
 
