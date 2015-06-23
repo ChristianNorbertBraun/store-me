@@ -14,7 +14,7 @@ var templates = {
 
 var english = {
     fixeddata:{
-        queryparams: "session"
+        queryparams: "sessionid"
     },
     link:{
         toDashboard:"dashboard",

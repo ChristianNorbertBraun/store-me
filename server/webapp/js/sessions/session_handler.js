@@ -98,6 +98,27 @@ var urlBuilder = function(page, sessionID)
     return page + "?" + strings.fixeddata.queryparams + "=" + sessionID;
 };
 
+var endSession = function(sessionID)
+{
+    for (var i = 0; i < currentSessions.length; i++)
+    {
+        var currentSession = currentSessions[i];
+
+        if (currentSession.expires < Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+
+        if (currentSession.sessionID === sessionID)
+        {
+            removeFromArray(currentSessions, i);
+            break;
+        }
+    }
+}
+
 if (typeof exports !== "undefined")
 {
     exports.newSession = function(username, password)

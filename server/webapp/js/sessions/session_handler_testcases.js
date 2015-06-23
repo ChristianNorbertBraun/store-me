@@ -4,12 +4,13 @@
 
 var session = new Session("captainLuma", "cherrybanana");
 console.log(currentSessions.length === 1);
-//setTimeout("console.log(isValidSession(session.sessionID) === false)", 700000); // test with 1 min expire time and 70s of waiting worked
+//setTimeout("console.log(isValidSession(session.sessionID) === false)", 700000); // test with 1 min expire time and 70s of waiting worked perfectly
 
-var timeStamp = 1435083694726;
-console.log(digitSum(timeStamp));
-console.log(getCheckStamp("marvintherolf"));
-console.log(getHashCode("marvintherolfcherrybanana", timeStamp));
-console.log(getSessionID("marvintherolf", "cherrybanana", timeStamp));
+var timeStamp = 0;
+console.log(digitSum(timeStamp) === 0);
+console.log(getCheckStamp("marvintherolf") === "69");
+console.log(getHashCode("marvintherolfcherrybanana", timeStamp) === "39111936");
+console.log(getSessionID("marvintherolf", "cherrybanana", timeStamp) === "6939111936");
 
 // TODO: test multiple sessions
+// TODO: test end session
