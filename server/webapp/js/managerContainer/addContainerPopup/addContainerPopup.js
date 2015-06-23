@@ -35,12 +35,12 @@ var addContainerPopup = Ractive.extend({
                                  <div class="col-md-5 attribute-entry">\
                                     <div class="input-group">\
                                         <span class="input-group-addon">\
-                                            <input id="compulsory{{i}}"  type="checkbox" {{#if compulsory}} disabled="true" checked=true{{/if}}>\
+                                            <input id="compulsory{{i}}"  type="checkbox" {{#if compulsory}} disabled="true" checked=true{{/if}} on-change="storeAttributeChanges(this,i)">\
                                         </span>\
                                         <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" {{#if compulsory}} readonly {{/if}}>\
                                     </div>\
                                  </div>\
-                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" {{#if compulsory}}placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" value=""></div>\
+                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" {{#if compulsory}}placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
                                 <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control" {{#if compulsory}} readonly {{/if}} placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                                 <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" {{#if compulsory}} disabled="true" {{/if}}  on-click="removeLine(this,i)">\
@@ -82,6 +82,7 @@ var addContainerPopup = Ractive.extend({
             changedAttribute.unit = attrUnit;
             changedAttribute.compulsory = compulsory;
         }
+        console.log(changedAttribute);
 
         window.currentRactive.set('data.currentAttributes.'+index,changedAttribute);
         console.log(window.currentRactive.get('data.currentAttributes'));
@@ -143,7 +144,9 @@ var addContainerPopup = Ractive.extend({
         var currentAttributes =  window.currentRactive.get('data.currentAttributes');
         for(i = 0; i < currentAttributes.length; ++i){
             if(currentAttributes[i].compulsory){
-                return false;
+                if(!currentAttributes[i].attributeName || !currentAttributes[i].unit || !currentAttributes[i].value){
+                    return false;
+                }
             }
         }
         return true;
