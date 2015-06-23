@@ -3,10 +3,7 @@
  */
 var cradle = require('cradle');
 var stringsFile = require('../webapp/string/strings.js');
-var dbSettings = {
-    url:"http://127.0.0.1",
-    port: 5984
-};
+var dbSettings = require('./dbSettings.js');
 
 prepareDB();
 

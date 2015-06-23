@@ -27,7 +27,7 @@ app.get("/register(.html)?", function(req,res){
 
 app.get("/inventory(.html)?", function(req,res){
     res.sendfile('webapp/inventory.html');
-})
+});
 
  /** serves all the static files */
  app.get(/^(.+)$/, function(req, res){
