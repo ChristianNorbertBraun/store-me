@@ -16,19 +16,32 @@ function Session(userName, password)
 
 var getSessionID = function(userName, password, timeStamp)
 {
-    var seed = userName + password + timeStamp;
-    return hashCode(seed);
+    var key = userName + password;
+    var seed = timeStamp;
+    return hashCode(key, seed);
 };
 
-var hashCode = function(seed)
+var hashCode = function(key, seed)
 {
-    var hashCode = "0";
+    var hashCode = "";
+    var offSet = digitSum(seed);
+
+    for (var i = 0; i < key.length; i++)
+    {
+        hashCode += (key.charCodeAt(i) + offSet) % 10;
+    }
+    return hashCode;
+};
+
+var digitSum = function(seed)
+{
+    var digitSum = 0;
 
     for (var i = 0; i < seed.length; i++)
     {
-        hashCode += (seed.charCodeAt(i) + i) % 10;
+        digitSum += seed.charCodeAt(i);
     }
-    return hashCode;
+    return digitSum;
 };
 
 var getExpireTimeStamp = function(timeStamp)
