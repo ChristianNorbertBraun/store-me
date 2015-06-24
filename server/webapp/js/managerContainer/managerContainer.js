@@ -89,8 +89,8 @@ var managerContainer = Ractive.extend(
                                 \
                             </div>\
                         </div>\
-                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal" on-click="fillParentId()">Add</button>\
-                        <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Delete</button>\
+                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal">Stock</button>\
+                        <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Deplete</button>\
                    </div>\
                    \
                    <div class="col-sm-4">\
@@ -104,6 +104,7 @@ var managerContainer = Ractive.extend(
         \
         \
         <addContainerPopup></addContainerPopup>\
+        <addItemPopup></addItemPopup>\
         {{else}}\
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
@@ -111,7 +112,8 @@ var managerContainer = Ractive.extend(
 
         components:{
             noStockContainer:noStockContainer,
-            addContainerPopup:addContainerPopup
+            addContainerPopup:addContainerPopup,
+            addItemPopup: addItemPopup
         },
 
         oninit: function(){

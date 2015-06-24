@@ -1,13 +1,23 @@
 //todo change debugMode before release
 var debugMode = true;
+
+var stringsFile = require('./webapp/string/strings.js');
+var sessionScript = require('./webapp/js/sessions/session_handler.js');
+var databaseInit = require('./database/databaseConfig.js');
+var userScript = require('./webapp/js/data_structure/user');
+
+var cradle = require('cradle');
+var db = new(cradle.Connection)().database(stringsFile.database.user);
+var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
-var cradle = require('cradle');
-var stringsFile = require('./webapp/string/strings.js');
-var db = new(cradle.Connection)().database(stringsFile.database.user);
-var sessionScript = require('./webapp/js/sessions/session_handler.js');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-var databaseInit = require('./database/databaseConfig.js');
+databaseInit.prepareDB();
+
  app.get("/", function(req, res) {
      console.log(req.headers);
     res.sendfile('webapp/index.html')
@@ -28,8 +38,8 @@ app.get("/login", function (req, res) {
             res.send("login failed");
         } else if (userInfo[1] === doc.password){
             res.statusCode = 200;
-            var session = sessionScript.newSession(userInfo[0], userInfo[1]);
-            res.send(session);
+            var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
+            res.send(sessionID);
         }
     })
 });
@@ -57,7 +67,6 @@ app.get("/dashboard(.html)?", function(req, res){
             res.sendfile('webapp/index.html');
     }
 });
-
 
 app.get("/inventory(.html)?", function(req,res){
     if(debugMode){
@@ -87,7 +96,6 @@ app.get("/coredata(.html)?", function(req,res){
  app.get(/^(.+)$/, function(req, res){
      console.log('static file request : ' + req.params[0]);
      res.sendfile( __dirname+ "/webapp" + req.params[0]);
-
  });
 
  app.listen(8080, function() {
@@ -96,25 +104,22 @@ app.get("/coredata(.html)?", function(req,res){
 
 
 app.post("/registeruser", function(req, res){
-   var userInfo = prepareAuthentication(req);
-    db.save({
-        name:userInfo[0], password:userInfo[1]
-    }, function (err, res) {
-       console.log(res);
+    var userInfo = prepareAuthentication(req);
+    var user = userScript.newUser(userInfo[0], userInfo[1]);
+
+    db.save(user, function (err, res) {
+       if(err !== null){
+           console.log(err);
+       }
     });
-    res.send("Hallo");
+    var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
+    res.send(sessionID);
 });
 
 function prepareAuthentication(req){
     var auth =  req.header('authorization');
     var buffer = new Buffer(auth.split(" ")[1], 'base64');
     var decryptedString = buffer.toString();
-    console.log(decryptedString);
-    var userInfo = decryptedString.split(":");
 
-    return userInfo;
+    return decryptedString.split(":");
 }
-
-
-
-

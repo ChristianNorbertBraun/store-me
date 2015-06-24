@@ -20,10 +20,10 @@ function register() {
             // end work with data
             checkSafePassword();
             checkPasswordConfirmation();
-            createUser(function(created){
+            createUser(function(created, sessionID){
                 if(created)
                 {
-                    location.href = strings.link.toDashboard;
+                    location.href = urlBuilder(strings.link.toDashboard, sessionID);
                 }
                 else
                 {
@@ -77,35 +77,18 @@ function getValues()
     passwordConfirmed = $('#confirmed-password').val();
 }
 
-//have to be changed if final DB is ready
-function checkIfUserAlreadyExist(cbFn)
-{
-    var mapFunction = function (doc)
-    {
-        if(doc.username) {
-            emit("username", doc.username);
-        }
-    };
+var checkIfUserAlreadyExist = function(callBackFunction){
 
-    $.couch.db(strings.database.user).query(mapFunction, "_count", "javascript", {
-        success: function (data) {
-            console.log(data);
-            var x = data["rows"];
-            var i;
-            for (i = 0; i < data["total_rows"]; i++) {
-                if (x[i].value == name) {
-                    cbFn(true);
-                }
-            }
-            cbFn(false, data);
+    $.couch.db(strings.database.user).openDoc(name, {
+        success: function(data) {
+            callBackFunction(true);
         },
-        error: function (status) {
+        error: function(status) {
             console.log(status);
-        },
-        reduce: false
+            callBackFunction(false);
+        }
     });
-
-}
+};
 
 function checkNull()
 {
@@ -129,24 +112,21 @@ function checkPasswordConfirmation()
     }
 }
 
-function createUser(cbFn)
-{
-    var user =
-    {
-        _id: this.name,
-        "type": "User",
-        "username": this.name,
-        "password": this.pass
-    };
-    $.couch.db(strings.database.user).saveDoc(user, {
-        success: function(data) {
-            cbFn(true);
-            console.log(data);
+var createUser = function(callBackFunction){
+    var formData = {userType:"User",stores:""};
+    var base64 = "Basic " + btoa(name+":"+pass);
+    $.ajax({
+        url : strings.link.backendConnection+"/registeruser",
+        type: "POST",
+        headers: {'authorization': base64},
+        data : formData,
+        success: function(data, textStatus, jqXHR)
+        {
+            callBackFunction(true, data.sessionID);
         },
-        error: function(status) {
-            console.log(status);
-            cbFn(false);
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            callBackFunction(false);
         }
     });
-}
-
+};

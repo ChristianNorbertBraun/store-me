@@ -5,13 +5,14 @@
 /**
  * Save an attribute from given name, unit and type to the database
  *
+ * @function
  * @param {Function} callBackFunction   - Necessary callBackFunction
  * @param {String} name                 - name of the attribute
  * @param {String} unit                 - type of unit for the current attribute
  * @param {String} type                 - describes the type of unit e.g. boolean
  * @author Marcel Gross
  */
-function saveAttribute(callBackFunction, name, unit, type) {
+var saveAttribute = function(callBackFunction, name, unit, type) {
     $.couch.urlPrefix = strings.link.dbConnection;
 
     var attribute =
@@ -30,15 +31,16 @@ function saveAttribute(callBackFunction, name, unit, type) {
             callBackFunction(false);
         }
     });
-}
+};
 
 /**
  * Returns an array with all saved attributes
  *
+ * @function
  * @param {Function} callBackFunction   - Necessary callBackFunction
  * @author Marcel Gross
  */
-function loadAllAttributes(callBackFunction){
+var loadAllAttributes = function (callBackFunction) {
     $.couch.urlPrefix = strings.link.dbConnection;
 
     var mapFunction = function(doc) {
@@ -59,18 +61,19 @@ function loadAllAttributes(callBackFunction){
         },
         reduce: false
     });
-}
+};
 
 /**
  * /**
  * Returns an attribute object identified by its name
  *
+ * @function
  * @param {Function} callBackFunction            - necessary callBackFunction
  * @param {String} attributeName                 - name which identifies the needed attribute object
  * @returns {Attribute}                          - returns the attribute, which is identified by attributeName
  * @author Marcel Gross
  */
-function loadAttributeByName(attributeName, callBackFunction){
+var loadAttributeByName = function(attributeName, callBackFunction){
     try{
         var link = strings.link.dbConnection+"/"+strings.database.attributes+"/"+attributeName;
         var result = $.ajax({type: "GET", url: link, async: false});
@@ -86,4 +89,4 @@ function loadAttributeByName(attributeName, callBackFunction){
     }
 
     return result;
-}
+};

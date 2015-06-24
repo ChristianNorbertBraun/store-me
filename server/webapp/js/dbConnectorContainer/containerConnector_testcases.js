@@ -1,8 +1,7 @@
 /**
  * Created by Marcel on 15.06.2015.
  */
-
-function createStore() {
+var createStore = function(){
  try {
   var store = initStore();
   saveStore(function (created) {
@@ -17,7 +16,7 @@ function createStore() {
  }
 };
 
-function initStore() {
+var initStore = function(){
 
  var store = new Container("store");
  var shelf1 = new Container("shelf1");
@@ -45,7 +44,7 @@ function initStore() {
  return store;
 };
 
-function loadCompleteStore() {
+var loadCompleteStore = function(){
  try {
   return loadStore(function (created, data) {
    if (created) {
@@ -59,7 +58,7 @@ function loadCompleteStore() {
  }
 };
 
-function loadStoreby(){
+var loadStoreBy = function () {
  loadStoreByName("store", function(created, data){
   if (created) {
    console.log(data);
@@ -67,7 +66,9 @@ function loadStoreby(){
    console.log("nothing loaded");
   }
  });
-}
-loadStoreby();
-//createStore();
-//loadCompleteStore();
+};
+
+
+createStore();
+loadCompleteStore();
+loadStoreBy();
