@@ -30,7 +30,7 @@ function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
 
     try
     {
-        $.couch.db(strings.database.items).open(oldItemId, {
+        $.couch.db(strings.database.items).openDoc(oldItemId, {
             success: function(data) {
                 console.log(data);
 
