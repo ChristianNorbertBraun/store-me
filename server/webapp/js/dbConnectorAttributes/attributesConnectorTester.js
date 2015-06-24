@@ -1,7 +1,7 @@
 /**
  * Created by Marcel on 22.06.2015.
  */
-function addAttributes() {
+var addAttributes = function() {
     console.log("addAttributes");
     var names =["length", "width", "height", "line"];
     var unit = ["m", "m", "m", "m"];
@@ -20,10 +20,9 @@ function addAttributes() {
     } catch (err) {
         console.log(err);
     }
-}
+};
 
-
-function getAllAttributes() {
+var getAllAttributes = function(){
     try {
         return loadAllAttributes(function (created, data) {
             if (created) {
@@ -35,9 +34,8 @@ function getAllAttributes() {
     } catch (err) {
         console.log(err);
     }
-}
-
-function getAttributeByName() {
+};
+var getAttributeByName = function() {
     loadAttributeByName('width', function(created, data){
         if(created){
             console.dir(data);
@@ -45,7 +43,7 @@ function getAttributeByName() {
             console.log("nothing loaded");
         }
     });
-}
+};
 
 
 //addAttributes();

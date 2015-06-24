@@ -8,6 +8,9 @@ var db = new(cradle.Connection)().database(stringsFile.database.user);
 var sessionScript = require('./webapp/js/sessions/session_handler.js');
 
 var databaseInit = require('./database/databaseConfig.js');
+
+databaseInit.prepareDB();
+
  app.get("/", function(req, res) {
      console.log(req.headers);
     res.sendfile('webapp/index.html')
@@ -109,7 +112,6 @@ function prepareAuthentication(req){
     var auth =  req.header('authorization');
     var buffer = new Buffer(auth.split(" ")[1], 'base64');
     var decryptedString = buffer.toString();
-    console.log(decryptedString);
     var userInfo = decryptedString.split(":");
 
     return userInfo;

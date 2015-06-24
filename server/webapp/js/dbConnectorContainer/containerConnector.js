@@ -5,12 +5,13 @@
 
 /**
  * Saves or update the given container in the database
+ *
  * @function
  * @param {Function} callBackFunction   - Necessary callBackFunction
  * @param {Container} container         - Complete store
- * @author Marcel Gro�
+ * @author Marcel Gross
  */
-function saveStore(callBackFunction, container) {
+var saveStore = function(callBackFunction, container){
     $.couch.urlPrefix = strings.link.dbConnection;
     var storeName = container.containerName;
     var db = loadStoreByName(storeName, function(){});
@@ -30,16 +31,17 @@ function saveStore(callBackFunction, container) {
             callBackFunction(false);
         }
     });
-}
+};
 
 /**
  * Load the root container and its subcontainers from database identified by its storeName
  *
+ * @function
  * @param {String} storeName    - the name which identifies the database
  * @returns {Container}         - the container identified by the given storeName
  * @author Marcel Gross
  */
-function loadStoreByName(storeName, callBackFunction){
+var loadStoreByName = function(storeName, callBackFunction){
     try{
         var link = strings.link.dbConnection+"/"+strings.database.container+"/"+storeName;
         var result = $.ajax({type: "GET", url: link, async: false});
@@ -57,15 +59,16 @@ function loadStoreByName(storeName, callBackFunction){
     }
 
     return result;
-}
+};
 
 /**
  * Load complete store from database
  *
+ * @function
  * @param {Function} callBackFunction   - Necessary callBackFunction
- * @author Marcel Gro�
+ * @author Marcel Gross
  */
-function loadStore(callBackFunction){
+var loadStore = function(callBackFunction){
     $.couch.urlPrefix = strings.link.dbConnection;
 
     var mapFunction = function(doc) {
@@ -86,4 +89,4 @@ function loadStore(callBackFunction){
         },
         reduce: false
     });
-}
+};
