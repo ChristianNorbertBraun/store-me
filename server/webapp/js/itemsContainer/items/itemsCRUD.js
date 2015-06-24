@@ -39,7 +39,7 @@ function getAllItemsFromCouch(cbFn)
 
 function updateItem(oldItemId, itemName, categoryID, attributes, cbFn)
 {
-    updateItemToDB(oldItemId, itemName, categoryID, attributes, function (ready, data){
-        if(ready) cbFn(true, data);
+    deleteItem(oldItemId, function (ready, data){
+        if(ready) createItem(oldItemId, itemName, categoryID, attributes, cbFn)
     })
 }

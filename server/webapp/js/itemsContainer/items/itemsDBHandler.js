@@ -34,9 +34,9 @@ function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
             success: function(data) {
                 console.log(data);
 
-                data[itemName] = itemName;
-                data[categoryID] = categoryID;
-                data[attributes] = attributes;
+                data[rows[0[value[itemName]]]] = itemName;
+                data[rows[0[value[categoryID]]]] = categoryID;
+                data[rows[0[value[attributes]]]] = attributes;
 
                 $.couch.db(strings.database.items).saveDoc(data, {
                     success: function(data) {
@@ -73,7 +73,7 @@ function getDataItemFromCouch(itemID)
             console.log(status);
         }
     });
-};
+}
 
 
 function getAllItemsFromDB(mapFunction, cbFn)
