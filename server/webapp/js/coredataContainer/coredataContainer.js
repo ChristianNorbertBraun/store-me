@@ -345,7 +345,7 @@ var coredataContainer = Ractive.extend({
 
         var newCategoryName = $('#edit-category-input').val();
 
-        categoryEdit(window.app.selectedCategoryName, newCategoryName, function(ready, data) {
+        categoryUpdate(window.app.selectedCategoryName, newCategoryName, function(ready, data) {
             if (ready) {
                 window.currentRactive.refreshCategories();
                 window.currentRactive.refreshItems();
@@ -370,7 +370,7 @@ var coredataContainer = Ractive.extend({
     },
 
     refreshCategories: function() {
-        getAllCategorys(function(ready, data) {
+        getAllCategories(function(ready, data) {
             if (ready) {
                 var categories = data.rows;
                 window.app.set('category', categories);
