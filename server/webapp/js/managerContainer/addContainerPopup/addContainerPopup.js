@@ -40,10 +40,11 @@ var addContainerPopup = Ractive.extend({
                                         <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" >\
                                     </div>\
                                  </div>\
+                                 \
                                 <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control {{#if compulsory}} compulsory-value {{/if}}" {{#if compulsory}} placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
                                 <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                                 <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal" {{#if compulsory}} disabled="true" {{/if}}  on-click="removeLine(this,i)">\
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal"  on-click="removeLine(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                     </button>\
                                 </div>\
