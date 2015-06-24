@@ -68,7 +68,6 @@ app.get("/dashboard(.html)?", function(req, res){
     }
 });
 
-
 app.get("/inventory(.html)?", function(req,res){
     if(debugMode){
         res.sendfile('webapp/inventory.html');
@@ -97,7 +96,6 @@ app.get("/coredata(.html)?", function(req,res){
  app.get(/^(.+)$/, function(req, res){
      console.log('static file request : ' + req.params[0]);
      res.sendfile( __dirname+ "/webapp" + req.params[0]);
-
  });
 
  app.listen(8080, function() {
@@ -106,19 +104,13 @@ app.get("/coredata(.html)?", function(req,res){
 
 
 app.post("/registeruser", function(req, res){
-   var userInfo = prepareAuthentication(req);
+    var userInfo = prepareAuthentication(req);
     var user = userScript.newUser(userInfo[0], userInfo[1]);
-    /*var user = {
-        _id : userInfo[0],
-        name : userInfo[0],
-        password : userInfo[1],
-        userType : req.body.userType,
-        stores : req.body.sotres
-    };*/
 
     db.save(user, function (err, res) {
-       if(err !== null)
-        console.log(err);
+       if(err !== null){
+           console.log(err);
+       }
     });
     var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
     res.send(sessionID);
@@ -128,11 +120,6 @@ function prepareAuthentication(req){
     var auth =  req.header('authorization');
     var buffer = new Buffer(auth.split(" ")[1], 'base64');
     var decryptedString = buffer.toString();
-    var userInfo = decryptedString.split(":");
 
-    return userInfo;
+    return decryptedString.split(":");
 }
-
-
-
-

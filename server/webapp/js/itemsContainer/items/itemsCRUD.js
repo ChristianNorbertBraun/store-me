@@ -26,7 +26,7 @@ function deleteItem(itemID, cbFn)
 }
 
 
-function getAllItems(cbFn)
+function getAllItemsFromCouch(cbFn)
 {
     var mapFunction = function (doc)
     {
