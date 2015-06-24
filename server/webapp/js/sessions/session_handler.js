@@ -7,6 +7,17 @@ var EXPIRE_TIME = 600000; //milliseconds
 var CHECK_STAMP_LENGTH = 2;
 var HASH_CODE_LENGTH = 8;
 
+
+/**
+ * A Session object contains a session id and an expire timestamp (10 min after creation). A session id is created
+ * during a successful login process. The session id is build by hashing the username, the password and the current
+ * time. All active sessions are stored in a static array called currentSessions. Every time a function iterates over
+ * this array it will delete all expired sessions.
+ * @constructor
+ * @param userName {String} - The username of a successfully logged in user
+ * @param password {String} - The password of the given user
+ * @author Marvin Therolf
+ */
 function Session(userName, password)
 {
     var timeStamp = Date.now();
@@ -15,6 +26,17 @@ function Session(userName, password)
     currentSessions.push(this);
 }
 
+/**
+ * Generates a session id out of a name, a password and a time stamp. The first two digits of the session id will
+ * correspond to the username and will always be the same for the same username. The following eight digits are the
+ * session hash code.
+ * @function
+ * @param userName {String}     - Name of the given user
+ * @param password {String}     - This users password
+ * @param timeStamp {Number}    - The given timestamp
+ * @returns {String} Session ID
+ * @author Marvin Therolf
+ */
 var getSessionID = function(userName, password, timeStamp)
 {
     var key = userName + password;
@@ -23,6 +45,14 @@ var getSessionID = function(userName, password, timeStamp)
     return prefix + hashCode;
 };
 
+/**
+ * Returns an 8-digit long hash code built by a given key and seed.
+ * @function
+ * @param key {String}  - The key to build the hash code for
+ * @param seed {Number} - Long integer corresponding to the given timestamp
+ * @returns {String} Hash code
+ * @author Marvin Therolf
+ */
 var getHashCode = function(key, seed)
 {
     var hashCode = "";
@@ -37,6 +67,13 @@ var getHashCode = function(key, seed)
     return "" + hashCode;
 };
 
+/**
+ * Returns the digit sum of a given number.
+ * @function
+ * @param {Number} number      - A number
+ * @returns {Number} The digit sum of the given number
+ * @author Marvin Therolf
+ */
 var digitSum = function(number)
 {
     var rest = number;
@@ -50,6 +87,13 @@ var digitSum = function(number)
     return digitSum;
 };
 
+/**
+ * Return a 2-digit check stamp for a given username.
+ * @function
+ * @param userName {String}     - The given username
+ * @returns {String} The check stamp. A two digit number as its string representation.
+ * @author Marvin Therolf
+ */
 var getCheckStamp = function(userName)
 {
     var checkStamp = 0;
@@ -63,11 +107,24 @@ var getCheckStamp = function(userName)
     return "" + checkStamp;
 };
 
+/**
+ * Calculates the expire time of a given timestamp.
+ * @param timeStamp {Number}    - Long integer representing the timestamp
+ * @returns {Number} Long integer representing the expire time
+ * @author Marvin Therolf
+ */
 var getExpireTimeStamp = function(timeStamp)
 {
     return timeStamp + EXPIRE_TIME;
 };
 
+/**
+ * Checks if a session id is valid. Checks for existence as well es valid expire timestamp. Deletes expired session ids
+ * in the process. Will refresh a valid session id for another 10 minutes.
+ * @param sessionID
+ * @returns {boolean}
+ * @author Marvin Therolf
+ */
 var isValidSession = function(sessionID)
 {
     var valid = false;
@@ -93,11 +150,26 @@ var isValidSession = function(sessionID)
     return valid;
 };
 
+/**
+ * Builds an url containing the given session id.
+ * @function
+ * @param page {String}         - URL of the screen the built url should refer to
+ * @param sessionID {String}    - id of the current session
+ * @returns {String} Next URL including the current session id
+ * @author Marvin Therolf
+ */
 var urlBuilder = function(page, sessionID)
 {
     return page + "?" + strings.fixeddata.queryparams + "=" + sessionID;
 };
 
+/**
+ * Deletes a given session from the list of valid sessions by searching for the session id. Deletes expired session ids
+ * in the process.
+ * @function
+ * @param sessionID {String}    -
+ * @author Marvin Therolf
+ */
 var endSession = function(sessionID)
 {
     for (var i = 0; i < currentSessions.length; i++)
@@ -119,6 +191,12 @@ var endSession = function(sessionID)
     }
 };
 
+/**
+ * Extracts the session id from the url.
+ * @function
+ * @returns {String} The current session id.
+ * @author Marvin Therolf
+ */
 var getSessionIDFromURL = function()
 {
     var query = location.search;
