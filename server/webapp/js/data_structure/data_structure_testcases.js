@@ -23,9 +23,10 @@ console.log(containerItem.itemID === "0815");
 console.log(containerItem.amount === 7);
 
 console.log("Construct Item");
-var item = new Item("0815", "Hammer");
-console.log(item.itemID === "0815");
+var item = new Item("0815", "Hammer", "Tool", []);
+console.log(item._id === "0815");
 console.log(item.itemName === "Hammer");
+console.log(item.category_id === "Tool");
 
 console.log("Construct ItemAttribute");
 var itemAttribute = new ItemAttribute("length", 5.0, "meters", "quantity");
