@@ -35,13 +35,13 @@ var addContainerPopup = Ractive.extend({
                                  <div class="col-md-5 attribute-entry">\
                                     <div class="input-group">\
                                         <span class="input-group-addon">\
-                                            <input id="compulsory{{i}}"  type="checkbox" {{#if compulsory}} disabled="true" checked=true{{/if}} on-change="storeAttributeChanges(this,i)">\
+                                            <input id="compulsory{{i}}"  type="checkbox"  on-change="storeAttributeChanges(this,i)">\
                                         </span>\
-                                        <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" {{#if compulsory}} readonly {{/if}}>\
+                                        <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" >\
                                     </div>\
                                  </div>\
-                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" {{#if compulsory}}placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
-                                <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control" {{#if compulsory}} readonly {{/if}} placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
+                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control {{#if compulsory}} compulsory-value {{/if}}" {{#if compulsory}} placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
+                                <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                                 <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" data-toggle="modal" {{#if compulsory}} disabled="true" {{/if}}  on-click="removeLine(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
@@ -141,15 +141,27 @@ var addContainerPopup = Ractive.extend({
     },
 
     noCompulsoryAttributes:function(){
+        var hasNoCompulsoryAttributes = true;
+        var compulsoryValues = $('.compulsory-value').get();
+
+
         var currentAttributes =  window.currentRactive.get('data.currentAttributes');
+
+        for(i = 0; i < compulsoryValues.length; ++i){
+            if($(compulsoryValues[i]).val() == ""){
+               hasNoCompulsoryAttributes = false;
+            }
+        }
+
         for(i = 0; i < currentAttributes.length; ++i){
             if(currentAttributes[i].compulsory){
-                if(!currentAttributes[i].attributeName || !currentAttributes[i].unit || !currentAttributes[i].value){
-                    return false;
+
+                if(!currentAttributes[i].attributeName || !currentAttributes[i].unit){
+                    hasNoCompulsoryAttributes = false;
                 }
             }
         }
-        return true;
+        return hasNoCompulsoryAttributes;
     },
 
     saveContainer:function(){
@@ -157,13 +169,14 @@ var addContainerPopup = Ractive.extend({
         var containerAmount = $("#container-amount").val();
         var containerName = $("#container-name").val();
 
+
         if(this.noCompulsoryAttributes()){
             this.cleanContainerValues();
             if(containerAmount > 0){
                 addSubContainers(window.parentContainer,containerName, containerAmount, window.currentRactive.get('data.currentAttributes'));
             }
             else{
-                var subContainer = new Container($("#container-name").val());
+                var subContainer = new Container(containerName);
 
                 this.attachAttributesToContainer(subContainer,window.currentRactive.get('data.currentAttributes'));
                 addSubContainer(window.parentContainer, subContainer);
