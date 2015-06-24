@@ -23,7 +23,7 @@ console.log(containerItem.itemID === "0815");
 console.log(containerItem.amount === 7);
 
 console.log("Construct Item");
-var item = new Item("0815", "Hammer", "Tool");
+var item = new Item("0815", "Hammer", "Tool", []);
 console.log(item._id === "0815");
 console.log(item.itemName === "Hammer");
 console.log(item.category_id === "Tool");

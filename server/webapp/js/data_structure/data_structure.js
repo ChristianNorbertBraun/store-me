@@ -540,8 +540,7 @@ function Item(itemID, itemName, category_id, attributes)
 {
     this._id = itemID;
     this.category_id = category_id;
-    if(attributes) this.attributes = attributes;
-    else this.attributes = [];
+    this.attributes = attributes;
     this.name = itemName;
 }
 
