@@ -425,6 +425,9 @@ var coredataContainer = Ractive.extend({
                             }));
                     });
                 }
+                else {
+                    window.currentRactive.refreshItems();
+                }
             }
         });
 
