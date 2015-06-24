@@ -393,7 +393,9 @@ var coredataContainer = Ractive.extend({
     },
 
     prepareItem: function() {
-        window.currentRactive.set('newItem', '');
+        window.currentRactive.set('newItem.id', '');
+        window.currentRactive.set('newItem.name', '');
+        window.currentRactive.set('newItem.category', '');
     },
 
     addItem: function() {
@@ -403,9 +405,9 @@ var coredataContainer = Ractive.extend({
 
         var attributes = window.currentRactive.get('newItem.attributes');
 
-        if (newItemId == null || newItemName == null || newCategoryName == null) {
+        if (newItemId == null || newItemName == null || newCategoryName == null
+            || newItemId == '' || newItemName == '' || newCategoryName == '') {
             alert('error with creating item');
-            this.prepareItem();
             return;
         }
 
