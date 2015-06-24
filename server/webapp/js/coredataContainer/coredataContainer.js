@@ -249,7 +249,7 @@ var coredataContainer = Ractive.extend({
                         </div>\
                         \
                         <div id="attribute-container">\
-                            {{#if currentItem.attributes}}\
+                            {{#if currentItem.value.attributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             \
@@ -411,18 +411,20 @@ var coredataContainer = Ractive.extend({
 
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
-                attributes.map(function(item) {
-                    if (loadAttributeByName(item.attributeName, function(success, result) {
-                        if (success == false) {
-                            saveAttribute(function(success) {
-                                window.currentRactive.refreshItems();
-                            }, item.attributeName, item.unit, item.type);
-                        }
-                        else {
-                            window.currentRactive.refreshItems();
-                        }
-                    }));
-                });
+                if (attributes != null) {
+                    attributes.map(function (item) {
+                        if (loadAttributeByName(item.attributeName, function (success, result) {
+                                if (success == false) {
+                                    saveAttribute(function (success) {
+                                        window.currentRactive.refreshItems();
+                                    }, item.attributeName, item.unit, item.type);
+                                }
+                                else {
+                                    window.currentRactive.refreshItems();
+                                }
+                            }));
+                    });
+                }
             }
         });
 
@@ -449,7 +451,9 @@ var coredataContainer = Ractive.extend({
         var itemName = this.get('currentItem.value.name');
         var itemCategory = this.get('currentItem.value.category_id');
 
-        updateItem(itemId, itemName, itemCategory, [], function(ready, data) {
+        var attributes = this.get('currentItem.value.attributes');
+
+        updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
                 window.currentRactive.refreshItems();
             }
