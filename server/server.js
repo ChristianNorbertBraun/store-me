@@ -1,13 +1,20 @@
 //todo change debugMode before release
 var debugMode = true;
+
+var stringsFile = require('./webapp/string/strings.js');
+var sessionScript = require('./webapp/js/sessions/session_handler.js');
+var databaseInit = require('./database/databaseConfig.js');
+var userScript = require('./webapp/js/data_structure/user');
+
+var cradle = require('cradle');
+var db = new(cradle.Connection)().database(stringsFile.database.user);
+var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
-var cradle = require('cradle');
-var stringsFile = require('./webapp/string/strings.js');
-var db = new(cradle.Connection)().database(stringsFile.database.user);
-var sessionScript = require('./webapp/js/sessions/session_handler.js');
-
-var databaseInit = require('./database/databaseConfig.js');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 databaseInit.prepareDB();
 
@@ -31,8 +38,8 @@ app.get("/login", function (req, res) {
             res.send("login failed");
         } else if (userInfo[1] === doc.password){
             res.statusCode = 200;
-            var session = sessionScript.newSession(userInfo[0], userInfo[1]);
-            res.send(session);
+            var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
+            res.send(sessionID);
         }
     })
 });
@@ -100,12 +107,21 @@ app.get("/coredata(.html)?", function(req,res){
 
 app.post("/registeruser", function(req, res){
    var userInfo = prepareAuthentication(req);
-    db.save({
-        name:userInfo[0], password:userInfo[1]
-    }, function (err, res) {
-       console.log(res);
+    var user = userScript.newUser(userInfo[0], userInfo[1]);
+    /*var user = {
+        _id : userInfo[0],
+        name : userInfo[0],
+        password : userInfo[1],
+        userType : req.body.userType,
+        stores : req.body.sotres
+    };*/
+
+    db.save(user, function (err, res) {
+       if(err !== null)
+        console.log(err);
     });
-    res.send("Hallo");
+    var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
+    res.send(sessionID);
 });
 
 function prepareAuthentication(req){
