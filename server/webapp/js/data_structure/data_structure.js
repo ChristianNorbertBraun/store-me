@@ -528,16 +528,21 @@ decreaseAmount = function(containerItem, amount)
  * @constructor
  * @param {String} itemID           - Unique Identifier of the item
  * @param {String} itemName         - Name of the item
- * @prop {String} itemID            - Unique Identifier of the item
+ * @param {String} category_id      - Unique Identifier of the category
+ * @param {Array} attributes        - Array of ItemAttributes
+ * @prop {String} _id               - Unique Identifier of the item in DB
+ * @prop {String} category_id       - Unique Identifier of the category
  * @prop {String} itemName          - Name of the item
  * @prop {Array} attributes         - Array of ItemAttributes
  * @author Marvin Therolf
  */
-function Item(itemID, itemName)
+function Item(itemID, itemName, category_id, attributes)
 {
-    this.itemID = itemID;
-    this.itemName = itemName;
-    this.attributes = [];
+    this._id = itemID;
+    this.category_id = category_id;
+    if(attributes) this.attributes = attributes;
+    else this.attributes = [];
+    this.name = itemName;
 }
 
 /**

@@ -19,6 +19,7 @@ function categoryAdd(categoryId,cbFn)
     }
 }
 
+
 function categoryUpdate(oldCategory, newCategory, cbFn)
 {
     setItemsToNewCategory(oldCategory, newCategory, function (itemsReady){
@@ -39,6 +40,7 @@ function categoryUpdate(oldCategory, newCategory, cbFn)
     });
 }
 
+
 function categoryDelete(categoryId, cbFn)
 {
     try
@@ -56,6 +58,7 @@ function categoryDelete(categoryId, cbFn)
         cbFn(false);
     }
 }
+
 
 function getAllCategories(cbFn)
 {
