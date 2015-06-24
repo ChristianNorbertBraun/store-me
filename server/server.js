@@ -1,5 +1,5 @@
 //todo change debugMode before release
-var debugMode = false;
+var debugMode = true;
 
 var stringsFile = require('./webapp/string/strings.js');
 var sessionScript = require('./webapp/js/sessions/session_handler.js');
