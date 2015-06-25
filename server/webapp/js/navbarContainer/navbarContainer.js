@@ -39,21 +39,25 @@ var navbarContainer = Ractive.extend({
     },
 
    oncomplete: function() {
-        userName = getUserNameBySessionID(getSessionIDFromURL());
+        var sessionid = getSessionIDFromURL();
 
-        if (userName != "none") {
-            dashboardLink = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
-            managerLink = urlBuilder(strings.link.toManager, getSessionIDFromURL());
-            coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
-            inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
+        if (sessionid != null) {
+            userName = getUserNameBySessionID(sessionid);
+
+            if (userName != "none") {
+                dashboardLink = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
+                managerLink = urlBuilder(strings.link.toManager, getSessionIDFromURL());
+                coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
+                inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
 
 
-            this.set('dashboardLink', dashboardLink);
-            this.set('managerLink', managerLink);
-            this.set('coredataLink', coredataLink);
-            this.set('inventoryLink', inventoryLink);
-            this.set('userName', userName);
-            this.set('loggedIn', true);
+                this.set('dashboardLink', dashboardLink);
+                this.set('managerLink', managerLink);
+                this.set('coredataLink', coredataLink);
+                this.set('inventoryLink', inventoryLink);
+                this.set('userName', userName);
+                this.set('loggedIn', true);
+            }
         }
    },
 
