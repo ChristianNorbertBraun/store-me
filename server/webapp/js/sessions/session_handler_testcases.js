@@ -3,7 +3,7 @@
  */
 
 console.log("Creating Session");
-var session = new Session("captainLuma", "cherrybanana");
+var session = newSession("captainLuma", "cherrybanana");
 console.log(currentSessions.length === 1);
 var oldExpireDate = currentSessions[0].expires;
 //setTimeout("console.log(isValidSession(session.sessionID) === false)", 700000); // test with 1 min expire time and 70s of waiting worked perfectly

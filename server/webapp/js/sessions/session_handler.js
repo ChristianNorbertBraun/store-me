@@ -12,7 +12,9 @@ var HASH_CODE_LENGTH = 8;
  * A Session object contains a session id and an expire timestamp (10 min after creation). A session id is created
  * during a successful login process. The session id is build by hashing the username, the password and the current
  * time. All active sessions are stored in a static array called currentSessions. Every time a function iterates over
- * this array it will delete all expired sessions.
+ * this array it will delete all expired sessions. <br>
+ * <br>Never use this constructor! Use function newSession instead! Otherwise the session will not be pushed to the
+ * array of valid sessions.
  * @constructor
  * @param userName {String} - The username of a successfully logged in user
  * @param password {String} - The password of the given user
@@ -27,8 +29,14 @@ function Session(userName, password)
     var timeStamp = Date.now();
     this.sessionID = getSessionID(userName, password, timeStamp);
     this.expires = getExpireTimeStamp(timeStamp);
-    currentSessions.push(this);
 }
+
+var newSession = function(username, password)
+{
+    var session = new Session(username, password);
+    currentSessions.push(session);
+    return session;
+};
 
 /**
  * Generates a session id out of a name, a password and a time stamp. The first two digits of the session id will
@@ -237,7 +245,7 @@ if (typeof exports !== "undefined")
 {
     exports.newSession = function(username, password)
     {
-        return new Session(username, password);
+        return newSession(username, password);
     };
 
     exports.isValidSession = function(sessionID)
