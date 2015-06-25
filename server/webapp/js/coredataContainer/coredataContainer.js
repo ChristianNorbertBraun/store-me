@@ -271,7 +271,7 @@ var coredataContainer = Ractive.extend({
                                         <input type="text" class="form-control" value="{{type}}" placeholder="Type" {{#unless edit_enabled}}disabled{{/unless}}>\
                                     </div>\
                                     <div class="col-md-2">\
-                                        <button class="btn btn-primary btn-sm" on-click="">\
+                                        <button class="btn btn-primary btn-sm" on-click="removeEditAttributeRow(i)" {{#unless edit_enabled}}disabled{{/unless}}>\
                                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                         </button>\
                                     </div>\
@@ -280,7 +280,7 @@ var coredataContainer = Ractive.extend({
                             \
                         </div>\
                         \
-                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="">\
+                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
                         </button>\
                         \
@@ -464,7 +464,20 @@ var coredataContainer = Ractive.extend({
             }
         })
 
-        $('#edit-category-modal').modal('hide');
+        $('#edit-item-modal').modal('hide');
+    },
+
+    addNewEditAttribute: function() {
+        if (window.currentRactive.get('currentItem.value.attributes') == null) {
+            window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
+        }
+        else {
+            window.currentRactive.push('currentItem.value.attributes', newItemAttribute("","","",""));
+        }
+    },
+
+    removeEditAttributeRow: function(index) {
+        window.currentRactive.splice('currentItem.value.attributes', index, 1);
     },
 
     deleteItemFromTable: function() {
