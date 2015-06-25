@@ -195,7 +195,6 @@ var endSession = function(sessionID)
             i--;
             continue;
         }
-
         if (currentSession.sessionID === sessionID)
         {
             removeFromArray(currentSessions, i);
@@ -217,7 +216,7 @@ var getSessionIDFromURL = function()
     var queryParamsArray = queryParams.split('&');
     var querySessionID = queryParamsArray[0].split('=');
     var sessionID = querySessionID[1];
-    return sessionID;
+    return sessionID + "==";
 };
 
 /**
@@ -236,6 +235,21 @@ var getUserNameBySessionID = function(sessionID)
         userName = decodedSessionID.substring(0, decodedSessionID.length - 10);
     }
     return userName;
+};
+
+/**
+ * Function to quickly remove an object from an array by providing the array and the object's index.
+ * @function
+ * @param {Array} array     - Array to remove object from
+ * @param index             - Index of the object to remove
+ * @author Marvin Therolf
+ */
+var removeFromArray = function(array, index)
+{
+    var hold = array[index];
+    array[index] = array[array.length-1];
+    array[array.length-1] = hold;
+    array.pop();
 };
 
 if (typeof exports !== "undefined")

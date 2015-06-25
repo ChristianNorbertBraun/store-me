@@ -70,6 +70,7 @@ var navbarContainer = Ractive.extend({
            headers: {'sessionID': getSessionIDFromURL()},
 
            success: function(res, status, xhr) {
+               location.href = strings.link.toLogin;
 
            },
 

@@ -4,7 +4,7 @@ var debugMode = false;
 var stringsFile = require('./webapp/string/strings.js');
 var sessionScript = require('./webapp/js/sessions/session_handler.js');
 var databaseInit = require('./database/databaseConfig.js');
-var userScript = require('./webapp/js/data_structure/user');
+var userScript = require('./webapp/js/data_structure/user.js');
 
 var cradle = require('cradle');
 var db = new(cradle.Connection)().database(stringsFile.database.user);
@@ -47,7 +47,6 @@ app.get("/login", function (req, res) {
 app.get("/logout", function(req, res){
     var sessionID =  req.header('sessionID');
     sessionScript.endSession(sessionID);
-    console.log(sessionScript.isValidSession(sessionID));
     res.sendfile('webapp/index.html');
 });
 
