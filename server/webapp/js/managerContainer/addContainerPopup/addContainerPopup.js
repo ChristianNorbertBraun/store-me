@@ -83,7 +83,6 @@ var addContainerPopup = Ractive.extend({
             changedAttribute.unit = attrUnit;
             changedAttribute.compulsory = compulsory;
         }
-        console.log(changedAttribute);
 
         window.currentRactive.set('data.currentAttributes.'+index,changedAttribute);
         console.log(window.currentRactive.get('data.currentAttributes'));
@@ -114,8 +113,7 @@ var addContainerPopup = Ractive.extend({
         var currentAttributes = window.currentRactive.get('data.currentAttributes');
         if(currentAttributes) {
             if (cleanAll) {
-                window.currentRactive.splice('data.currentAttributes', 0, currentAttributes.length);
-                console.log(window.currentRactive.get('data.currentAttributes'));
+                window.currentRactive.set('data.currentAttributes', null);
             }
             else {
                 for (i = 0; i < currentAttributes.length; ++i) {
