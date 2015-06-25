@@ -37,9 +37,6 @@ var addItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">Item Name</label>\
                             <div class="col-md-6"><input id="item-name" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
-                                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
-                                    </button>\
                             </div>\
                         </div>\
                         <div id="attribute-container">\
