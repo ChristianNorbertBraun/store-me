@@ -159,3 +159,14 @@ yoloItems.push(new Item("100", "yolo", "cat1"));
 yoloItems.push(new Item("200", "fish", "cat1"));
 console.log(categoryStillReferenced(yoloItems,"cat1") === true);
 console.log(categoryStillReferenced(yoloItems,"cat2") === false);
+
+console.log("Count Containers and Items");
+var startHere = new Container("Start Container");
+addSubContainers(startHere, "Sub Container ", 9);
+for (var i = 0; i < startHere.subContainers.length; i++)
+{
+    var oldSubbi = startHere.subContainers[i];
+    addItem(oldSubbi, "123", 5);
+}
+console.log(countContainers(startHere) === 10);
+console.log(countItems(startHere) === 45);

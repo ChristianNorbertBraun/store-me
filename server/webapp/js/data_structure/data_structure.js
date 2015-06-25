@@ -667,11 +667,56 @@ var copyArray = function(array)
  * @param {Number} a    - A number
  * @param {Number} b    - Another number
  * @returns {number} The difference between a and b.
+ * @author Marvin Therolf
  */
 var sortNumerically = function (a, b)
 {
     return a - b;
 };
+
+/**
+ * Counts the amount of items stored in a container and its sub containers.
+ * @function
+ * @param container {Container}     - Container to start counting from
+ * @returns {Number} Amount of stored items.
+ * @author Marvin Therolf
+ */
+var countItems = function(container)
+{
+    var amount = 0;
+    var allItems = getAllItems(container);
+
+    for (var i = 0; i < allItems.length; i++)
+    {
+        amount += allItems[i].amount;
+    }
+    return amount;
+};
+
+/**
+ * Recursively counts the amount of sub containers contained by a given container.
+ * @function
+ * @param container {Container}     - Container to start counting from
+ * @returns {Number} Amount of sub containers (recursive).
+ * @author Marvin Therolf
+ */
+var countContainers = function(container)
+{
+    var amount = 1;
+    var subContainers = container.subContainers;
+
+    for (var i = 0; i < subContainers.length; i++)
+    {
+        amount += countContainers(subContainers[i]);
+    }
+    return amount;
+};
+
+
+
+
+
+
 
 // TODO: plausibility (already exists, etc.)
 // TODO: rename CRUD operations (Marcel W.)
