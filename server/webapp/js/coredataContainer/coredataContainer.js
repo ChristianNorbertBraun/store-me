@@ -249,7 +249,7 @@ var coredataContainer = Ractive.extend({
                         </div>\
                         \
                         <div id="attribute-container">\
-                            {{#if currentItem.attributes}}\
+                            {{#if currentItem.value.attributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             \
@@ -271,7 +271,7 @@ var coredataContainer = Ractive.extend({
                                         <input type="text" class="form-control" value="{{type}}" placeholder="Type" {{#unless edit_enabled}}disabled{{/unless}}>\
                                     </div>\
                                     <div class="col-md-2">\
-                                        <button class="btn btn-primary btn-sm" on-click="">\
+                                        <button class="btn btn-primary btn-sm" on-click="removeEditAttributeRow(i)" {{#unless edit_enabled}}disabled{{/unless}}>\
                                             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                         </button>\
                                     </div>\
@@ -280,7 +280,7 @@ var coredataContainer = Ractive.extend({
                             \
                         </div>\
                         \
-                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="">\
+                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
                         </button>\
                         \
@@ -393,7 +393,9 @@ var coredataContainer = Ractive.extend({
     },
 
     prepareItem: function() {
-        window.currentRactive.set('newItem', '');
+        window.currentRactive.set('newItem.id', '');
+        window.currentRactive.set('newItem.name', '');
+        window.currentRactive.set('newItem.category', '');
     },
 
     addItem: function() {
@@ -403,26 +405,31 @@ var coredataContainer = Ractive.extend({
 
         var attributes = window.currentRactive.get('newItem.attributes');
 
-        if (newItemId == null || newItemName == null || newCategoryName == null) {
+        if (newItemId == null || newItemName == null || newCategoryName == null
+            || newItemId == '' || newItemName == '' || newCategoryName == '') {
             alert('error with creating item');
-            this.prepareItem();
             return;
         }
 
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
-                attributes.map(function(item) {
-                    if (loadAttributeByName(item.attributeName, function(success, result) {
-                        if (success == false) {
-                            saveAttribute(function(success) {
-                                window.currentRactive.refreshItems();
-                            }, item.attributeName, item.unit, item.type);
-                        }
-                        else {
-                            window.currentRactive.refreshItems();
-                        }
-                    }));
-                });
+                if (attributes != null) {
+                    attributes.map(function (item) {
+                        if (loadAttributeByName(item.attributeName, function (success, result) {
+                                if (success == false) {
+                                    saveAttribute(function (success) {
+                                        window.currentRactive.refreshItems();
+                                    }, item.attributeName, item.unit, item.type);
+                                }
+                                else {
+                                    window.currentRactive.refreshItems();
+                                }
+                            }));
+                    });
+                }
+                else {
+                    window.currentRactive.refreshItems();
+                }
             }
         });
 
@@ -449,13 +456,28 @@ var coredataContainer = Ractive.extend({
         var itemName = this.get('currentItem.value.name');
         var itemCategory = this.get('currentItem.value.category_id');
 
-        updateItem(itemId, itemName, itemCategory, [], function(ready, data) {
+        var attributes = this.get('currentItem.value.attributes');
+
+        updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
                 window.currentRactive.refreshItems();
             }
         })
 
-        $('#edit-category-modal').modal('hide');
+        $('#edit-item-modal').modal('hide');
+    },
+
+    addNewEditAttribute: function() {
+        if (window.currentRactive.get('currentItem.value.attributes') == null) {
+            window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
+        }
+        else {
+            window.currentRactive.push('currentItem.value.attributes', newItemAttribute("","","",""));
+        }
+    },
+
+    removeEditAttributeRow: function(index) {
+        window.currentRactive.splice('currentItem.value.attributes', index, 1);
     },
 
     deleteItemFromTable: function() {
@@ -483,7 +505,7 @@ var coredataContainer = Ractive.extend({
     },
 
     refreshItems: function() {
-        getAllItems(function(ready, data) {
+        getAllItemsFromCouch(function(ready, data) {
            if (ready) {
                var items = data.rows;
                window.app.set('items', items);
