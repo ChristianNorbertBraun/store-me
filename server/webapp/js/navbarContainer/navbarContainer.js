@@ -42,7 +42,7 @@ var navbarContainer = Ractive.extend({
         coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
         inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
 
-        this.set('coredataLink', coredataLink);
+        this.set('dashboardLink', dashboardLink);
         this.set('managerLink', managerLink);
         this.set('coredataLink', coredataLink);
         this.set('inventoryLink', inventoryLink);
