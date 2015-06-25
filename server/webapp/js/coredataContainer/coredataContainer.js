@@ -297,33 +297,37 @@ var coredataContainer = Ractive.extend({
         </div>\
     ',
 
-    data: {},
+    data: {
+        edit_enabled: false     // for checkbox in edit modal, if true then it is possible to edit the item in the modal
+    },
 
     oninit: function() {
         this.refreshCategories();
         this.refreshItems();
         window.currentRactive = this;
-        window.currentRactive.set('edit_enabled', false);
     },
 
     /* Category Methods */
 
     selectCategory: function(index) {
+        // Remove all selections from the categories except the newly selected one
         $('li.list-group-item').each(function() {
             if ($(this).attr('id') != (index + '')) {
                 $(this).removeClass('list-group-item-selected');
             }
         });
 
+        // toggle the selected one (if it was already selected then it will be unselected)
         $('#' + index).toggleClass('list-group-item-selected');
 
+        // set categorySelected boolean for the category ADD/EDIT buttons
         if ($('li').hasClass('list-group-item-selected'))
             window.currentRactive.set('categorySelected', true);
         else
             window.currentRactive.set('categorySelected', false);
 
+        // prepare category edit modal
         var selectedCategoryName = this.get('category.' + index).id
-
         $('#edit-category-input').val(selectedCategoryName);
     },
 
@@ -337,6 +341,7 @@ var coredataContainer = Ractive.extend({
             }
         });
 
+        // clear input for next category
         $('#add-category-input').val("");
         $('#add-category-modal').modal('hide');
     },
@@ -348,12 +353,13 @@ var coredataContainer = Ractive.extend({
         categoryUpdate(window.app.selectedCategoryName, newCategoryName, function(ready, data) {
             if (ready) {
                 window.currentRactive.refreshCategories();
+
+                // items must be refreshed aswell cause items may change also when category changes
                 window.currentRactive.refreshItems();
             }
         })
 
         $('#edit-category-modal').modal('hide');
-
     },
 
     deleteCategory: function(index) {
@@ -369,6 +375,8 @@ var coredataContainer = Ractive.extend({
         });
     },
 
+    // important method, gets called always after database operations to categories
+    // so they get reloaded and set to the front-end
     refreshCategories: function() {
         getAllCategories(function(ready, data) {
             if (ready) {
@@ -381,14 +389,17 @@ var coredataContainer = Ractive.extend({
     /* Item Methods */
 
     selectItem: function(index) {
+        // removes selections from every item except the selected one
         $('tr.table-entry').each(function() {
             if ($(this).attr('id') != ('item_' + index)) {
                 $(this).removeClass('table-entry-selected');
             }
         });
 
+        // toggles the selected item --> in case it was selected it will be unselected
         $('#item_' + index).toggleClass('table-entry-selected');
 
+        //
         this.updateTableEditButton();
     },
 
@@ -399,23 +410,33 @@ var coredataContainer = Ractive.extend({
     },
 
     addItem: function() {
+        // get all values from ractive data
         var newItemId = window.currentRactive.get('newItem.id');
         var newItemName = window.currentRactive.get('newItem.name');
         var newCategoryName = window.currentRactive.get('newItem.category');
 
         var attributes = window.currentRactive.get('newItem.attributes');
 
+        // check whether important fields are empty
+        // TODO: When attributes are added but empty
         if (newItemId == null || newItemName == null || newCategoryName == null
             || newItemId == '' || newItemName == '' || newCategoryName == '') {
             alert('error with creating item');
             return;
         }
 
+
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
+
+                // check if no attributes were added to the item
                 if (attributes != null) {
+
+                    // check every attribute if it already exists in the attributes database
                     attributes.map(function (item) {
                         if (loadAttributeByName(item.attributeName, function (success, result) {
+
+                                // if it does not exist in attributes database yet then add it
                                 if (success == false) {
                                     saveAttribute(function (success) {
                                         window.currentRactive.refreshItems();
@@ -437,7 +458,9 @@ var coredataContainer = Ractive.extend({
         $('#add-item-modal').modal('hide');
     },
 
+    // prepare new attribute
     addNewAttribute: function() {
+        // workaround if no attribute exists yet then create array, else you can just push it
         if (window.currentRactive.get('newItem.attributes') == null) {
             window.currentRactive.set('newItem.attributes.0', new ItemAttribute("", "", "", ""));
         }
@@ -449,6 +472,7 @@ var coredataContainer = Ractive.extend({
     removeAttributeRow: function(index) {
         window.currentRactive.splice('newItem.attributes', index, 1);
     },
+
 
     editItem: function() {
 
@@ -467,7 +491,9 @@ var coredataContainer = Ractive.extend({
         $('#edit-item-modal').modal('hide');
     },
 
+    // prepare new edit attribute
     addNewEditAttribute: function() {
+        // workaround if no attribute exists yet then create array, else you can just push it
         if (window.currentRactive.get('currentItem.value.attributes') == null) {
             window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
         }
@@ -482,10 +508,6 @@ var coredataContainer = Ractive.extend({
 
     deleteItemFromTable: function() {
         var itemToDeleteIndex = $('.table-entry-selected').attr('id');
-
-        if (itemToDeleteIndex == null) {
-            return;
-        }
 
         this.unselectAllEntries();
 
@@ -504,6 +526,7 @@ var coredataContainer = Ractive.extend({
         this.updateTableEditButton();
     },
 
+    // important method for items, gets called after every item database operations to reload the items from database
     refreshItems: function() {
         getAllItemsFromCouch(function(ready, data) {
            if (ready) {
@@ -523,6 +546,7 @@ var coredataContainer = Ractive.extend({
         this.set('currentItem', '');
     },
 
+    // preparation for editing a category
     saveCurrentCategory: function() {
         var currentContainerIndex = $('li.list-group-item-selected').attr('id');
 
@@ -535,6 +559,7 @@ var coredataContainer = Ractive.extend({
         }
     },
 
+    // preparation for editing an item
     saveCurrentItemEntry: function() {
         var itemToEditIndex = $('.table-entry-selected').attr('id');
 
