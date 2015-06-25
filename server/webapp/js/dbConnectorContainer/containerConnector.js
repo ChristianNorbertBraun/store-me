@@ -14,7 +14,7 @@
 var saveStore = function(callBackFunction, container){
     $.couch.urlPrefix = strings.link.dbConnection;
     var storeName = container.containerName;
-    loadStoreByName("store", function(loaded, db){
+    loadStoreByName(storeName, function(loaded, db){
         if(loaded){
             console.log(db);
             container["_id"] = db._id;
