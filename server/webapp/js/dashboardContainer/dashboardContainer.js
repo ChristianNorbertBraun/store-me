@@ -106,8 +106,9 @@ var dashboardContainer = Ractive.extend({
                 window.currentRactive.set('amountItems', itemCount);
 
                 var sessionID = getSessionIDFromURL();
-                //var userName = getUserNameBySessionID(sessionID);
-                window.currentRactive.set('storeAdmin', sessionID);
+                var userName = getUserNameBySessionID(sessionID);
+                console.dir(currentSessions);
+                window.currentRactive.set('storeAdmin', userName);
             }
         })
     },
