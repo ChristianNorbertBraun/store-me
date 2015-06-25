@@ -61,7 +61,7 @@ var managerContainer = Ractive.extend(
                                 </ul>\
                             </div>\
                         </div>\
-                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-container-modal" on-click="fillParentId()">Add</button>\
+                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-container-modal" on-click="prepareAddContainerPopup()">Add</button>\
                         <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Delete</button>\
                         \
                         \
@@ -109,6 +109,10 @@ var managerContainer = Ractive.extend(
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
         ',
+
+        data:{
+            newContainer:{}
+        },
 
         components:{
             noStockContainer:noStockContainer,
@@ -221,12 +225,11 @@ var managerContainer = Ractive.extend(
 
         },
 
-        fillParentId:function(){
+        prepareAddContainerPopup:function(){
             $("#parent-id").val(window.parentContainer.containerID);
-            var compulsaryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
-
-            window.currentRactive.set('data.currentAttributes',compulsaryAttributes);
-            $('.validation-message').remove();
+            var newContainer = new Container("");
+            this.set('newContainer', newContainer);
+            $('#container-amount').val('');
         },
 
             writeToDb:function(stock){
