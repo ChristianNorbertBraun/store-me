@@ -9,22 +9,23 @@ var navbarContainer = Ractive.extend({
                         <div class="navbar-header">\
                             <a class="navbar-brand">StoreMe</a>\
                         </div>\
-                        \
-                        <ul class="nav navbar-nav navbar-right">\
-                            <li>\
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Christian\
-                                <span class="caret"></span></a>\
-                                \
-                                <ul class="dropdown-menu" role="menu">\
-                                    <li><a href="{{dashboardLink}}">Dashboard</a></li>\
-                                    <li><a href="{{managerLink}}">Manager</a></li>\
-                                    <li><a href="{{coredataLink}}">Coredata</a></li>\
-                                    <li><a href="{{inventoryLink}}">Inventory</a></li>\
-                                    <li class="divider"></li>\
-                                    <li><a href="#">Logout</a></li>\
-                                </ul>\
-                            </li>\
-                        </ul>\
+                        {{#if loggedIn}}\
+                            <ul class="nav navbar-nav navbar-right">\
+                                <li>\
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{userName}}\
+                                    <span class="caret"></span></a>\
+                                    \
+                                    <ul class="dropdown-menu" role="menu">\
+                                        <li><a href="{{dashboardLink}}">Dashboard</a></li>\
+                                        <li><a href="{{managerLink}}">Manager</a></li>\
+                                        <li><a href="{{coredataLink}}">Coredata</a></li>\
+                                        <li><a href="{{inventoryLink}}">Inventory</a></li>\
+                                        <li class="divider"></li>\
+                                        <li><a href="#">Logout</a></li>\
+                                    </ul>\
+                                </li>\
+                            </ul>\
+                        {{/if}}\
                     </div>\
                 </nav>\
                 ',
@@ -32,23 +33,27 @@ var navbarContainer = Ractive.extend({
         dashboardLink: '',
         managerLink: '',
         coredataLink: '',
-        inventoryLink: ''
-
+        inventoryLink: '',
+        userName: null,
+        loggedIn: false
     },
 
    oncomplete: function() {
-        dashboardLink = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
-        managerLink = urlBuilder(strings.link.toManager, getSessionIDFromURL());
-        coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
-        inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
+        userName = getUserNameBySessionID(getSessionIDFromURL());
 
-        this.set('dashboardLink', dashboardLink);
-        this.set('managerLink', managerLink);
-        this.set('coredataLink', coredataLink);
-        this.set('inventoryLink', inventoryLink);
-   },
+        if (userName != "none") {
+            dashboardLink = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
+            managerLink = urlBuilder(strings.link.toManager, getSessionIDFromURL());
+            coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
+            inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
 
-   loadCoredata: function() {
 
+            this.set('dashboardLink', dashboardLink);
+            this.set('managerLink', managerLink);
+            this.set('coredataLink', coredataLink);
+            this.set('inventoryLink', inventoryLink);
+            this.set('userName', userName);
+            this.set('loggedIn', true);
+        }
    }
 });
