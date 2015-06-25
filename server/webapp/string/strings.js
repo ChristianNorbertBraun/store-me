@@ -19,6 +19,8 @@ var english = {
     link:{
         toDashboard:"dashboard",
         toManager:"manager",
+        toCoredata:"coredata",
+        toInventory:"inventory",
         dbConnection:"http://localhost:5984",
         backendConnection:"http://localhost:8080"
     },
