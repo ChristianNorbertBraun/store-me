@@ -40,22 +40,22 @@ var addItemPopup = Ractive.extend({
                             </div>\
                         </div>\
                         <div id="attribute-container">\
-                            {{#if stockItem.itemAttributes}}\
+                            {{#if stockItem.attributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             {{#each stockItem.itemAttributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" ></div>\
+                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" ></div>\
                                  \
-                                <div class="col-md-3 attribute-entry"><input id="item-attribute-value{{i}}" type="text" class="form-control {{#if compulsory}} compulsory-value {{/if}}" {{#if compulsory}} placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
-                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
+                                <div class="col-md-3 attribute-entry"><input id="item-attribute-value{{i}}" type="text" class="form-control"></div>\
+                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}"></div>\
                             </div>\
                             {{/each}}\
                         </div>\
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal" on-click="cleanContainerValues(true)">Close</button>\
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>\
                         <button type="button" class="btn btn-primary" on-click="saveContainer()">Add</button>\
                     </div>\
                 </div>\
@@ -64,7 +64,13 @@ var addItemPopup = Ractive.extend({
     ',
 
     loadItem:function(){
-        var stockItem = getDataItemFromCouch(this.get('stockItemStructure._id'));
+        console.log(this.get('stockItemStructure.itemID'));
+        var stockItem = getDataItemFromCouch(this.get('stockItemStructure.itemID'));
         console.log(stockItem);
+        /*var stockItemStructure = this.get('stockItemStructure');
+
+        stockItemStructure.name = stockItem.name;
+        stockItemStructure.attributes = stockItem.attributes;*/
+
     }
 });
