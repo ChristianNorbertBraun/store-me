@@ -256,7 +256,7 @@ var coredataContainer = Ractive.extend({
                             {{#each currentItem.value.attributes:i}}\
                                 <div id="attribute_row_{{i}}" class="row modal-row" intro-outro="slideh">\
                                     <div class="col-md-3 attribute-entry">\
-                                        <input type="text" class="form-control" value="{{attributeName}}" placeholder="Attribute Name" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                        <input type="text" class="form-control" value="{{attributeName}}" placeholder="Attribute Name" disabled>\
                                     </div>\
                                     \
                                     <div class="col-md-3 attribute-entry">\
@@ -264,11 +264,11 @@ var coredataContainer = Ractive.extend({
                                     </div>\
                                     \
                                     <div class="col-md-2 attribute-entry">\
-                                        <input type="text" class="form-control" value="{{unit}}" placeholder="Unit" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                        <input type="text" class="form-control" value="{{unit}}" placeholder="Unit" disabled>\
                                     </div>\
                                     \
                                     <div class="col-md-2 attribute-entry">\
-                                        <input type="text" class="form-control" value="{{type}}" placeholder="Type" {{#unless edit_enabled}}disabled{{/unless}}>\
+                                        <input type="text" class="form-control" value="{{type}}" placeholder="Type" disabled>\
                                     </div>\
                                     <div class="col-md-2">\
                                         <button class="btn btn-primary btn-sm" on-click="removeEditAttributeRow(i)" {{#unless edit_enabled}}disabled{{/unless}}>\
