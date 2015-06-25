@@ -19,12 +19,12 @@ var registerContainer = Ractive.extend({
                         <input id="confirmed-password" class="form-control login-input" type="password" placeholder="Confirm Password" onkeypress="keyHandlerRegister(event)"/>\
                     </div>\
                 </div>\
-                <button type="button" class="btn btn-primary login-btn center-block" onclick="register()">Sign Up!</button>\
+                <button type="button" class="btn btn-primary login-btn center-block" onclick="register()">Sign Up</button>\
             </div>\
           </div>\
           <div class="create-account center-block">\
-            <p class="text-center">Don\'t have a StoreMe account yet?<br>\
-            <a id="sign-up" href="register.html">Sign up!</a> </p>\
+            <p class="text-center">Already have a StoreMe account?<br>\
+            <a id="sign-up" href="index.html">Login!</a> </p>\
           </div>\
     </div>\ ',
 
