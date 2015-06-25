@@ -14,7 +14,7 @@ var dashboardContainer = Ractive.extend({
                             <div class="panel-body">\
                                 <div class="row">\
                                     <p class="col-md-6">{{panel.content.info.admin}}</p>\
-                                    <p class="col-md-6">Christian</p>\
+                                    <p class="col-md-6">{{storeAdmin}}</p>\
                                 </div>\
                                 \
                                 <div class="row">\
@@ -87,6 +87,7 @@ var dashboardContainer = Ractive.extend({
     sortModeDown: true,
 
     data: {
+        storeAdmin: 'Marvin',
         amountContainers: 0,
         amountItems: 0
     },
@@ -94,12 +95,19 @@ var dashboardContainer = Ractive.extend({
     oninit: function() {
         window.currentRactive = this;
 
-        loadStore(function(status, container) {
-            if (status) {
-                var returnVal = countContainers(container);
-                window.currentRactive.set('amountContainers', returnVal);
-                returnVal = countItems(container);
-                window.currentRactive.set('amountItems', returnVal);
+        loadStore(function(status, container)
+        {
+            if (status)
+            {
+                var containerCount = countContainers(container);
+                window.currentRactive.set('amountContainers', containerCount);
+
+                var itemCount = countItems(container);
+                window.currentRactive.set('amountItems', itemCount);
+
+                var sessionID = getSessionIDFromURL();
+                var userName = getUserNameBySessionID(sessionID);
+                window.currentRactive.set('storeAdmin', userName);
             }
         })
     },
