@@ -407,6 +407,7 @@ var coredataContainer = Ractive.extend({
         window.currentRactive.set('newItem.id', '');
         window.currentRactive.set('newItem.name', '');
         window.currentRactive.set('newItem.category', '');
+        window.currentRactive.set('newItem.attributes', null);
     },
 
     addItem: function() {
@@ -431,22 +432,7 @@ var coredataContainer = Ractive.extend({
 
                 // check if no attributes were added to the item
                 if (attributes != null) {
-
-                    // check every attribute if it already exists in the attributes database
-                    attributes.map(function (item) {
-                        if (loadAttributeByName(item.attributeName, function (success, result) {
-
-                                // if it does not exist in attributes database yet then add it
-                                if (success == false) {
-                                    saveAttribute(function (success) {
-                                        window.currentRactive.refreshItems();
-                                    }, item.attributeName, item.unit, item.type);
-                                }
-                                else {
-                                    window.currentRactive.refreshItems();
-                                }
-                            }));
-                    });
+                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
                 }
                 else {
                     window.currentRactive.refreshItems();
@@ -484,11 +470,37 @@ var coredataContainer = Ractive.extend({
 
         updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
-                window.currentRactive.refreshItems();
+
+                // check if no attributes were added to the item
+                if (attributes != null) {
+                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
+                }
+                else {
+                    window.currentRactive.refreshItems();
+                }
             }
         })
 
         $('#edit-item-modal').modal('hide');
+    },
+
+    // check every attribute if it already exists in the attributes database
+    addItemAttributesToGeneralAttributeDB: function(attributes) {
+
+        attributes.map(function (item) {
+            if (loadAttributeByName(item.attributeName, function (success, result) {
+
+                    // if it does not exist in attributes database yet then add it
+                    if (success == false) {
+                        saveAttribute(function (success) {
+                            window.currentRactive.refreshItems();
+                        }, item.attributeName, item.unit, item.type);
+                    }
+                    else {
+                        window.currentRactive.refreshItems();
+                    }
+                }));
+        });
     },
 
     // prepare new edit attribute
@@ -498,7 +510,7 @@ var coredataContainer = Ractive.extend({
             window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
         }
         else {
-            window.currentRactive.push('currentItem.value.attributes', newItemAttribute("","","",""));
+            window.currentRactive.push('currentItem.value.attributes', new ItemAttribute("","","",""));
         }
     },
 
