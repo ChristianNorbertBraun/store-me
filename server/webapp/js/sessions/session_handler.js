@@ -252,7 +252,7 @@ if (typeof exports !== "undefined")
 
     exports.endSession = function(sessionID)
     {
-        endSession(sessionID);
+        return endSession(sessionID);
     }
 }
 
