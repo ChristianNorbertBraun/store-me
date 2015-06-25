@@ -70,5 +70,5 @@ var loadStoreBy = function () {
 
 
 createStore();
-loadCompleteStore();
-loadStoreBy();
+//loadCompleteStore();
+//loadStoreBy();
