@@ -20,7 +20,11 @@ console.log(isValidSession(session.sessionID));
 var newExpireDate = currentSessions[0].expires;
 console.log(oldExpireDate < newExpireDate);
 
+console.log("Get user name by session");
+console.log(getUserNameBySessionID(session.sessionID) === "captainLuma");
+
 console.log("End session");
 endSession(session.sessionID);
 console.log(currentSessions.length === 0);
 console.log(!isValidSession(session.sessionID));
+

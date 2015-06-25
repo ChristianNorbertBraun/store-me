@@ -16,10 +16,14 @@ var HASH_CODE_LENGTH = 8;
  * @constructor
  * @param userName {String} - The username of a successfully logged in user
  * @param password {String} - The password of the given user
+ * @prop userName {String}  - Username
+ * @prop sessionID {String} - 10 digit session id
+ * @prop expires {Number}   - Long integer representing the expire date
  * @author Marvin Therolf
  */
 function Session(userName, password)
 {
+    this.userName = userName;
     var timeStamp = Date.now();
     this.sessionID = getSessionID(userName, password, timeStamp);
     this.expires = getExpireTimeStamp(timeStamp);
@@ -205,6 +209,28 @@ var getSessionIDFromURL = function()
     var querySessionID = queryParamsArray[0].split('=');
     var sessionID = querySessionID[1];
     return sessionID;
+};
+
+/**
+ * Returns a username corresponding to a given session id if the session id is valid. Returns null otherwise;
+ * @function
+ * @param sessionID {String}        - session id to search for
+ * @returns {String} Username
+ * @author Marvin Therolf
+ */
+var getUserNameBySessionID = function(sessionID)
+{
+    var userName = null;
+
+    for (var i = 0; i < currentSessions.length; i++)
+    {
+        if (currentSessions[i].sessionID === sessionID)
+        {
+            userName = currentSessions[i].userName;
+            break;
+        }
+    }
+    return userName;
 };
 
 if (typeof exports !== "undefined")
