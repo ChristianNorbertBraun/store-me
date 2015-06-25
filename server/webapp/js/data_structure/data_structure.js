@@ -587,10 +587,10 @@ removeAllItemAttributes = function(item)
 };
 
 /**
- * Checks an array of Item objects for a given categoryID. Returns true if category id was found. Returns false
- * otherwise.
+ * Checks an array of Item objects taken from the database for a given categoryID.
+ * Returns true if category id was found. Returns false otherwise.
  * @function
- * @param items {Array}         - Array of items to search
+ * @param items {Array}         - Array of items from database to search
  * @param category_id {String}  - Category id to search for
  * @returns {boolean} Whether or not category id was found
  */
@@ -600,7 +600,7 @@ var categoryStillReferenced = function(items, category_id)
 
     for (var i = 0; i < items.length; i++)
     {
-        if (items[i].category_id === category_id)
+        if (items[i].value.category_id === category_id)
         {
             referenceFound = true;
             break;

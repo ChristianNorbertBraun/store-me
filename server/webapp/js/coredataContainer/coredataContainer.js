@@ -369,6 +369,13 @@ var coredataContainer = Ractive.extend({
     deleteCategory: function(index) {
         var deletedCategoryName = this.get('category.' + index).id;
 
+        var items = window.currentRactive.get('items');
+
+        if (categoryStillReferenced(items, deletedCategoryName)) {
+            alert('category still is referenced');
+            return;
+        }
+
         categoryDelete(deletedCategoryName, function(status) {
             if (status) {
                 window.currentRactive.refreshCategories();
