@@ -712,8 +712,28 @@ var countContainers = function(container)
     return amount;
 };
 
+/**
+ * Searches a list of items for a sub string included in the item name. Returns an array of results.
+ * @function
+ * @param items {Array}      - Array of items to search
+ * @param subString {String} - Substring to search for
+ * @returns {Array} Results
+ */
+var searchForItemName = function(items, subString)
+{
+    var result = [];
 
+    for (var i = 0; i < items.length; i++)
+    {
+        var currentItem = items[i];
 
+        if (currentItem.name.indexOf(subString) > -1)
+        {
+            result.push(currentItem);
+        }
+    }
+    return result;
+};
 
 
 
