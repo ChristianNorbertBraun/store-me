@@ -54,20 +54,20 @@ var dashboardContainer = Ractive.extend({
                                 </thead>\
                                 \
                                 <tbody>\
-                                    {{#each table.data}}\
+                                    {{#each logdata}}\
                                         <tr>\
                                             <td class="icon-field">\
-                                            {{#if stored}}\
+                                            {{#if value.stored}}\
                                                 <img class="table-icon" src="resources/icons/stored-icon.jpg" alt="stored">\
                                             {{else}}\
                                                 <img class="table-icon" src="resources/icons/removed-icon.jpg" alt="removed">\
                                             {{/if}}\
                                             </td>\
-                                            <td>{{date}}</td>\
-                                            <td>{{container}}</td>\
-                                            <td>{{item}}</td>\
-                                            <td>{{amount}}</td>\
-                                            <td>{{employee}}</td>\
+                                            <td>{{value.date}}</td>\
+                                            <td>{{value.containerID}}</td>\
+                                            <td>{{value.itemName}}</td>\
+                                            <td>{{value.amount}}</td>\
+                                            <td>{{value.employee}}</td>\
                                         </tr>\
                                     {{/each}}\
                                 </tbody>\
@@ -84,7 +84,8 @@ var dashboardContainer = Ractive.extend({
     data: {
         storeAdmin: 'Marvin',
         amountContainers: 0,
-        amountItems: 0
+        amountItems: 0,
+        logdata: null
     },
 
     oninit: function() {
@@ -104,7 +105,15 @@ var dashboardContainer = Ractive.extend({
                 var userName = getUserNameBySessionID(sessionID);
                 window.currentRactive.set('storeAdmin', userName);
             }
-        })
+        });
+
+        /* for creation of dummy data
+        saveLogContainer(new LogContainer(true, "date", "container", "item", 4, "marvin"), function(success) {
+            if (success)
+                console.log("Success");
+        });*/
+
+        window.currentRactive.refreshLogData();
     },
 
     oncomplete: function() {
@@ -156,5 +165,16 @@ var dashboardContainer = Ractive.extend({
 
     loadManager: function() {
         location.href = urlBuilder(strings.link.toManager, getSessionIDFromURL());
+    },
+
+    refreshLogData: function() {
+        loadAllLogContainer(function(status, logs) {
+            if (status && logs) {
+                window.currentRactive.set('logdata', logs);
+            }
+            else {
+                alert('error');
+            }
+        });
     }
 });
