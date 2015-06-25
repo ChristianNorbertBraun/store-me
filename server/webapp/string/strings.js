@@ -23,7 +23,8 @@ var english = {
         toCoredata:"coredata",
         toInventory:"inventory",
         dbConnection:"http://localhost:5984",
-        backendConnection:"http://localhost:13373"
+        port:13373,
+        backendConnection:"http://localhost"
     },
 
     database:{

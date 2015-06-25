@@ -65,7 +65,7 @@ var navbarContainer = Ractive.extend({
        debugger;
 
        $.ajax({
-           url: strings.link.backendConnection + "/logout",
+           url: strings.link.backendConnection + ":" + strings.link.port + "/logout",
            type: "GET",
            headers: {'sessionID': getSessionIDFromURL()},
 

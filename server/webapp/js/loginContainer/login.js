@@ -9,7 +9,7 @@ var tryLogin = function(){
         checkNullLoginValues();
         var base64 = "Basic " + btoa(loginName+":"+loginPassword);
         $.ajax({
-            url: strings.link.backendConnection+"/login",
+            url: strings.link.backendConnection+":"+strings.link.port+"/login",
             type: "GET",
             headers: {'authorization': base64},
             success: function(res, status, xhr) {
