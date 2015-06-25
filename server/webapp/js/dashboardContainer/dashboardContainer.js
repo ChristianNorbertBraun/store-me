@@ -26,11 +26,6 @@ var dashboardContainer = Ractive.extend({
                                     <p class="col-md-6">{{panel.content.info.items}}</p>\
                                     <p class="col-md-6">{{amountItems}}</p>\
                                 </div>\
-                                \
-                                <div class="row">\
-                                    <p class="col-md-6">{{panel.content.info.volume}}</p>\
-                                    <p class="col-md-6">230 m<sup>3</sup></p>\
-                                </div>\
                             </div>\
                         </div>\
                         \
