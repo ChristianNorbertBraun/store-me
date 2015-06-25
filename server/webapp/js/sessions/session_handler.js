@@ -248,6 +248,11 @@ if (typeof exports !== "undefined")
     exports.isValidSession = function(sessionID)
     {
         return isValidSession(sessionID);
+    };
+
+    exports.endSession = function(sessionID)
+    {
+        endSession(sessionID);
     }
 }
 

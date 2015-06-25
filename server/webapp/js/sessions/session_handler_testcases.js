@@ -28,3 +28,4 @@ endSession(session.sessionID);
 console.log(currentSessions.length === 0);
 console.log(!isValidSession(session.sessionID));
 
+console.log(getSessionIDFromURL());
