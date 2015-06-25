@@ -201,7 +201,7 @@ var coredataContainer = Ractive.extend({
                         </button>\
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>\
+                        <button type="button" class="btn btn-default" on-click="closeModal()">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="addItem()">Add</button>\
                     </div>\
                 </div>\
@@ -280,12 +280,11 @@ var coredataContainer = Ractive.extend({
                             \
                         </div>\
                         \
-                        <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
-                        </button>\
                         \
-                        <div class="checkbox pull-right">\
-                            <input checked="{{edit_enabled}}" type="checkbox"><p class="checkbox-label">  Enable Editing<p>\
+                        <div class="checkbox row">\
+                            <div class="col-sm-offset-9 col-sm-3">\
+                                <input checked="{{edit_enabled}}" type="checkbox"><p class="checkbox-label">  Enable Editing<p>\
+                            </div>\
                         </div>\
                     </div>\
                     <div class="modal-footer">\
@@ -296,6 +295,11 @@ var coredataContainer = Ractive.extend({
             </div>\
         </div>\
     ',
+
+    /* removed button from attributes
+    <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
+    </button>\ */
 
     data: {
         edit_enabled: false     // for checkbox in edit modal, if true then it is possible to edit the item in the modal
@@ -419,9 +423,7 @@ var coredataContainer = Ractive.extend({
         var attributes = window.currentRactive.get('newItem.attributes');
 
         // check whether important fields are empty
-        // TODO: When attributes are added but empty
-        if (newItemId == null || newItemName == null || newCategoryName == null
-            || newItemId == '' || newItemName == '' || newCategoryName == '') {
+        if (!window.currentRactive.validateItemFields(newItemId, newItemName, newCategoryName, attributes)) {
             alert('error with creating item');
             return;
         }
@@ -442,6 +444,37 @@ var coredataContainer = Ractive.extend({
 
         this.prepareItem();
         $('#add-item-modal').modal('hide');
+    },
+
+    closeModal: function() {
+        this.prepareItem();
+        $('#add-item-modal').modal('hide');
+    },
+
+    validateItemFields(itemId, itemName, itemCategory, attributes) {
+        // need global var because of map function
+        window.tempReturn = true;
+
+        if (itemId == null || itemName == null
+            || itemId == '' || itemName == '') {
+
+            window.tempReturn = false;
+        }
+        else {
+            if (attributes != null) {
+                attributes.map(function(attr) {
+                    if (attr.attributeName == null || attr.attributeName == '' ||
+                        attr.value == null || attr.value == '' ||
+                        attr.unit == null || attr.unit == '' ||
+                        attr.type == null || attr.type == '') {
+
+                        window.tempReturn = false;
+                    }
+                });
+            }
+        }
+
+        return window.tempReturn;
     },
 
     // prepare new attribute
@@ -467,6 +500,12 @@ var coredataContainer = Ractive.extend({
         var itemCategory = this.get('currentItem.value.category_id');
 
         var attributes = this.get('currentItem.value.attributes');
+
+        // check whether important fields are empty
+        if (!window.currentRactive.validateItemFields(itemId, itemName, itemCategory, attributes)) {
+            alert('error with creating item');
+            return;
+        }
 
         updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
