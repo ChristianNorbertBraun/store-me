@@ -107,8 +107,7 @@ var dashboardContainer = Ractive.extend({
 
                 var sessionID = getSessionIDFromURL();
                 var userName = getUserNameBySessionID(sessionID);
-                console.dir(currentSessions);
-                window.currentRactive.set('storeAdmin', sessionID);
+                window.currentRactive.set('storeAdmin', userName);
             }
         })
     },
