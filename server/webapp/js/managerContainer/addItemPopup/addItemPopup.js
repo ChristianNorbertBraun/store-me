@@ -40,15 +40,14 @@ var addItemPopup = Ractive.extend({
                             </div>\
                         </div>\
                         <div id="attribute-container">\
-                            {{#if stockItem.attributes}}\
+                            {{#if stockItemStructure.attributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
-                            {{#each stockItem.itemAttributes:i}}\
+                            {{#each stockItemStructure.attributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" ></div>\
-                                 \
-                                <div class="col-md-3 attribute-entry"><input id="item-attribute-value{{i}}" type="text" class="form-control"></div>\
-                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}"></div>\
+                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
+                                <div class="col-md-5 attribute-entry"><input id="item-attribute-value{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
+                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
                             </div>\
                             {{/each}}\
                         </div>\
@@ -56,7 +55,7 @@ var addItemPopup = Ractive.extend({
                     </div>\
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>\
-                        <button type="button" class="btn btn-primary" on-click="saveContainer()">Add</button>\
+                        <button type="button" class="btn btn-primary" on-click="stockItem()">Stock</button>\
                     </div>\
                 </div>\
             </div>\
@@ -64,13 +63,22 @@ var addItemPopup = Ractive.extend({
     ',
 
     loadItem:function(){
-        console.log(this.get('stockItemStructure.itemID'));
-        var stockItem = getDataItemFromCouch(this.get('stockItemStructure.itemID'));
-        console.log(stockItem);
-        /*var stockItemStructure = this.get('stockItemStructure');
 
-        stockItemStructure.name = stockItem.name;
-        stockItemStructure.attributes = stockItem.attributes;*/
+        getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
+            if(success){
+                var stockItemStructure = window.currentRactive.get('stockItemStructure');
+                stockItemStructure.name = data.name;
+                stockItemStructure.attributes = data.attributes;
 
+                window.currentRactive.set('stockItemStructure',stockItemStructure);
+            }
+        });
+    },
+
+    stockItem:function(){
+        stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'),20);
+
+        window.currentRactive.writeToDb();
+        $('#add-item-modal').modal('hide');
     }
 });

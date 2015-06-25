@@ -240,7 +240,7 @@ var managerContainer = Ractive.extend(
             $('#container-amount').val(1);
         },
 
-            writeToDb:function(stock){
+        writeToDb:function(stock){
            if(stock){
                saveStore(function(boolean){
                    loadStore(window.currentRactive.getStoreFromDb);
