@@ -19,12 +19,12 @@ var dashboardContainer = Ractive.extend({
                                 \
                                 <div class="row">\
                                     <p class="col-md-6">{{panel.content.info.container}}</p>\
-                                    <p class="col-md-6">{{amountContainer}} piece</p>\
+                                    <p class="col-md-6">{{amountContainers}}</p>\
                                 </div>\
                                 \
                                 <div class="row">\
                                     <p class="col-md-6">{{panel.content.info.items}}</p>\
-                                    <p class="col-md-6">320 piece</p>\
+                                    <p class="col-md-6">{{amountItems}}</p>\
                                 </div>\
                                 \
                                 <div class="row">\
@@ -87,7 +87,8 @@ var dashboardContainer = Ractive.extend({
     sortModeDown: true,
 
     data: {
-        amountContainer: 0
+        amountContainers: 0,
+        amountItems: 0
     },
 
     oninit: function() {
@@ -96,7 +97,9 @@ var dashboardContainer = Ractive.extend({
         loadStore(function(status, container) {
             if (status) {
                 var returnVal = countContainers(container);
-                window.currentRactive.set('amountContainer', returnVal);
+                window.currentRactive.set('amountContainers', returnVal);
+                returnVal = countItems(container);
+                window.currentRactive.set('amountItems', returnVal);
             }
         })
     },
