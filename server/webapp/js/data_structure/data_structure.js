@@ -600,7 +600,7 @@ var categoryStillReferenced = function(items, category_id)
 
     for (var i = 0; i < items.length; i++)
     {
-        if (item[i].category_id === category_id)
+        if (items[i].category_id === category_id)
         {
             referenceFound = true;
             break;
