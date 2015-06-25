@@ -7,19 +7,19 @@ var EXPIRE_TIME = 600000; //milliseconds
 var CHECK_STAMP_LENGTH = 2;
 var HASH_CODE_LENGTH = 8;
 
-
 /**
  * A Session object contains a session id and an expire timestamp (10 min after creation). A session id is created
  * during a successful login process. The session id is build by hashing the username, the password and the current
  * time. All active sessions are stored in a static array called currentSessions. Every time a function iterates over
  * this array it will delete all expired sessions. <br>
  * <br>Never use this constructor! Use function newSession instead! Otherwise the session will not be pushed to the
- * array of valid sessions.
+ * array of valid sessions. <br>
+ * <br> The Session ID does contain the username and is Base64-encoded.
  * @constructor
  * @param userName {String} - The username of a successfully logged in user
  * @param password {String} - The password of the given user
  * @prop userName {String}  - Username
- * @prop sessionID {String} - 10 digit session id
+ * @prop sessionID {String} - 10 digit session id plus username encoded with Base64
  * @prop expires {Number}   - Long integer representing the expire date
  * @author Marvin Therolf
  */
@@ -54,7 +54,9 @@ var getSessionID = function(userName, password, timeStamp)
     var key = userName + password;
     var hashCode = getHashCode(key, timeStamp);
     var prefix = getCheckStamp(userName);
-    return prefix + hashCode;
+    var sessionID = userName + prefix + hashCode;
+    var sessionID64 = btoa(sessionID);
+    return sessionID64;
 };
 
 /**
@@ -228,15 +230,11 @@ var getSessionIDFromURL = function()
  */
 var getUserNameBySessionID = function(sessionID)
 {
-    var userName = null;
+    var userName = "none";
 
-    for (var i = 0; i < currentSessions.length; i++)
-    {
-        if (currentSessions[i].sessionID === sessionID)
-        {
-            userName = currentSessions[i].userName;
-            break;
-        }
+    if (sessionID !== "") {
+        var decodedSessionID = atob(sessionID);
+        userName = decodedSessionID.substring(0, decodedSessionID.length - 10);
     }
     return userName;
 };

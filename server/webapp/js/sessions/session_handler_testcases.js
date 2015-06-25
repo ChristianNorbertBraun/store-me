@@ -13,7 +13,7 @@ var timeStamp = 0;
 console.log(digitSum(timeStamp) === 0);
 console.log(getCheckStamp("marvintherolf") === "69");
 console.log(getHashCode("marvintherolfcherrybanana", timeStamp) === "39111936");
-console.log(getSessionID("marvintherolf", "cherrybanana", timeStamp) === "6939111936");
+console.log(getSessionID("marvintherolf", "cherrybanana", timeStamp) === btoa("marvintherolf6939111936"));
 
 console.log("Valid session handling");
 console.log(isValidSession(session.sessionID));
