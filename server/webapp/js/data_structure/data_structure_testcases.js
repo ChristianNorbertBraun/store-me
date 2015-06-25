@@ -153,12 +153,15 @@ addContainerAttribute(compulsoryTestContainer.subContainers[0], compulsoryAttrib
 addContainerAttribute(compulsoryTestContainer.subContainers[1], nonCompulsoryAttributes);
 console.log(getAllCompulsoryContainerAttributes(compulsoryTestContainer).length == 3);
 */
+
+/* Changed to only work with database key value pairs
 console.log("Category still referenced");
 var yoloItems = [];
 yoloItems.push(new Item("100", "yolo", "cat1"));
 yoloItems.push(new Item("200", "fish", "cat1"));
 console.log(categoryStillReferenced(yoloItems,"cat1") === true);
 console.log(categoryStillReferenced(yoloItems,"cat2") === false);
+*/
 
 console.log("Count Containers and Items");
 var startHere = new Container("Start Container");
