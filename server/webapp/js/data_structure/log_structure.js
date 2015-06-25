@@ -15,14 +15,38 @@
  * @constructor
  * @author Marcel Gross
  */
-function LogContainer(stored, date, containerID, itemName, amount, employee){
+function LogContainer(stored, containerID, itemName, amount, employee){
+
+
+
     this.stored = stored;
-    this.date = date;
+    this.date = getCurrentTime();
     this.containerID = containerID;
     this.itemName = itemName;
     this.amount = amount;
     this.employee = employee
+
 }
+
+var getCurrentTime = function () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var minutes = today.getMinutes();
+
+    if(dd<10) {
+        dd='0'+dd
+    }
+    if(mm<10) {
+        mm='0'+mm
+    }
+
+    today = mm+'.'+dd+'.'+yyyy+' '+hh+':'+minutes;
+
+    return today;
+};
 
 /**
  * A function to save a logContainer into the database

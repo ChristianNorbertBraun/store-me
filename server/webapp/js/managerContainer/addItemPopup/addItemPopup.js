@@ -79,6 +79,7 @@ var addItemPopup = Ractive.extend({
         stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'),20);
 
         window.currentRactive.writeToDb();
+        saveLogContainer(new LogContainer(true, window.parentContainer.containerName, this.get('stockItemStructure.name'),20, getUserNameBySessionID(getSessionIDFromURL())), function(saved){});
         $('#add-item-modal').modal('hide');
     }
 });
