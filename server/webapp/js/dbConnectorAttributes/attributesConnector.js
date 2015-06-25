@@ -74,7 +74,18 @@ var loadAllAttributes = function (callBackFunction) {
  * @author Marcel Gross
  */
 var loadAttributeByName = function(attributeName, callBackFunction){
-    try{
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.attributes).openDoc(attributeName, {
+        success: function(data) {
+            callBackFunction(true, data);
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+    //todo remove this code if the function above works
+   /* try{
         var link = strings.link.dbConnection+"/"+strings.database.attributes+"/"+attributeName;
         var result = $.ajax({type: "GET", url: link, async: false});
     } catch (err){
@@ -88,5 +99,5 @@ var loadAttributeByName = function(attributeName, callBackFunction){
         callBackFunction(true, result);
     }
 
-    return result;
+    return result;*/
 };

@@ -42,7 +42,18 @@ var saveStore = function(callBackFunction, container){
  * @author Marcel Gross
  */
 var loadStoreByName = function(storeName, callBackFunction){
-    try{
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.container).openDoc(storeName, {
+        success: function(data) {
+            callBackFunction(true, data);
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+    //todo remove this code if the function above works
+/*    try{
         var link = strings.link.dbConnection+"/"+strings.database.container+"/"+storeName;
         var result = $.ajax({type: "GET", url: link, async: false});
     } catch(err){
@@ -58,7 +69,7 @@ var loadStoreByName = function(storeName, callBackFunction){
         callBackFunction(true, result);
     }
 
-    return result;
+    return result;*/
 };
 
 /**
