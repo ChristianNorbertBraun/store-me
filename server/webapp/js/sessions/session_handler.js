@@ -143,7 +143,7 @@ var isValidSession = function(sessionID)
         if (currentSession.sessionID === sessionID)
         {
             valid = true;
-            currentSession.expires = getExpireTimeStamp(Date.now());
+            currentSessions[i].expires = getExpireTimeStamp(Date.now());
             break;
         }
     }
