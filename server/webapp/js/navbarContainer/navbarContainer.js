@@ -21,7 +21,7 @@ var navbarContainer = Ractive.extend({
                                         <li><a href="{{coredataLink}}">Coredata</a></li>\
                                         <li><a href="{{inventoryLink}}">Inventory</a></li>\
                                         <li class="divider"></li>\
-                                        <li><a href="#">Logout</a></li>\
+                                        <li><a type="button" on-click="logout()">Logout</a></li>\
                                     </ul>\
                                 </li>\
                             </ul>\
@@ -55,5 +55,23 @@ var navbarContainer = Ractive.extend({
             this.set('userName', userName);
             this.set('loggedIn', true);
         }
+   },
+
+   logout: function() {
+       debugger;
+
+       $.ajax({
+           url: strings.link.backendConnection + "/logout",
+           type: "GET",
+           headers: {'sessionID': getSessionIDFromURL()},
+
+           success: function(res, status, xhr) {
+
+           },
+
+           error: function(res, status, xhr) {
+               alert("ERROR!");
+           }
+       });;
    }
 });

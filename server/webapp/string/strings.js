@@ -17,6 +17,7 @@ var english = {
         queryparams: "sessionid"
     },
     link:{
+        toLogin:"index",
         toDashboard:"dashboard",
         toManager:"manager",
         toCoredata:"coredata",
