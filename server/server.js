@@ -47,6 +47,7 @@ app.get("/login", function (req, res) {
 app.get("/logout", function(req, res){
     var sessionID =  req.header('sessionID');
     sessionScript.endSession(sessionID);
+    console.log(sessionScript.isValidSession(sessionID));
     res.sendfile('webapp/index.html');
 });
 

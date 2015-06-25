@@ -7,8 +7,7 @@ var tryLogin = function(){
     try{
         getLoginValues();
         checkNullLoginValues();
-        //var base64 = "Basic " + btoa(loginName+":"+loginPassword);
-        var base64 = "Basic dGVzdG1hcmNlbDpUZXN0MTIz";
+        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
         $.ajax({
             url: strings.link.backendConnection+"/login",
             type: "GET",
