@@ -60,17 +60,19 @@ function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
 }
 
 
-function getDataItemFromCouch(itemID)
+function getDataItemFromCouch(itemID, callBackFunction)
 {
     $.couch.urlPrefix = strings.link.dbConnection;
 
     $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
             console.log(data);
+            callBackFunction(true, data);
             return data;
         },
         error: function(status) {
             console.log(status);
+            callBackFunction(false, status);
         }
     });
 }
