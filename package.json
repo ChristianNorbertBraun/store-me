@@ -1,0 +1,12 @@
+{
+  "name": "storeme",
+
+  "description": "StoreMe is a simple but flexible storage system based on CouchDB and web technologies",
+
+  "dependencies": {
+    "express": "4.13.0",
+    "cradle": "0.6.9",
+    "btoa": "1.1.2",
+    "body-parser": "1.13.1"
+  }
+}
