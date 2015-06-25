@@ -7,7 +7,8 @@ var tryLogin = function(){
     try{
         getLoginValues();
         checkNullLoginValues();
-        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
+        //var base64 = "Basic " + btoa(loginName+":"+loginPassword);
+        var base64 = "Basic dGVzdG1hcmNlbDpUZXN0MTIz";
         $.ajax({
             url: strings.link.backendConnection+"/login",
             type: "GET",
@@ -30,7 +31,7 @@ var tryLogin = function(){
         });
 
     } catch(err){
-
+        console.log(err);
     }
 };
 
