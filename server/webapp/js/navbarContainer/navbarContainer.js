@@ -45,10 +45,10 @@ var navbarContainer = Ractive.extend({
             userName = getUserNameBySessionID(sessionid);
 
             if (userName != "none") {
-                dashboardLink = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
-                managerLink = urlBuilder(strings.link.toManager, getSessionIDFromURL());
-                coredataLink = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
-                inventoryLink = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
+                dashboardLink = urlBuilder(strings.link.toDashboard, sessionid);
+                managerLink = urlBuilder(strings.link.toManager, sessionid);
+                coredataLink = urlBuilder(strings.link.toCoredata, sessionid);
+                inventoryLink = urlBuilder(strings.link.toInventory, sessionid);
 
 
                 this.set('dashboardLink', dashboardLink);

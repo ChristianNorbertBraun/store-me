@@ -16,45 +16,44 @@ var addItemPopup = Ractive.extend({
                     <div id="add-container-body" class="modal-body">\
                     \
                         <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Parent ContainerID</label>\
-                            <div class="col-md-8"><input id="parent-id" type="text" class="form-control" placeholder="Parent-Id" readonly></div>\
+                            <label class="col-md-4 modal-label">ContainerID</label>\
+                            <div class="col-md-6"><input id="container-id" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
+                            <div class="col-md-2">\
+                                    <button class="btn btn-primary btn-sm" >\
+                                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
+                                    </button>\
+                            </div>\
                         </div>\
                          <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Name</label>\
-                            <div class="col-md-8"><input id="container-name" type="text" class="form-control" placeholder="Container Name"></div>\
+                            <label class="col-md-4 modal-label">ItemID</label>\
+                            <div class="col-md-6"><input id="item-id" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-2">\
+                                    <button class="btn btn-primary btn-sm" >\
+                                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
+                                    </button>\
+                            </div>\
                         </div>\
-                        \
+                        <div class="row popup-entry">\
+                            <label class="col-md-4 modal-label">Item Name</label>\
+                            <div class="col-md-6"><input id="item-name" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
+                            <div class="col-md-2">\
+                                    <button class="btn btn-primary btn-sm" >\
+                                        <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
+                                    </button>\
+                            </div>\
+                        </div>\
                         <div id="attribute-container">\
-                            {{#if data.currentAttributes}}\
+                            {{#if stockItem.itemAttributes}}\
                                 <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
-                            {{#each data.currentAttributes:i}}\
+                            {{#each stockItem.itemAttributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry">\
-                                    <div class="input-group">\
-                                        <span class="input-group-addon">\
-                                            <input id="compulsory{{i}}"  type="checkbox"  on-change="storeAttributeChanges(this,i)">\
-                                        </span>\
-                                        <input id="attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" >\
-                                    </div>\
-                                 </div>\
+                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name{{i}}" type="text" class="form-control" placeholder="Attribute Name" on-change="storeAttributeChanges(this,i)" value="{{attributeName}}" ></div>\
                                  \
-                                <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control {{#if compulsory}} compulsory-value {{/if}}" {{#if compulsory}} placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
-                                <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
-                                <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" data-toggle="modal"  on-click="removeLine(this,i)">\
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
-                                    </button>\
-                                </div>\
+                                <div class="col-md-3 attribute-entry"><input id="item-attribute-value{{i}}" type="text" class="form-control {{#if compulsory}} compulsory-value {{/if}}" {{#if compulsory}} placeholder={{value}} {{else}}placeholder="Attribute Value"{{/if}} on-change="storeAttributeChanges(this,i)" ></div>\
+                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" on-change="storeAttributeChanges(this,i)" value="{{unit}}"></div>\
                             </div>\
                             {{/each}}\
-                        </div>\
-                        <button class="btn btn-primary btn-sm criteria-add-button popup-entry" data-toggle="modal" on-click="addLine()">\
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
-                        </button>\
-                        <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Amount of Containers</label>\
-                            <div class="col-md-8"><input id="container-amount" type="number" class="form-control" placeholder="Container Amount"></div>\
                         </div>\
                     \
                     </div>\
@@ -65,5 +64,10 @@ var addItemPopup = Ractive.extend({
                 </div>\
             </div>\
         </div>\
-    '
+    ',
+
+    loadItem:function(){
+        var stockItem = getDataItemFromCouch(this.get('stockItemStructure._id'));
+        console.log(stockItem);
+    }
 });

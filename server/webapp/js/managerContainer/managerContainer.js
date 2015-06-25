@@ -89,7 +89,7 @@ var managerContainer = Ractive.extend(
                                 \
                             </div>\
                         </div>\
-                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal">Stock</button>\
+                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal" on-click="prepareAddItemPopup()">Stock</button>\
                         <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Deplete</button>\
                    </div>\
                    \
@@ -111,7 +111,9 @@ var managerContainer = Ractive.extend(
         ',
 
         data:{
-            newContainer:{}
+            stockItemStructure:{},
+            newContainer:{},
+            compulsoryAttributes:[]
         },
 
         components:{
@@ -225,11 +227,17 @@ var managerContainer = Ractive.extend(
 
         },
 
+        prepareAddItemPopup:function(){
+            this.set('stockItemStructure.containerID',window.parentContainer.containerID);
+        },
+
         prepareAddContainerPopup:function(){
             $("#parent-id").val(window.parentContainer.containerID);
             var newContainer = new Container("");
+            var parentCompulsoryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
+            newContainer.attributes = parentCompulsoryAttributes;
             this.set('newContainer', newContainer);
-            $('#container-amount').val('');
+            $('#container-amount').val(1);
         },
 
             writeToDb:function(stock){
