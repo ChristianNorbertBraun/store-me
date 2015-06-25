@@ -30,7 +30,8 @@ var english = {
         user:"storemeusers",
         items:"storemeitems",
         category:"storemecategory",
-        attributes: "storemeattributes"
+        attributes: "storemeattributes",
+        log:"storemelog"
     },
 
     registration:{
