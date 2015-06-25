@@ -14,23 +14,48 @@
 var saveStore = function(callBackFunction, container){
     $.couch.urlPrefix = strings.link.dbConnection;
     var storeName = container.containerName;
-    var db = loadStoreByName(storeName, function(){});
-    if(db !== null){
-        db = JSON.parse(db);
-        container["_id"] = db._id;
-        container["_rev"] = db._rev;
-    } else {
-        container["_id"] = storeName;
-    }
-    $.couch.db(strings.database.container).saveDoc(container, {
-        success: function (data) {
-            callBackFunction(true);
-        },
-        error: function (status) {
-            console.log(status);
-            callBackFunction(false);
+    loadStoreByName("store", function(loaded, db){
+        if(loaded){
+            console.log(db);
+            container["_id"] = db._id;
+            container["_rev"] = db._rev;
+        } else {
+            container["_id"] = storeName;
         }
+        $.couch.db(strings.database.container).saveDoc(container, {
+            success: function (data) {
+                callBackFunction(true);
+            },
+            error: function (status) {
+                console.log(status);
+                callBackFunction(false);
+            }
+        });
     });
+    //todo remove this code if the function above works
+/*
+       $.couch.urlPrefix = strings.link.dbConnection;
+     var storeName = container.containerName;
+     var db = loadStoreByName(storeName, function(){});
+     if(db !== null){
+     db = JSON.parse(db);
+     container["_id"] = db._id;
+     container["_rev"] = db._rev;
+     } else {
+     container["_id"] = storeName;
+     }
+     $.couch.db(strings.database.container).saveDoc(container, {
+     success: function (data) {
+     callBackFunction(true);
+     },
+     error: function (status) {
+     console.log(status);
+     callBackFunction(false);
+     }
+     });
+*/
+
+
 };
 
 /**
@@ -53,7 +78,7 @@ var loadStoreByName = function(storeName, callBackFunction){
         }
     });
     //todo remove this code if the function above works
-/*    try{
+    /*try{
         var link = strings.link.dbConnection+"/"+strings.database.container+"/"+storeName;
         var result = $.ajax({type: "GET", url: link, async: false});
     } catch(err){
