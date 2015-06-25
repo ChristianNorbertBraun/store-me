@@ -149,7 +149,7 @@ var inventoryContainer = Ractive.extend({
     },
 
     refreshItems: function() {
-        getAllItems(function(ready, data) {
+        getAllItemsFromCouch(function(ready, data) {
             if (ready) {
                 var items = data.rows;
                 window.currentRactive.set('items', items);
