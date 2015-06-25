@@ -249,6 +249,11 @@ if (typeof exports !== "undefined")
     {
         return isValidSession(sessionID);
     }
+
+    exports.endSession = function(sessionID)
+    {
+        endSession(sessionID);
+    }
 }
 
 if (typeof require !== "undefined")
