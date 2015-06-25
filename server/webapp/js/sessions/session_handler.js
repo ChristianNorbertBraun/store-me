@@ -1,7 +1,6 @@
 /**
  * Created by Marvin Therolf on 23.06.15.
  */
-
 var currentSessions = [];
 var EXPIRE_TIME = 600000; //milliseconds
 var CHECK_STAMP_LENGTH = 2;
@@ -250,4 +249,9 @@ if (typeof exports !== "undefined")
     {
         return isValidSession(sessionID);
     }
+}
+
+if (typeof require !== "undefined")
+{
+    var btoa = require('btoa');
 }
