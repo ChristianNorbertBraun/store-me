@@ -2,8 +2,6 @@
  * Created by captainluma on 15.06.15.
  */
 
-// constructors
-
 console.log("Construct Container");
 var testStorage = new Container("Storage");
 console.log(testStorage.containerID === "0");
@@ -25,7 +23,7 @@ console.log(containerItem.amount === 7);
 console.log("Construct Item");
 var item = new Item("0815", "Hammer", "Tool", []);
 console.log(item._id === "0815");
-console.log(item.itemName === "Hammer");
+console.log(item.name === "Hammer");
 console.log(item.category_id === "Tool");
 
 console.log("Construct ItemAttribute");
@@ -34,8 +32,6 @@ console.log(itemAttribute.attributeName === "length");
 console.log(itemAttribute.value === 5.0);
 console.log(itemAttribute.unit === "meters");
 console.log(itemAttribute.type === "quantity");
-
-// functions
 
 console.log("Handling container attributes");
 addContainerAttribute(testStorage, containerAttribute);
@@ -54,7 +50,7 @@ console.log("Handling container items");
 addItem(container1, containerItem.itemID, 5);
 console.log(container1.items[0].itemID === "0815");
 console.log(container1.items[0].amount === 5);
-removeItem(container1, item.itemID, 5);
+removeItem(container1, containerItem.itemID, 5);
 console.log(container1.items.length === 0);
 
 console.log("Handling item attributes");
@@ -134,7 +130,7 @@ addSubContainer(shelf1, subshelf1_2);
 addSubContainer(shelf2, subshelf2_1);
 addSubContainer(shelf2, subshelf2_2);
 console.log(getContainerById(store, searchID).containerID === searchID);
-
+/* works fine. requires database connection
 console.log("Get all attributes");
 var anotherTestContainer = new Container("Woop Woop");
 addSubContainers(anotherTestContainer, "Subby-o-", 7);
@@ -156,3 +152,10 @@ addContainerAttribute(compulsoryTestContainer.subContainers[0], compulsoryAttrib
 addContainerAttribute(compulsoryTestContainer.subContainers[0], compulsoryAttributes);
 addContainerAttribute(compulsoryTestContainer.subContainers[1], nonCompulsoryAttributes);
 console.log(getAllCompulsoryContainerAttributes(compulsoryTestContainer).length == 3);
+*/
+console.log("Category still referenced");
+var yoloItems = [];
+yoloItems.push(new Item("100", "yolo", "cat1"));
+yoloItems.push(new Item("200", "fish", "cat1"));
+console.log(categoryStillReferenced(yoloItems,"cat1") === true);
+console.log(categoryStillReferenced(yoloItems,"cat2") === false);

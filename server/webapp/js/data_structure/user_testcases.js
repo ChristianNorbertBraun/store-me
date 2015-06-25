@@ -4,8 +4,8 @@
 
 
 console.log("New User");
-var user = new User("Tester", "pw");
-console.log(user.name === "Tester");
+var user = new User("marv", "qqq");
+console.log(user.name === "marv");
 
 saveUserInDB(user, function(exists){
     if(exists){
@@ -42,7 +42,7 @@ changeUserType("Tester", "Admin", function(exists){
     }
 });
 */
-loadUserFromDB("Tester", function(exists, data){
+loadUserFromDB("marv", function(exists, data){
     if(exists){
         console.log(data);
     }
