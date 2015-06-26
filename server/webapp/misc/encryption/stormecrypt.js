@@ -10,13 +10,11 @@ var storeMeEncrypt = function (message)
 
     for (var i = 0; i < message.length; i++)
     {
-        var letter = message.charCodeAt(i) - 48;
-
-        var offset = codeAlphabet.charCodeAt(i%codeAlphabet.length);
+        var letter = alphabet.indexOf(message.charAt(i));
+        var offset = alphabet.indexOf(codeAlphabet.charAt(i%codeAlphabet.length));
         letter += offset;
-        letter = modulo(letter, (123-48));
-        letter += 48;
-        code += String.fromCharCode(letter);
+        letter = modulo(letter, alphabet.length);
+        code += alphabet.charAt(letter);
     }
     return code;
 };
@@ -27,12 +25,11 @@ var storeMeDecrypt = function (code)
 
     for (var i = 0; i < code.length; i++)
     {
-        var letter = code.charCodeAt(i) - 48;
-        var offset = codeAlphabet.charCodeAt(i%codeAlphabet.length);
+        var letter = alphabet.indexOf(code.charAt(i));
+        var offset = alphabet.indexOf(codeAlphabet.charAt(i%codeAlphabet.length));
         letter -= offset;
-        letter = modulo(letter, (123-48));
-        letter += 48;
-        message += String.fromCharCode(letter);
+        letter = modulo(letter, alphabet.length);
+        message += alphabet.charAt(letter);
     }
     return message;
 };
@@ -42,5 +39,5 @@ var modulo = function(x, y)
     return ((x%y)+y)%y;
 };
 
-console.log(storeMeEncrypt("Marvin0123456789"));
-console.log(storeMeDecrypt("U?KR8pJ9[W[O8Q@b"));
+console.log(storeMeEncrypt("A"));
+console.log(storeMeDecrypt("c"));
