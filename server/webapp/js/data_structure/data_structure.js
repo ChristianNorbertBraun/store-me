@@ -38,7 +38,7 @@ var getAllItemIDs = function (container, setOfIDs)
     }
     for (var k = 0; k < container.subContainers.length; k++)
     {
-        var currentSubContainer = container.subContainers[i];
+        var currentSubContainer = container.subContainers[k];
         getAllItemIDs(currentSubContainer, setOfIDs);
     }
     return setOfIDs;
