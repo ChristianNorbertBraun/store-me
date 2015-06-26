@@ -269,3 +269,8 @@ if (typeof exports !== "undefined")
         return endSession(sessionID);
     }
 }
+
+if (typeof require !== "undefined")
+{
+    var btoa = require('btoa');
+}

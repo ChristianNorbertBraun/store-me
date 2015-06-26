@@ -29,6 +29,47 @@ function Container(containerName)
     this.items = [];
 }
 
+var getAllItemIDs = function (container, setOfIDs)
+{
+    for (var i = 0; i < container.items.length; i++)
+    {
+        var currentID = container.items[i].itemID;
+        addToSet(setOfIDs, currentID);
+    }
+    for (var k = 0; k < container.subContainers.length; k++)
+    {
+        var currentSubContainer = container.subContainers[i];
+        getAllItemIDs(currentSubContainer, setOfIDs);
+    }
+    return setOfIDs;
+};
+
+var addToSet = function (array, item)
+{
+    if (!contains(array, item))
+    {
+        array.push(item);
+    }
+};
+
+var contains = function (array, item)
+{
+    var result = false;
+
+    for (var i = 0; i < array.length; i++)
+    {
+        if (array[i] === item)
+        {
+            result = true;
+            break;
+        }
+    }
+    return result;
+};
+
+
+
+
 /**
  * Returns all items contained by the given container and its sub containers. The returned array is an array of
  * ContainerItem objects.
