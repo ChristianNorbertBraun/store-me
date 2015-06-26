@@ -1,40 +1,46 @@
 /**
  * Created by Marvin Therolf on 26.06.15.
  */
+var codeAlphabet = "StoreMe";
+var alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-var storemeEncrypt = function (message)
+var storeMeEncrypt = function (message)
 {
     var code = "";
-    var alphabet = "StoreMe";
 
     for (var i = 0; i < message.length; i++)
     {
-        var letter = message.charCodeAt(i)-48;
-        console.log(letter);
-        var offset = alphabet.charCodeAt(i%alphabet.length)-48;
-        console.log(offset);
+        var letter = message.charCodeAt(i) - 48;
+
+        var offset = codeAlphabet.charCodeAt(i%codeAlphabet.length);
         letter += offset;
-        console.log(letter);
-        letter %= (122-65);   // char code of z
-        console.log(letter);
-        letter += 65;   // char code of A
-        console.log(letter);
+        letter = modulo(letter, (123-48));
+        letter += 48;
         code += String.fromCharCode(letter);
     }
     return code;
 };
 
-var storemeDecrypt = function (code)
+var storeMeDecrypt = function (code)
 {
     var message = "";
-    var alphabet = "StoreMe";
 
     for (var i = 0; i < code.length; i++)
     {
-
+        var letter = code.charCodeAt(i) - 48;
+        var offset = codeAlphabet.charCodeAt(i%codeAlphabet.length);
+        letter -= offset;
+        letter = modulo(letter, (123-48));
+        letter += 48;
+        message += String.fromCharCode(letter);
     }
     return message;
 };
 
-console.log(storemeEncrypt("M"));
-console.log(storemeDecrypt("HDPWvcveNJNBdDlU"));
+var modulo = function(x, y)
+{
+    return ((x%y)+y)%y;
+};
+
+console.log(storeMeEncrypt("Marvin0123456789"));
+console.log(storeMeDecrypt("U?KR8pJ9[W[O8Q@b"));
