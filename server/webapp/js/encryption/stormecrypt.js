@@ -38,6 +38,3 @@ var modulo = function(x, y)
 {
     return ((x%y)+y)%y;
 };
-
-console.log(storeMeEncrypt("A"));
-console.log(storeMeDecrypt("c"));

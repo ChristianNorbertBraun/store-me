@@ -29,8 +29,17 @@ function Container(containerName)
     this.items = [];
 }
 
-var getAllItemIDs = function (container, setOfIDs)
+/**
+ * Returns a set of item IDs contained by a container and all of its sub containers.
+ * @function
+ * @param container {Container}     - Container to start the search from
+ * @returns {Array} Set of IDs
+ * @author Marvin Therolf
+ */
+var getAllItemIDs = function (container)
 {
+    var setOfIDs = [];
+
     for (var i = 0; i < container.items.length; i++)
     {
         var currentID = container.items[i].itemID;
@@ -44,6 +53,12 @@ var getAllItemIDs = function (container, setOfIDs)
     return setOfIDs;
 };
 
+/**
+ * Adds an item to an array if it doesn't contain this item already.
+ * @param array {Array}     - Set
+ * @param item {*}          - Item to add to the set
+ * @author Marvin Therolf
+ * */
 var addToSet = function (array, item)
 {
     if (!contains(array, item))
@@ -52,6 +67,14 @@ var addToSet = function (array, item)
     }
 };
 
+/**
+ * Checks if item already exits in array.
+ * @function
+ * @param array
+ * @param item
+ * @returns {boolean}
+ * @author Marvin Therolf
+ */
 var contains = function (array, item)
 {
     var result = false;
@@ -66,9 +89,6 @@ var contains = function (array, item)
     }
     return result;
 };
-
-
-
 
 /**
  * Returns all items contained by the given container and its sub containers. The returned array is an array of
@@ -135,6 +155,22 @@ getAllItemAttributes = function(container)
         }
     }
     return allAttributes;
+};
+
+/**
+ * Adds all attributes of an item to a set of attributes. So if the set already contains an attribute it is not added
+ * once more. Because it's a set. :)
+ * @function
+ * @param attributes {Array}    - Set of ItemAttribute objects
+ * @param item {Item}           - Item object to get attributes from
+ */
+var addAttributes = function(attributes, item)
+{
+     for (var i = 0; i < item.attributes.length; i++)
+     {
+         var currentAttribute = attributes[i];
+         addToSet(attributes, currentAttribute);
+     }
 };
 
 /**
@@ -534,6 +570,7 @@ function ContainerAttribute(attributeName, value, unit, type, compulsory)
  */
 function ContainerItem(itemID, amount)
 {
+
     this.itemID = itemID;
     this.amount = amount;
     this.parentContainerID = "0";
