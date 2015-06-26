@@ -33,13 +33,12 @@ function Container(containerName)
  * Returns a set of item IDs contained by a container and all of its sub containers.
  * @function
  * @param container {Container}     - Container to start the search from
+ * @param setOfIDs {Array}          - Set of IDs
  * @returns {Array} Set of IDs
  * @author Marvin Therolf
  */
-var getAllItemIDs = function (container)
+var getAllItemIDs = function (container, setOfIDs)
 {
-    var setOfIDs = [];
-
     for (var i = 0; i < container.items.length; i++)
     {
         var currentID = container.items[i].itemID;
