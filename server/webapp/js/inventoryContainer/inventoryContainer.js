@@ -80,14 +80,20 @@ var inventoryContainer = Ractive.extend({
                                 <tr>\
                                     <th>ID</th>\
                                     <th>Name</th>\
+                                    <th>Category</th>\
+                                    <th>Parent Container</th>\
+                                    <th>Amount</th>\
                                 </tr>\
                             </thead>\
                             \
                             <tbody>\
                                 {{#each items:i}}\
                                     <tr id="item_{{i}}">\
-                                        <td>{{id}}</td>\
-                                        <td>{{value.name}}</td>\
+                                        <td>{{itemID}}</td>\
+                                        <td>{{name}}</td>\
+                                        <td>{{category_id}}</td>\
+                                        <td>{{parentContainerName}}</td>\
+                                        <td>{{amount}}</td>\
                                     </tr>\
                                 {{/each}}\
                             </tbody>\
@@ -110,15 +116,9 @@ var inventoryContainer = Ractive.extend({
 
     oncomplete: function() {
 
-        /* TODO Does not work
-
-        $('#inventory-table').tablesorter({
-            textExtraction:function(s){
-                if($(s).find('img').length == 0) return $(s).text();
-                return $(s).find('img').attr('alt');
-            }
-        });*/
     },
+
+    /* criterias */
 
     addCriteria: function() {
         var criteriaName = window.currentRactive.get('newCriteriaName');
@@ -148,11 +148,24 @@ var inventoryContainer = Ractive.extend({
         window.currentRactive.set('newCriteriaName', '');
     },
 
+    /* items */
+
     refreshItems: function() {
-        getAllItemsFromCouch(function(ready, data) {
-            if (ready) {
-                var items = data.rows;
-                window.currentRactive.set('items', items);
+        loadStore(function(success, container) {
+            if (success) {
+                var items = getAllItems(container);
+
+                window.tempContainer = container;
+
+                items.map(function(item) {
+                    getDataItemFromCouch(item.itemID, function(status, data) {
+                        item.name = data.name;
+                        item.category_id = data.category_id;
+                        item.parentContainerName = getContainerById(window.tempContainer, item.parentContainerID).containerName;
+
+                        window.currentRactive.set('items', items);
+                    });
+                });
             }
         });
     }
