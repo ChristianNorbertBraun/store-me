@@ -54,8 +54,8 @@ var getSessionID = function(userName, password, timeStamp)
     var hashCode = getHashCode(key, timeStamp);
     var prefix = getCheckStamp(userName);
     var sessionID = userName + prefix + hashCode;
-    var sessionID64 = btoa(sessionID);
-    return sessionID64;
+    var sessionIDEncrypted = btoa(sessionID);
+    return sessionIDEncrypted;
 };
 
 /**
