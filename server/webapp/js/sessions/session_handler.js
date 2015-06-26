@@ -216,7 +216,7 @@ var getSessionIDFromURL = function()
     var queryParamsArray = queryParams.split('&');
     var querySessionID = queryParamsArray[0].split('=');
     var sessionID = querySessionID[1];
-    return sessionID;
+    return sessionID + "==";
 };
 
 /**
