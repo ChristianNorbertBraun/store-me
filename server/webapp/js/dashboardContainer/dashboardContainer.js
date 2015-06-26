@@ -112,24 +112,18 @@ var dashboardContainer = Ractive.extend({
             if (success)
                 console.log("Success");
         });*/
-
-        window.currentRactive.refreshLogData();
     },
 
     oncomplete: function() {
-        $('#item-table').tablesorter({
-            textExtraction:function(s){
-                if($(s).find('img').length == 0) return $(s).text();
-                return $(s).find('img').attr('alt');
-            }
-        });
+        window.currentRactive.refreshLogData();
     },
 
+    /* tablesorter not functional anymore
     sortTable: function(element, index) {
         this.determineMode(index);
         this.clearCarets();
         this.setCorrectCaret(index);
-    },
+    },*/
 
     determineMode: function(index) {
         if ($('#column_' + index + ' span.dropdown').hasClass('hidden')) {
@@ -171,9 +165,19 @@ var dashboardContainer = Ractive.extend({
         loadAllLogContainer(function(status, logs) {
             if (status && logs) {
                 window.currentRactive.set('logdata', logs);
+                // bug: this.updateTableSorter();
             }
             else {
                 alert('error');
+            }
+        });
+    },
+
+    updateTableSorter: function() {
+        $('#item-table').tablesorter({
+            textExtraction:function(s){
+                if($(s).find('img').length == 0) return $(s).text();
+                return $(s).find('img').attr('alt');
             }
         });
     }
