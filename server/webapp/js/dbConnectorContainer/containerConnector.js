@@ -69,6 +69,10 @@ var loadStore = function(callBackFunction){
         emit(null, doc);
     };
     $.couch.db(strings.database.container).query(mapFunction, "_count", "javascript", {
+        crossDomain: true,
+        dataType: 'json',
+        headers: {'Access-Control-Allow-Origin': '*'},
+
         success: function(data) {
             try {
                 var containerObject = data["rows"][0].value;
