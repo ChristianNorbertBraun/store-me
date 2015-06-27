@@ -12,8 +12,9 @@ var tryLogin = function(){
 
         $.ajax({
             url: strings.link.backendConnection+":"+strings.link.port+"/login",
-            type: "GET",
+            type: 'GET',
             crossDomain: true,
+            dataType: 'jsonp',
             headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
             success: function(res, status, xhr) {
                 console.log("hi");
