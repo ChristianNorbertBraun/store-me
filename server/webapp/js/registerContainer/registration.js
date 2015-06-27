@@ -119,7 +119,9 @@ var createUser = function(callBackFunction){
     $.ajax({
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
         type: "POST",
-        headers: {'authorization': encryptedUserData},
+        crossDomain: true,
+        dataType: 'jsonp',
+        headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
         data : formData,
         success: function(data, textStatus, jqXHR)
         {
