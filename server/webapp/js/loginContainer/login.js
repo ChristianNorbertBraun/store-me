@@ -9,9 +9,11 @@ var tryLogin = function(){
         checkNullLoginValues();
 //        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
         var encryptedUserData = storeMeEncrypt(loginName + ":" + loginPassword);
+
         $.ajax({
             url: strings.link.backendConnection+":"+strings.link.port+"/login",
             type: "GET",
+            crossDomain: true,
             headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
             success: function(res, status, xhr) {
                 console.log("hi");
