@@ -12,11 +12,7 @@ var tryLogin = function(){
         $.ajax({
             url: strings.link.backendConnection+":"+strings.link.port+"/login",
             type: "GET",
-            beforeSend: function(xrn)
-            {
-                xrn.setRequestHeader('Access-Control-Allow-Origin', '*');
-            },
-            headers: {'authorization': /*encryptedUserData*/"hallo"},
+            headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
             success: function(res, status, xhr) {
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
             },
