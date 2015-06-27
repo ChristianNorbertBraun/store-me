@@ -14,9 +14,11 @@ var tryLogin = function(){
             type: "GET",
             headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
             success: function(res, status, xhr) {
+                console.log("hi");
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
             },
             error: function(res, status, xhr) {
+                console.log("bye");
                 //wrongPassword
                 if(res.status == 400){
                     window.alert(strings.login.wrongPassword);
