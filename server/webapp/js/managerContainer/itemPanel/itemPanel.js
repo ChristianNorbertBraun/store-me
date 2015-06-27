@@ -39,17 +39,29 @@ var itemPanel = Ractive.extend({
 
 
     prepareDepleteItemPopup:function(){
-       window.depleteItemRactive.loadItemDeplete();
        window.currentRactive.set('stockItemStructure.amount',"");
     },
 
     selectItem:function(event, index){
-        window.currentRactive.removeSelection();
+
+        if( $(".list-group-item-selected").get().length > 1){
+            window.currentRactive.removeSelection();
+        }
+
         $('#item'+index).toggleClass('list-group-item-selected');
-        var itemID = this.get('items.'+index+'._id');
+        var item = this.get('items.'+index);
         var containerID = window.parentContainer.containerID;
-        window.currentRactive.set('stockItemStructure.itemID',itemID);
+        window.currentRactive.set('stockItemStructure',item);
         window.currentRactive.set('stockItemStructure.containerID',containerID);
+
+        if($(".list-group-item-selected").get().length == 0){
+            window.currentRactive.set('selectedItem', {});
+        }
+        else{
+            window.currentRactive.set('selectedItem', item);
+        }
+
+
 
     }
 });

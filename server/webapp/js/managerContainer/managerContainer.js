@@ -69,11 +69,8 @@ var managerContainer = Ractive.extend(
                     <div class="col-sm-4">\
                         <itemPanel></itemPanel>\
                    </div>\
-                   \
                    <div class="col-sm-4">\
-                        <div id="item-info" >\
-                            <h4>{{info.title}}</h4>\
-                        </div>\
+                        <itemInfoPanel></itemInfoPanel>\
                    </div>\
                 </div>\
             </div>\
@@ -99,7 +96,8 @@ var managerContainer = Ractive.extend(
             addContainerPopup:addContainerPopup,
             addItemPopup: addItemPopup,
             itemPanel: itemPanel,
-            depleteItemPopup:depleteItemPopup
+            depleteItemPopup:depleteItemPopup,
+            itemInfoPanel: itemInfoPanel
         },
 
         oninit: function(){

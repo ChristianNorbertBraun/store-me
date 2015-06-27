@@ -30,7 +30,7 @@ var depleteItemPopup = Ractive.extend({
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ItemID</label>\
-                            <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItemDeplete()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItemDeplete()" value="{{stockItemStructure._id}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -73,7 +73,7 @@ var depleteItemPopup = Ractive.extend({
     },
 
     loadItemDeplete:function(){
-        getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
+        getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
@@ -90,7 +90,7 @@ var depleteItemPopup = Ractive.extend({
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
 
-        deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
+        deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount);
         window.currentRactive.writeToDb();
 
 
