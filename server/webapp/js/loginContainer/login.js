@@ -16,7 +16,7 @@ var tryLogin = function(){
             {
                 xrn.setRequestHeader('Access-Control-Allow-Origin', '*');
             },
-            headers: {'authorization': encryptedUserData},
+            headers: {'authorization': /*encryptedUserData*/"hallo"},
             success: function(res, status, xhr) {
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
             },
