@@ -160,15 +160,17 @@ var managerContainer = Ractive.extend(
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
             window.currentRactive.set('items',[]);
-            console.log(allContainerItems);
+
+            window.containerItems = allContainerItems;
+            window.containerItemIndex = 0;
             for(i = 0; i < allContainerItems.length; ++i){
-                window.currentContainerItem = allContainerItems[i];
                 getDataItemFromCouch(allContainerItems[i].itemID,function(success,data){
-                    data.amount = window.currentContainerItem.amount;
+
+                    data.amount = window.containerItems[window.containerItemIndex++].amount;
 
                     window.currentRactive.push('items',data);
 
-                })
+                });
             }
         },
 

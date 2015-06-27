@@ -27,7 +27,7 @@ var itemPanel = Ractive.extend({
         </div>\
    </div>\
    <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal" on-click="prepareAddItemPopup()">Stock</button>\
-   <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#deplete-item-modal">Deplete</button>\
+   <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#deplete-item-modal" >Deplete</button>\
    ',
 
     prepareAddItemPopup:function(){
@@ -35,5 +35,16 @@ var itemPanel = Ractive.extend({
             containerID: window.parentContainer.containerID
         };
         window.currentRactive.set('stockItemStructure',stockItemStructure);
+    },
+
+
+
+    selectItem:function(event, index){
+        window.currentRactive.removeSelection();
+        $('#item'+index).toggleClass('list-group-item-selected');
+        var itemID = this.get('items.'+index+'._id');
+        var containerID = window.parentContainer.containerID;
+        window.currentRactive.set('stockItemStructure.itemID',itemID);
+        window.currentRactive.set('stockItemStructure.containerID',containerID);
     }
 });

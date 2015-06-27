@@ -30,7 +30,7 @@ var depleteItemPopup = Ractive.extend({
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ItemID</label>\
-                            <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItemDeplete()" value="{{stockItemStructure.itemID}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -60,7 +60,7 @@ var depleteItemPopup = Ractive.extend({
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>\
+                        <button type="button" class="btn btn-default"  >Close</button>\
                         <button type="button" class="btn btn-primary" on-click="depleteItem()">Deplete</button>\
                     </div>\
                 </div>\
@@ -68,8 +68,7 @@ var depleteItemPopup = Ractive.extend({
         </div>\
     ',
 
-    loadItem:function(){
-
+    loadItemDeplete:function(){
         getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
@@ -92,6 +91,6 @@ var depleteItemPopup = Ractive.extend({
 
 
         saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
-        $('#add-item-modal').modal('hide');
+        $('#deplete-item-modal').modal('hide');
     }
 });
