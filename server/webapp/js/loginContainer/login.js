@@ -14,7 +14,7 @@ var tryLogin = function(){
             url: strings.link.backendConnection+":"+strings.link.port+"/login",
             type: 'GET',
             crossDomain: true,
-            dataType: 'jsonp',
+            dataType: 'json',
             headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
             success: function(res, status, xhr) {
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);

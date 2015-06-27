@@ -120,7 +120,7 @@ var createUser = function(callBackFunction){
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
         type: "POST",
         crossDomain: true,
-        dataType: 'jsonp',
+        dataType: 'json',
         headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
         data : formData,
         success: function(data, textStatus, jqXHR)
