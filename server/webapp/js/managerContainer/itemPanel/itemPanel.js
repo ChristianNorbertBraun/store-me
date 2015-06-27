@@ -44,7 +44,7 @@ var itemPanel = Ractive.extend({
 
     selectItem:function(event, index){
 
-        if( $(".list-group-item-selected").get().length > 1){
+        if( $(".list-group-item-selected").get().length >= 1){
             window.currentRactive.removeSelection();
         }
 
