@@ -1,23 +1,27 @@
 /**
+ * Created by christian on 27.06.15.
+ */
+
+/**
  * Created by christian on 24.06.15.
  */
 
-var addItemPopup = Ractive.extend({
+var depleteItemPopup = Ractive.extend({
 
     template:'\
-      <div class="modal fade" id="add-item-modal" tabindex="-1" role="dialog" aria-labelledby="add-item" aria-hidden="true">\
+      <div class="modal fade" id="deplete-item-modal" tabindex="-1" role="dialog" aria-labelledby="deplete-item" aria-hidden="true">\
             <div class="modal-dialog">\
                 <div class="modal-content">\
                     <div class="modal-header">\
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
-                        <h4 class="modal-title modal-title-color" id="add-item">Stock Item</h4>\
+                        <h4 class="modal-title modal-title-color" id="deplete-item">Deplete Item</h4>\
                     </div>\
                        \
-                    <div id="add-container-body" class="modal-body">\
+                    <div id="add-container-body-deplete" class="modal-body">\
                     \
                         <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ContainerID</label>\
-                            <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
+                            <div class="col-md-6"><input id="container-id-deplete" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -26,7 +30,7 @@ var addItemPopup = Ractive.extend({
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ItemID</label>\
-                            <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -35,21 +39,21 @@ var addItemPopup = Ractive.extend({
                         </div>\
                         <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">Item Name</label>\
-                            <div class="col-md-6"><input id="item-name-stock" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
+                            <div class="col-md-6"><input id="item-name-deplete" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
                         </div>\
                         <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">Amount</label>\
-                            <div class="col-md-6"><input id="item-amount-stock" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{stockItemStructure.amount}}></div>\
+                            <div class="col-md-6"><input id="item-amount-deplete" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{stockItemStructure.amount}}></div>\
                         </div>\
                         <div id="attribute-container">\
                             {{#if stockItemStructure.attributes}}\
-                                <h3 id="attribute-heading-stock" intro-outro="slideh">Attributes</h3>\
+                                <h3 id="attribute-heading-deplete" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             {{#each stockItemStructure.attributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name-stock{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
-                                <div class="col-md-5 attribute-entry"><input id="item-attribute-value-stock{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
-                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit-stock{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
+                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name-deplete{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
+                                <div class="col-md-5 attribute-entry"><input id="item-attribute-value-deplete{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
+                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit-deplete{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
                             </div>\
                             {{/each}}\
                         </div>\
@@ -57,7 +61,7 @@ var addItemPopup = Ractive.extend({
                     </div>\
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>\
-                        <button type="button" class="btn btn-primary" on-click="stockItem()">Stock</button>\
+                        <button type="button" class="btn btn-primary" on-click="depleteItem()">Deplete</button>\
                     </div>\
                 </div>\
             </div>\
@@ -77,16 +81,17 @@ var addItemPopup = Ractive.extend({
         });
     },
 
-    stockItem:function(){
-        var parentContainerName = window.parentContainer.containerName
+    depleteItem:function(){
+        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
 
-        stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
+        deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
         window.currentRactive.writeToDb();
 
-        saveLogContainer(new LogContainer(true, parentContainerName, itemName,amount, username), function(saved){});
+
+        saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
         $('#add-item-modal').modal('hide');
     }
 });

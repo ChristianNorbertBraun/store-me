@@ -67,30 +67,7 @@ var managerContainer = Ractive.extend(
                         \
                     </div>\
                     <div class="col-sm-4">\
-                        <div id="item-list" class="panel panel-primary info-panel">\
-                            <div class="panel-heading">{{panels[1].title}}</div>\
-                            <div class="panel-body no-padding">\
-                             <ul class="list-group" id="item-list">\
-                                    {{#each items:i}}\
-                                        <li id = item{{i}} intro-outro="slideh" class="list-group-item list-group-border item-entry" on-click="selectItem(this,i)">\
-                                           <div  class="row">\
-                                                <div class="col-xs-10">\
-                                                    <h4 class="list-group-item-heading">{{itemID}}</h4>\
-                                                    \
-                                                        <div class="list-group-item-text attributes">\
-                                                            <span class=" badge">{{amount}} pieces</span>\
-                                                        </div>\
-                                                    \
-                                                </div>\
-                                            </div>\
-                                        </li>\
-                                    {{/each}}\
-                                </ul>\
-                                \
-                            </div>\
-                        </div>\
-                        <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-item-modal" on-click="prepareAddItemPopup()">Stock</button>\
-                        <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Deplete</button>\
+                        <itemPanel></itemPanel>\
                    </div>\
                    \
                    <div class="col-sm-4">\
@@ -105,6 +82,7 @@ var managerContainer = Ractive.extend(
         \
         <addContainerPopup></addContainerPopup>\
         <addItemPopup></addItemPopup>\
+        <depleteItemPopup></depleteItemPopup>\
         {{else}}\
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
@@ -119,7 +97,9 @@ var managerContainer = Ractive.extend(
         components:{
             noStockContainer:noStockContainer,
             addContainerPopup:addContainerPopup,
-            addItemPopup: addItemPopup
+            addItemPopup: addItemPopup,
+            itemPanel: itemPanel,
+            depleteItemPopup:depleteItemPopup
         },
 
         oninit: function(){
@@ -152,7 +132,7 @@ var managerContainer = Ractive.extend(
 
             var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
             window.parentContainer = getContainerById(window.currentTableState, parentId);
-            window.app.set('items', getAllItems(window.parentContainer));
+            this.mapContainerItemOnDataItem();
             this.removeSelection();
 
         },
@@ -171,12 +151,25 @@ var managerContainer = Ractive.extend(
             window.app.push('pathElements', clickedContainer);
             clickedContainerHistory.push(parentContainers);
 
-            var allItems = getAllItems(clickedContainer);
-            window.app.set('items',allItems);
-
+            this.mapContainerItemOnDataItem();
             this.removeSelection();
             $('#'+index).toggleClass('list-group-item-selected');
 
+        },
+
+        mapContainerItemOnDataItem:function(){
+            var allContainerItems = getAllItems(window.parentContainer);
+            window.currentRactive.set('items',[]);
+            console.log(allContainerItems);
+            for(i = 0; i < allContainerItems.length; ++i){
+                window.currentContainerItem = allContainerItems[i];
+                getDataItemFromCouch(allContainerItems[i].itemID,function(success,data){
+                    data.amount = window.currentContainerItem.amount;
+
+                    window.currentRactive.push('items',data);
+
+                })
+            }
         },
 
        getStoreFromDb: function(error, result){
@@ -198,8 +191,7 @@ var managerContainer = Ractive.extend(
                }
 
                window.app.set('data.container', subContainer);
-               var allItems = getAllItems(window.parentContainer);
-               window.app.set('items',allItems);
+               window.currentRactive.mapContainerItemOnDataItem();
            }
            else{
 
@@ -222,14 +214,10 @@ var managerContainer = Ractive.extend(
             }
             this.set("data.container", window.parentContainer.subContainers);
             this.writeToDb();
-            var allItems = getAllItems(window.parentContainer);
-            window.app.set('items',allItems);
+            this.mapContainerItemOnDataItem();
 
         },
 
-        prepareAddItemPopup:function(){
-            this.set('stockItemStructure.containerID',window.parentContainer.containerID);
-        },
 
         prepareAddContainerPopup:function(){
             $("#parent-id").val(window.parentContainer.containerID);
