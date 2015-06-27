@@ -2,9 +2,9 @@
  * Created by Marvin Therolf on 26.06.15.
  */
 var codeAlphabet = "StoreMe";
-var alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+var alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:";
 
-var storeMeEncrypt = function (message)
+var storeMeEncrypt = function(message)
 {
     var code = "";
 
@@ -19,7 +19,7 @@ var storeMeEncrypt = function (message)
     return code;
 };
 
-var storeMeDecrypt = function (code)
+var storeMeDecrypt = function(code)
 {
     var message = "";
 
@@ -38,3 +38,16 @@ var modulo = function(x, y)
 {
     return ((x%y)+y)%y;
 };
+
+if (typeof exports !== "undefined")
+{
+    exports.storeMeDecrypt = function(code)
+    {
+        return storeMeDecrypt(code);
+    };
+
+    exports.storeMeEncrypt = function(message)
+    {
+        return storeMeEncrypt(message);
+    }
+}

@@ -1,6 +1,12 @@
 /**
  * Created by Marvin Therolf on 23.06.15.
  */
+
+if (typeof require !== "undefined")
+{
+    var encryptionScript = require('../encryption/stormecryptBE.js');
+}
+
 var currentSessions = [];
 var EXPIRE_TIME = 600000; //milliseconds
 var CHECK_STAMP_LENGTH = 2;
@@ -54,7 +60,16 @@ var getSessionID = function(userName, password, timeStamp)
     var hashCode = getHashCode(key, timeStamp);
     var prefix = getCheckStamp(userName);
     var sessionID = userName + prefix + hashCode;
-    var sessionIDEncrypted = btoa(sessionID);
+    var sessionIDEncrypted = "";
+
+    if (typeof encryptionScript !== "undefined")
+    {
+        sessionIDEncrypted = encryptionScript.storeMeEncrypt(sessionID);
+    }
+    else
+    {
+        sessionIDEncrypted = storeMeEncrypt(sessionID);
+    }
     return sessionIDEncrypted;
 };
 
@@ -163,7 +178,7 @@ var isValidSession = function(sessionID)
     return valid;
 };
 
-/**
+/**http://localhost:13373/
  * Builds an url containing the given session id.
  * @function
  * @param page {String}         - URL of the screen the built url should refer to
@@ -216,7 +231,7 @@ var getSessionIDFromURL = function()
     var queryParamsArray = queryParams.split('&');
     var querySessionID = queryParamsArray[0].split('=');
     var sessionID = querySessionID[1];
-    return sessionID + "==";
+    return sessionID;
 };
 
 /**
@@ -230,8 +245,16 @@ var getUserNameBySessionID = function(sessionID)
 {
     var userName = "none";
 
-    if (sessionID !== "") {
-        var decodedSessionID = atob(sessionID);
+    if (sessionID !== "")
+    {
+        var decodedSessionID = "";
+        if (typeof encryptionScript !== "undefined")
+        {
+            decodedSessionID = encryptionScript.storeMeDecrypt(sessionID);
+        }
+        else{
+            decodedSessionID = storeMeDecrypt(sessionID);
+        }
         userName = decodedSessionID.substring(0, decodedSessionID.length - 10);
     }
     return userName;
@@ -268,9 +291,4 @@ if (typeof exports !== "undefined")
     {
         return endSession(sessionID);
     }
-}
-
-if (typeof require !== "undefined")
-{
-    var btoa = require('btoa');
 }

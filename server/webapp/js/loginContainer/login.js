@@ -7,11 +7,12 @@ var tryLogin = function(){
     try{
         getLoginValues();
         checkNullLoginValues();
-        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
+//        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
+        var encryptedUserData = storeMeEncrypt(loginName + ":" + loginPassword);
         $.ajax({
             url: strings.link.backendConnection+":"+strings.link.port+"/login",
             type: "GET",
-            headers: {'authorization': base64},
+            headers: {'authorization': encryptedUserData},
             success: function(res, status, xhr) {
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
             },

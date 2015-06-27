@@ -5,6 +5,7 @@ var stringsFile = require('./webapp/string/strings.js');
 var sessionScript = require('./webapp/js/sessions/session_handler.js');
 var databaseInit = require('./database/databaseConfig.js');
 var userScript = require('./webapp/js/data_structure/user.js');
+var encryptionScript = require('./webapp/js/encryption/stormecryptBE.js');
 
 var cradle = require('cradle');
 var db = new(cradle.Connection)().database(stringsFile.database.user);
@@ -122,10 +123,17 @@ app.post("/registeruser", function(req, res){
     res.send(sessionID);
 });
 
-function prepareAuthentication(req){
+function prepareAuthentication(req)
+{
+    var auth = req.header('authorization');
+    var decryptedString = (encryptionScript.storeMeDecrypt(auth));
+    return decryptedString.split(":");
+
+/*
     var auth =  req.header('authorization');
     var buffer = new Buffer(auth.split(" ")[1], 'base64');
     var decryptedString = buffer.toString();
 
     return decryptedString.split(":");
+*/
 }

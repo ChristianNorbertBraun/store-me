@@ -114,11 +114,12 @@ function checkPasswordConfirmation()
 
 var createUser = function(callBackFunction){
     var formData = {userType:"User",stores:""};
-    var base64 = "Basic " + btoa(name+":"+pass);
+//    var base64 = "Basic " + btoa(name+":"+pass);
+    var encryptedUserData = storeMeEncrypt(name + ":" + pass);
     $.ajax({
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
         type: "POST",
-        headers: {'authorization': base64},
+        headers: {'authorization': encryptedUserData},
         data : formData,
         success: function(data, textStatus, jqXHR)
         {
