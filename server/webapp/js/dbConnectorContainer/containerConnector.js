@@ -24,8 +24,6 @@ var saveStore = function(callBackFunction, container){
         }
         $.couch.db(strings.database.container).saveDoc(container, {
 
-            crossDomain: true,
-            dataType: 'json',
 
             success: function (data) {
                 callBackFunction(true);
@@ -50,8 +48,6 @@ var loadStoreByName = function(storeName, callBackFunction){
     $.couch.urlPrefix = strings.link.dbConnection;
     $.couch.db(strings.database.container).openDoc(storeName, {
 
-        crossDomain: true,
-        dataType: 'json',
 
         success: function(data) {
             callBackFunction(true, data);
@@ -77,9 +73,6 @@ var loadStore = function(callBackFunction){
         emit(null, doc);
     };
     $.couch.db(strings.database.container).query(mapFunction, "_count", "javascript", {
-
-        crossDomain: true,
-        dataType: 'json',
 
         success: function(data) {
             try {
