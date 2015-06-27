@@ -26,7 +26,6 @@ var saveStore = function(callBackFunction, container){
 
             crossDomain: true,
             dataType: 'json',
-            headers: {'Access-Control-Allow-Origin': '*'},
 
             success: function (data) {
                 callBackFunction(true);
@@ -53,7 +52,6 @@ var loadStoreByName = function(storeName, callBackFunction){
 
         crossDomain: true,
         dataType: 'json',
-        headers: {'Access-Control-Allow-Origin': '*'},
 
         success: function(data) {
             callBackFunction(true, data);
@@ -82,7 +80,6 @@ var loadStore = function(callBackFunction){
 
         crossDomain: true,
         dataType: 'json',
-        headers: {'Access-Control-Allow-Origin': '*'},
 
         success: function(data) {
             try {
