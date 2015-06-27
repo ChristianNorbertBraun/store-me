@@ -9,7 +9,7 @@
 var depleteItemPopup = Ractive.extend({
 
     template:'\
-      <div class="modal fade" id="deplete-item-modal" tabindex="-1" role="dialog" aria-labelledby="deplete-item" aria-hidden="true">\
+      <div class="modal fade" id="deplete-item-modal" tabindex="-1" role="dialog" aria-labelledby="deplete-item" aria-hidden="true" >\
             <div class="modal-dialog">\
                 <div class="modal-content">\
                     <div class="modal-header">\
@@ -67,6 +67,10 @@ var depleteItemPopup = Ractive.extend({
             </div>\
         </div>\
     ',
+
+    oninit:function(){
+        window.depleteItemRactive = this;
+    },
 
     loadItemDeplete:function(){
         getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){

@@ -64,6 +64,10 @@ var addItemPopup = Ractive.extend({
         </div>\
     ',
 
+    oninit:function(){
+        window.addItemRactive = this;
+    },
+
     loadItem:function(){
 
         getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
