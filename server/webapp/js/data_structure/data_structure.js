@@ -187,8 +187,18 @@ getDataItems = function(containerItems)
     for (var i = 0; i < containerItems.length; i++)
     {
         var currentContainerItem = containerItems[i];
-        var dataItem = getDataItemFromCouch(currentContainerItem.itemID);
-        dataItems.push(dataItem);
+        var dataItem = null;
+        getDataItemFromCouch(currentContainerItem.itemID, function(boolean, data)
+        {
+            if (boolean)
+            {
+                dataItem = data;
+            }
+        });
+        if (dataItem !== null)
+        {
+            dataItems.push(dataItem);
+        }
     }
     return dataItems;
 };
