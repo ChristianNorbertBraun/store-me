@@ -24,7 +24,7 @@ var coredataContainer = Ractive.extend({
                                             </div>\
                                             \
                                             <div class="col-xs-2">\
-                                                <span class="glyphicon glyphicon-remove" on-click="deleteCategory(i)" aria-hidden="true"></span>\
+                                                <span class="cursor-pointer glyphicon glyphicon-remove" on-click="deleteCategory(i)" aria-hidden="true"></span>\
                                             </div>\
                                         </div>\
                                     </li>\
@@ -76,7 +76,7 @@ var coredataContainer = Ractive.extend({
                 <div class="modal-content">\
                     <div class="modal-header">\
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>\
-                        <h4 class="modal-title modal-title-color" id="add-criteria">Add a new category</h4>\
+                        <h4 class="modal-title modal-title-color">Add a new category</h4>\
                     </div>\
                     \
                     <div class="modal-body">\

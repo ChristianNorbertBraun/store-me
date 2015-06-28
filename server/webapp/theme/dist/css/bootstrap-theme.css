@@ -10,6 +10,9 @@
 .main-screen-path-entry:hover {
   color: #e74c3c;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .btn-default,
 .btn-primary,
 .btn-success,

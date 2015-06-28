@@ -15,10 +15,6 @@
     overflow-y: auto;
 }
 
-span {
-    cursor:pointer;
-}
-
 #item-table {
     max-height: 450px;
     overflow-y: auto;

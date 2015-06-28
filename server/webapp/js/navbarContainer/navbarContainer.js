@@ -21,7 +21,7 @@ var navbarContainer = Ractive.extend({
                                         <li><a href="{{coredataLink}}">Coredata</a></li>\
                                         <li><a href="{{inventoryLink}}">Inventory</a></li>\
                                         <li class="divider"></li>\
-                                        <li><a type="button" on-click="logout()">Logout</a></li>\
+                                        <li><a class="cursor-pointer" type="button" on-click="logout()">Logout</a></li>\
                                     </ul>\
                                 </li>\
                             </ul>\

@@ -11,6 +11,9 @@
 .main-screen-path-entry:hover {
   color: #e74c3c;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
