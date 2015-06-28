@@ -50,6 +50,7 @@ var itemPanel = Ractive.extend({
 
         $('#item'+index).toggleClass('list-group-item-selected');
         var item = this.get('items.'+index);
+        //toDO fix container ID bug
         var containerID = window.parentContainer.containerID;
         window.currentRactive.set('stockItemStructure',item);
         window.currentRactive.set('stockItemStructure.containerID',containerID);
