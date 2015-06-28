@@ -82,7 +82,7 @@ var dashboardContainer = Ractive.extend({
     sortModeDown: true,
 
     data: {
-        storeAdmin: 'Marvin',
+        storeAdmin: 'DEFAULT',
         amountContainers: 0,
         amountItems: 0,
         logdata: null
@@ -95,15 +95,16 @@ var dashboardContainer = Ractive.extend({
         {
             if (status)
             {
-                var containerCount = countContainers(container);
-                window.currentRactive.set('amountContainers', containerCount);
-
-                var itemCount = countItems(container);
-                window.currentRactive.set('amountItems', itemCount);
-
                 var sessionID = getSessionIDFromURL();
                 var userName = getUserNameBySessionID(sessionID);
                 window.currentRactive.set('storeAdmin', userName);
+                if(typeof container !== 'undefined') {
+                    var containerCount = countContainers(container);
+                    window.currentRactive.set('amountContainers', containerCount);
+
+                    var itemCount = countItems(container);
+                    window.currentRactive.set('amountItems', itemCount);
+                }
             }
         });
 
