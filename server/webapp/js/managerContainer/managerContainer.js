@@ -158,7 +158,7 @@ var managerContainer = Ractive.extend(
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
             window.currentRactive.set('items',[]);
-
+            console.log(getDataItems(allContainerItems));
             window.containerItems = allContainerItems;
             window.containerItemIndex = 0;
             for(i = 0; i < allContainerItems.length; ++i){

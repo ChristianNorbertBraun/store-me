@@ -7,7 +7,7 @@ var navbarContainer = Ractive.extend({
                 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">\
                     <div class="container">\
                         <div class="navbar-header">\
-                            <a class="navbar-brand">StoreMe</a>\
+                            <img class="navbar-brand" src="resources/logo/logoText200px.png">\
                         </div>\
                         {{#if loggedIn}}\
                             <ul class="nav navbar-nav navbar-right">\
