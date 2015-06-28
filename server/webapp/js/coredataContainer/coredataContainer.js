@@ -137,7 +137,7 @@ var coredataContainer = Ractive.extend({
                                 <label class="modal-label">Item ID</label>\
                             </div>\
                             <div class="col-sm-8">\
-                                <input id="add-item-id" type="text" class="form-control" value={{newItem.id}} placeholder="Input Item ID">\
+                                <input id="add-item-id" type="text" on-change="checkIfItemIdUsed()" class="form-control" value={{newItem.id}} placeholder="Input Item ID">\
                             </div>\
                         </div>\
                         \
@@ -419,6 +419,18 @@ var coredataContainer = Ractive.extend({
         window.currentRactive.set('newItem.name', '');
         window.currentRactive.set('newItem.category', '');
         window.currentRactive.set('newItem.attributes', null);
+    },
+
+    checkIfItemIdUsed: function() {
+        var currentId = window.currentRactive.get('newItem.id');
+
+        console.log("hello");
+
+        getDataItemFromCouch(currentId, function(success) {
+            if (success) {
+                alert("Warning: id is taken");
+            }
+        });
     },
 
     addItem: function() {
