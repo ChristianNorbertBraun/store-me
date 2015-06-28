@@ -7,7 +7,7 @@ var loginContainer = Ractive.extend({
       <div class="loginFrame container">\
           <div class="panel panel-default login-panel center-block">\
             <div class="panel-body">\
-                <h3 class="text-center">Login</h3>\
+                <h3 class="text-center"> <img  src="resources/logo/logoText200pxFrame.png">\</h3>\
                 <div class="login-group center-block">\
                     <div class="input-group">\
                         <input id="login-username" class="form-control login-input" type="text" placeholder="Username"/>\
