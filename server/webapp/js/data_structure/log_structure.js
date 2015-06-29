@@ -22,7 +22,7 @@ function LogContainer(stored, containerID, itemName, amount, employee)
     this.containerID = containerID;
     this.itemName = itemName;
     this.amount = amount;
-    this.employee = employee
+    this.employee = employee;
 }
 
 /**
