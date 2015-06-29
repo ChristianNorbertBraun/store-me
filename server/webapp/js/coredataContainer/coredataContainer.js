@@ -584,7 +584,7 @@ var coredataContainer = Ractive.extend({
 
         loadStore(function(success, container) {
             if (success) {
-                if (itemStillStored(itemToDeleteIndex, container)) {
+                if (itemStillStored(deletedItemName, container)) {
                     alert('item still stored');
                     return;
                 }
