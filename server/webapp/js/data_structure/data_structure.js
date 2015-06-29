@@ -491,27 +491,6 @@ findFreeID = function(container)
 };
 
 /**
- * Generates a String representation of a given container. This is like a static version of the containers toString()-
- * function. This is not going to be a JSON.<br>
- * <br>
- * Recursive.
- * @function
- * @param {Container} container     - Container to represent as a String
- * @returns {String} Representation
- * @author Marvin Therolf
- */
-print = function(container)
-{
-    var result = container.containerID + "\t" + container.containerName + "\n";
-
-    for (var i = 0; i < container.subContainers.length; i++)
-    {
-        result += print(container.subContainers[i]);
-    }
-    return result;
-};
-
-/**
  * Finds and returns a container starting at a given container recursively checking the container id.
  * @function
  * @param {Container} container     - Container to start the search at
