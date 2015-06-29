@@ -392,8 +392,8 @@ addItem = function(container, itemID, amount)
             container.items.push(containerItem);
             result = true;
         }
-        return result;
     }
+    return result;
 };
 
 /**
