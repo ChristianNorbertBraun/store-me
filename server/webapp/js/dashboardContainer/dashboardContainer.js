@@ -29,8 +29,9 @@ var dashboardContainer = Ractive.extend({
                             </div>\
                         </div>\
                         \
-                        <button type="button" class="btn btn-primary dashboard-button" on-click="loadManager()">{{button.stock}}</button>\
-                        <button type="button" class="btn btn-primary dashboard-button">{{button.overview}}</button>\
+                        <button type="button" class="btn btn-primary dashboard-button" on-click="loadManager()">{{button.manager}}</button>\
+                        <button type="button" class="btn btn-primary dashboard-button" on-click="loadInventory()">{{button.inventory}}</button>\
+                        <button type="button" class="btn btn-primary dashboard-button" on-click="loadCoredata()">{{button.coredata}}</button>\
                     </div>\
                     \
                     <div class="col-sm-9">\
@@ -158,8 +159,18 @@ var dashboardContainer = Ractive.extend({
         }
     },
 
+    /* links */
+
     loadManager: function() {
         location.href = urlBuilder(strings.link.toManager, getSessionIDFromURL());
+    },
+
+    loadInventory: function() {
+        location.href = urlBuilder(strings.link.toInventory, getSessionIDFromURL());
+    },
+
+    loadCoredata: function() {
+        location.href = urlBuilder(strings.link.toCoredata, getSessionIDFromURL());
     },
 
     refreshLogData: function() {
