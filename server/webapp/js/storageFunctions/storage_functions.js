@@ -14,7 +14,7 @@
 var stock = function(storage, containerID, itemID, amount)
 {
     var container = getContainerById(storage, containerID);
-    addItem(container, itemID, amount);
+    return addItem(container, itemID, amount);
 };
 
 /**
@@ -29,5 +29,5 @@ var stock = function(storage, containerID, itemID, amount)
 var deplete = function(storage, containerID, itemID, amount)
 {
     var container = getContainerById(storage, containerID);
-    removeItem(container, itemID, amount);
+    return removeItem(container, itemID, amount);
 };
