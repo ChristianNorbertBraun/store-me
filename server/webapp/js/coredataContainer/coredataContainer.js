@@ -47,14 +47,22 @@ var coredataContainer = Ractive.extend({
                                 <tr>\
                                     <th>ID</th>\
                                     <th>Name</th>\
+                                    <th>Category</th>\
+                                    <th>QR</th>\
                                 </tr>\
                             </thead>\
                             \
                             <tbody>\
                                 {{#each items:i}}\
                                     <tr id="item_{{i}}" class="table-entry" on-click="selectItem(i)">\
-                                        <td>{{id}}\
-                                        <td>{{value.name}}\
+                                        <td>{{id}}</td>\
+                                        <td>{{value.name}}</td>\
+                                        <td>{{value.category_id}}</td>\
+                                        <td>\
+                                            <button class="btn btn-primary btn-sm" on-click="generateQRCode(id)">\
+                                                <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
+                                            </button>\
+                                        </td>\
                                     </tr>\
                                 {{/each}}\
                             </tbody>\
@@ -290,6 +298,23 @@ var coredataContainer = Ractive.extend({
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default" data-dismiss="modal" on-click="refreshItems()">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="editItem()">Edit</button>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+        \
+        <div class="modal fade" id="qrcode-modal">\
+            <div class="modal-dialog">\
+                <div class="modal-content">\
+                    <div class="modal-header">\
+                        <h4 class="modal-title">QR Code</h4>\
+                    </div>\
+                    <div class="modal-body">\
+                        <div id="qrcode"></div>\
+                    </div>\
+                    <div class="modal-footer">\
+                        <button type="button" class="btn btn-default" on-click="closeQRModal()">Close</button>\
+                        <button type="button" class="btn btn-default" on-click="printQRCode()">Print</button>\
                     </div>\
                 </div>\
             </div>\
@@ -661,6 +686,34 @@ var coredataContainer = Ractive.extend({
             window.currentRactive.set('itemSelected', true);
         else
             window.currentRactive.set('itemSelected', false);
-    }
+    },
 
+    /* QR stuff */
+
+    generateQRCode: function(string) {
+        var qrcoder = new QRCode("qrcode",{
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            width: 200,
+            height: 200,
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        qrcoder.makeCode(string);
+
+        $('#qrcode-modal').modal('show');
+    },
+
+    printQRCode: function() {
+        var newWindow = window.open();
+        newWindow.document.write(document.getElementById("qrcode").innerHTML);
+        newWindow.print();
+
+        this.closeQRModal();
+    },
+
+    closeQRModal: function() {
+        $('#qrcode-modal').modal('hide');
+        $('#qrcode').html('');
+    }
 });
