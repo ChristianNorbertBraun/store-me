@@ -108,12 +108,6 @@ var dashboardContainer = Ractive.extend({
                 }
             }
         });
-
-        /* for creation of dummy data
-        saveLogContainer(new LogContainer(true, "date", "container", "item", 4, "marvin"), function(success) {
-            if (success)
-                console.log("Success");
-        });*/
     },
 
     oncomplete: function() {
