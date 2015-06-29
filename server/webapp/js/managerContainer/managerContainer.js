@@ -70,7 +70,7 @@ var managerContainer = Ractive.extend(
                         <itemPanel></itemPanel>\
                    </div>\
                    <div class="col-sm-4">\
-                        <itemInfoPanel></itemInfoPanel>\
+                        <itemInfoPanel intro-outro="slideh"></itemInfoPanel>\
                    </div>\
                 </div>\
             </div>\

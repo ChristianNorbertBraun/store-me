@@ -173,3 +173,9 @@ for (var i = 0; i < startHere.subContainers.length; i++)
 }
 console.log(countContainers(startHere) === 10);
 console.log(countItems(startHere) === 45);
+
+console.log("add 0 Items");
+var lookatme = new Container("look at me");
+lookatme.items.push(new ContainerItem("12345", 15));
+addItem(lookatme, 12345, 0);
+addItem(lookatme, 12346, 0);

@@ -375,19 +375,23 @@ removeAllSubContainers = function(container)
 addItem = function(container, itemID, amount)
 {
     var result = false;
-    var containerItem = containsItem(container, itemID);
 
-    if (containerItem != null)
+    if (amount > 0)
     {
-        increaseAmount(containerItem, amount);
-        result = true;
-    }
-    else
-    {
-        containerItem = new ContainerItem(itemID, amount);
-        containerItem.parentContainerID = container.containerID;
-        container.items.push(containerItem);
-        result = true;
+        var containerItem = containsItem(container, itemID);
+
+        if (containerItem != null)
+        {
+            increaseAmount(containerItem, amount);
+            result = true;
+        }
+        else
+        {
+            containerItem = new ContainerItem(itemID, amount);
+            containerItem.parentContainerID = container.containerID;
+            container.items.push(containerItem);
+            result = true;
+        }
     }
     return result;
 };
@@ -407,9 +411,11 @@ containsItem = function(container, itemID)
 
     for (var i = 0; i < container.items.length; i++)
     {
-        if (container.items[i].itemID === itemID)
+        var currentContainerItem = container.items[i];
+
+        if (currentContainerItem.itemID === itemID)
         {
-            result = container.items[i];
+            result = currentContainerItem;
             break;
         }
     }
@@ -427,19 +433,24 @@ containsItem = function(container, itemID)
 removeItem = function(container, itemID, amount)
 {
     var result = false;
-    var containerItem = containsItem(container, itemID);
 
-    if (containerItem != null)
+    for (var i = 0; i < container.items.length; i++)
     {
-        if (container.items[i].amount === amount)
+        var containerItem = container.items[i];
+
+        if (containerItem.itemID = itemID)
         {
-            removeFromArray(container.items, i);
-            result = true;
-        }
-        else if (container.items[i].amount > amount)
-        {
-            decreaseAmount(container.items[i], amount);
-            result = true;
+            if (containerItem.amount === amount)
+            {
+                removeFromArray(container.items, i);
+                result = true;
+            }
+            else if (containerItem.amount > amount)
+            {
+                decreaseAmount(container.items[i], amount);
+                result = true;
+            }
+            break;
         }
     }
     return result;
@@ -488,27 +499,6 @@ findFreeID = function(container)
         }
     }
     return container.containerID + "-" + freeSubID;
-};
-
-/**
- * Generates a String representation of a given container. This is like a static version of the containers toString()-
- * function. This is not going to be a JSON.<br>
- * <br>
- * Recursive.
- * @function
- * @param {Container} container     - Container to represent as a String
- * @returns {String} Representation
- * @author Marvin Therolf
- */
-print = function(container)
-{
-    var result = container.containerID + "\t" + container.containerName + "\n";
-
-    for (var i = 0; i < container.subContainers.length; i++)
-    {
-        result += print(container.subContainers[i]);
-    }
-    return result;
 };
 
 /**
@@ -586,7 +576,6 @@ function ContainerAttribute(attributeName, value, unit, type, compulsory)
  */
 function ContainerItem(itemID, amount)
 {
-
     this.itemID = itemID;
     this.amount = amount;
     this.parentContainerID = "0";
@@ -595,7 +584,7 @@ function ContainerItem(itemID, amount)
 /**
  * Increases the amount of items held by a ContainerItem object by the given amount.
  * @function
- * @param {Container} containerItem     - ContainerItem the holds the item
+ * @param {ContainerItem} containerItem     - ContainerItem the holds the item
  * @param {Number} amount               - Amount to add to the total amount
  * @author Marvin Therolf
  */

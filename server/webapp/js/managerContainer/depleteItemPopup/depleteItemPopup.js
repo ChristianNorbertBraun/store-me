@@ -47,20 +47,20 @@ var depleteItemPopup = Ractive.extend({
                         </div>\
                         <div id="attribute-container">\
                             {{#if stockItemStructure.attributes}}\
-                                <h3 id="attribute-heading-deplete" intro-outro="slideh">Attributes</h3>\
+                                <h3 id="attribute-heading-deplete" class="item-structure" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             {{#each stockItemStructure.attributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name-deplete{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
-                                <div class="col-md-5 attribute-entry"><input id="item-attribute-value-deplete{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
-                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit-deplete{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
+                                 <div class="col-md-5 attribute-entry item-structure"><input id="item-attribute-name-deplete{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
+                                <div class="col-md-5 attribute-entry item-structure"><input id="item-attribute-value-deplete{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
+                                <div class="col-md-2 attribute-entry item-structure"><input id="item-attribute-unit-deplete{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
                             </div>\
                             {{/each}}\
                         </div>\
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default"  >Close</button>\
+                        <button type="button" class="btn btn-default"  on-click="closeDepleteItemPopup()">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="depleteItem()">Deplete</button>\
                     </div>\
                 </div>\
@@ -90,11 +90,22 @@ var depleteItemPopup = Ractive.extend({
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
 
-        deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount);
-        window.currentRactive.writeToDb();
+        var depleted = deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount);
+        if(depleted){
+            saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
+            window.currentRactive.writeToDb();
 
+            this.closeDepleteItemPopup();
+        }
+        else{
 
-        saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
+        }
+    },
+
+    closeDepleteItemPopup:function(){
         $('#deplete-item-modal').modal('hide');
+        setTimeout(function(){
+            $('.item-structure').remove();
+        },200);
     }
 });

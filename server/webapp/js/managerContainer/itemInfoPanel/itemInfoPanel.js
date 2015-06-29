@@ -23,10 +23,10 @@ var itemInfoPanel = Ractive.extend({
     </div>\
     <div id="attribute-container">\
     {{#if selectedItem.attributes}}\
-        <h3 id="attribute-heading-info" intro-outro="slideh">Attributes</h3>\
+        <h3 id="attribute-heading-info" >Attributes</h3>\
     {{/if}}\
     {{#each selectedItem.attributes:i}}\
-    <div class="row popup-entry" intro-outro="slideh">\
+    <div class="row popup-entry" >\
         <div class="col-md-5 attribute-entry"><input id="item-attribute-name-info{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
         <div class="col-md-4 attribute-entry"><input id="item-attribute-value-info{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
         <div class="col-md-3 attribute-entry"><input id="item-attribute-unit-info{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\

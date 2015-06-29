@@ -43,20 +43,20 @@ var addItemPopup = Ractive.extend({
                         </div>\
                         <div id="attribute-container">\
                             {{#if stockItemStructure.attributes}}\
-                                <h3 id="attribute-heading-stock" intro-outro="slideh">Attributes</h3>\
+                                <h3 id="attribute-heading-stock" class="item-structure" intro-outro="slideh">Attributes</h3>\
                             {{/if}}\
                             {{#each stockItemStructure.attributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
-                                 <div class="col-md-5 attribute-entry"><input id="item-attribute-name-stock{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
-                                <div class="col-md-5 attribute-entry"><input id="item-attribute-value-stock{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
-                                <div class="col-md-2 attribute-entry"><input id="item-attribute-unit-stock{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
+                                 <div class="col-md-5 attribute-entry item-structure"><input id="item-attribute-name-stock{{i}}" type="text" class="form-control" placeholder="Attribute Name" value="{{attributeName}}" readonly ></div>\
+                                <div class="col-md-5 attribute-entry item-structure"><input id="item-attribute-value-stock{{i}}" type="text" class="form-control" value="{{value}}" readonly></div>\
+                                <div class="col-md-2 attribute-entry item-structure"><input id="item-attribute-unit-stock{{i}}" type="text" class="form-control"  placeholder="Unit" value="{{unit}}" readonly></div>\
                             </div>\
                             {{/each}}\
                         </div>\
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>\
+                        <button type="button" class="btn btn-default" on-click="closeAddItemPopup()" >Close</button>\
                         <button type="button" class="btn btn-primary" on-click="stockItem()">Stock</button>\
                     </div>\
                 </div>\
@@ -66,6 +66,13 @@ var addItemPopup = Ractive.extend({
 
     oninit:function(){
         window.addItemRactive = this;
+    },
+
+    closeAddItemPopup:function(){
+        $('#add-item-modal').modal('hide');
+        setTimeout(function(){
+            $('.item-structure').remove();
+        },200);
     },
 
     loadItem:function(){
@@ -82,15 +89,19 @@ var addItemPopup = Ractive.extend({
     },
 
     stockItem:function(){
-        var parentContainerName = window.parentContainer.containerName
+        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
 
-        stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
-        window.currentRactive.writeToDb();
+        var stocked = stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
+        if(stocked){
+            window.currentRactive.writeToDb();
+            saveLogContainer(new LogContainer(true, parentContainerName, itemName,amount, username), function(saved){});
+            this.closeAddItemPopup();
+        }
+        else{
 
-        saveLogContainer(new LogContainer(true, parentContainerName, itemName,amount, username), function(saved){});
-        $('#add-item-modal').modal('hide');
+        }
     }
 });

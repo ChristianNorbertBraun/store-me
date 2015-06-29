@@ -70,8 +70,9 @@ var english = {
     dashboard: {
 
         button: {
-            stock: "Manage Stock",
-            overview: "Stock Overview"
+            manager: "Manage Storage",
+            inventory: "Show Inventory",
+            coredata: "Manage Coredata"
         },
 
         panel: {
@@ -148,7 +149,9 @@ var english = {
                     employee: 'Christian Paling'
                 }
             ]
-        }
+        },
+
+        loggedIn: true
     },
 
     manager: {
@@ -166,7 +169,9 @@ var english = {
 
         data:{
             container:[]
-        }
+        },
+
+        loggedIn: true
     },
 
     inventory: {
@@ -176,7 +181,9 @@ var english = {
                 attribute: 'Attributes',
                 inventorytable: 'Inventory Table'
             }
-        }
+        },
+
+        loggedIn: true
     },
 
     coredata: {
@@ -184,7 +191,9 @@ var english = {
             title: {
                 category: 'Categories'
             }
-        }
+        },
+
+        loggedIn: true
     }
 };
 

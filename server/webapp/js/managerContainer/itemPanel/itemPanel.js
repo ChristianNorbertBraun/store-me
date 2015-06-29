@@ -44,11 +44,13 @@ var itemPanel = Ractive.extend({
 
     selectItem:function(event, index){
 
-        if( $(".list-group-item-selected").get().length >= 1){
+        $('#item'+index).toggleClass('list-group-item-selected');
+        if( $(".list-group-item-selected").get().length > 1){
             window.currentRactive.removeSelection();
+            $('#item'+index).toggleClass('list-group-item-selected');
         }
 
-        $('#item'+index).toggleClass('list-group-item-selected');
+
         var item = this.get('items.'+index);
         //toDO fix container ID bug
         var containerID = window.parentContainer.containerID;
