@@ -433,19 +433,24 @@ containsItem = function(container, itemID)
 removeItem = function(container, itemID, amount)
 {
     var result = false;
-    var containerItem = containsItem(container, itemID);
 
-    if (containerItem != null)
+    for (var i = 0; i < container.items.length; i++)
     {
-        if (container.items[i].amount === amount)
+        var containerItem = container.items[i];
+
+        if (containerItem.itemID = itemID)
         {
-            removeFromArray(container.items, i);
-            result = true;
-        }
-        else if (container.items[i].amount > amount)
-        {
-            decreaseAmount(container.items[i], amount);
-            result = true;
+            if (containerItem.amount === amount)
+            {
+                removeFromArray(container.items, i);
+                result = true;
+            }
+            else if (containerItem.amount > amount)
+            {
+                decreaseAmount(container.items[i], amount);
+                result = true;
+            }
+            break;
         }
     }
     return result;
