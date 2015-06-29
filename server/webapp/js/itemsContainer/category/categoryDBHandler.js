@@ -14,7 +14,6 @@ function addCategoryToDB(categoryId, cbFn)
     try {
         $.couch.db(strings.database.category).saveDoc(category, {
             success: function (data) {
-                console.log(data);
                 cbFn(true, data);
             },
             error: function (status) {
@@ -36,7 +35,6 @@ function deleteCategoryId(oldCategory, cbFn)
     try {
         $.couch.db(strings.database.category).openDoc(oldCategory, {
             success: function (data) {
-                console.log(data);
                 $.couch.db(strings.database.category).removeDoc(data, {
                     success: function (data2) {
                         console.log(data2);
@@ -66,10 +64,8 @@ function deleteCategoryFromDB(categoryId, cbFn)
     try {
         $.couch.db(strings.database.category).openDoc(categoryId, {
             success: function (data) {
-                console.log(data);
                 $.couch.db(strings.database.category).removeDoc(data, {
                     success: function (data2) {
-                        console.log(data2);
                         cbFn(true);
                     },
                     error: function (status) {
@@ -101,7 +97,6 @@ function checkIfCategoryHasItems(categoryId, cbFn)
     try {
         $.couch.db(strings.database.category).query(mapFunction, "_count", "javascript", {
             success: function (data) {
-                console.log(data);
                 var rows = data["rows"];
                 var i;
                 for (i = 0; i < data["total_rows"]; i++) {
@@ -137,7 +132,6 @@ function setItemsToNewCategory(oldCategory, newCategory, cbFn)
 
         $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
             success: function (data) {
-                console.log(data);
                 var rows = data["rows"];
                 var i;
                 for(i = 0; i < data["total_rows"] ; i++)
@@ -165,7 +159,6 @@ function setNewCategory(id, newCategory)
     try {
         $.couch.db(strings.database.items).openDoc(id, {
             success: function (data) {
-                console.log(data);
                 data.category_id = newCategory;
                 $.couch.db(strings.database.items).saveDoc(data, {
                     success: function (data2) {
@@ -195,7 +188,6 @@ function getAllCategoriesFromDB(mapFunction, cbFn)
 
         $.couch.db(strings.database.category).query(mapFunction, "_count", "javascript", {
             success: function (data) {
-                console.log(data);
                 cbFn(true, data);
             },
             error: function (status) {

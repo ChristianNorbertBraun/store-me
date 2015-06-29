@@ -10,7 +10,6 @@ function addItemToDB(item, cbFn)
     {
         $.couch.db(strings.database.items).saveDoc(item, {
             success: function(data) {
-                console.log(data);
                 cbFn(true, data);
             },
             error: function(status) {
@@ -32,7 +31,6 @@ function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
     {
         $.couch.db(strings.database.items).openDoc(oldItemId, {
             success: function(data) {
-                console.log(data);
 
                 data[rows[0[value[itemName]]]] = itemName;
                 data[rows[0[value[categoryID]]]] = categoryID;
@@ -40,7 +38,6 @@ function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
 
                 $.couch.db(strings.database.items).saveDoc(data, {
                     success: function(data) {
-                        console.log(data);
                         cbFn(true, data);
                     },
                     error: function(status) {
@@ -66,7 +63,6 @@ function getDataItemFromCouch(itemID, callBackFunction)
 
     $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
-            console.log(data);
             callBackFunction(true, data);
             return data;
         },
@@ -85,7 +81,6 @@ function getAllItemsFromDB(mapFunction, cbFn)
     try {
         $.couch.db(strings.database.items).query(mapFunction, "_count", "javascript", {
             success: function (data) {
-                console.log(data);
                 cbFn(true, data);
             },
             error: function (status) {
@@ -106,10 +101,8 @@ function deleteItemFromDB(itemID, cbFn)
 
     $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
-            console.log(data);
             $.couch.db(strings.database.items).removeDoc(data, {
                 success: function(data2) {
-                    console.log(data2);
                     cbFn(true, data2);
                 },
                 error: function(status) {

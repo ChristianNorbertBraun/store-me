@@ -424,8 +424,6 @@ var coredataContainer = Ractive.extend({
     checkIfItemIdUsed: function() {
         var currentId = window.currentRactive.get('newItem.id');
 
-        console.log("hello");
-
         getDataItemFromCouch(currentId, function(success) {
             if (success) {
                 alert("Warning: id is taken");
@@ -584,12 +582,25 @@ var coredataContainer = Ractive.extend({
         itemToDeleteIndex = itemToDeleteIndex.substr(5);
         var deletedItemName = this.get('items.' + itemToDeleteIndex).id;
 
-        deleteItem(deletedItemName, function(status) {
-            if (status) {
-                window.currentRactive.refreshItems();
+        loadStore(function(success, container) {
+            if (success) {
+                if (itemStillStored(deletedItemName, container)) {
+                    alert('item still stored');
+                    return;
+                }
+                else {
+                    deleteItem(deletedItemName, function(status) {
+                        if (status) {
+                            window.currentRactive.refreshItems();
+                        }
+                        else {
+                            alert('Error while deleting');
+                        }
+                    });
+                }
             }
             else {
-                alert('Error while deleting');
+                alert('connection to storage failed');
             }
         });
 

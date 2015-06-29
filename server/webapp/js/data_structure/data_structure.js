@@ -108,15 +108,16 @@ getAllItems = function(container)
     }
     return allItems;
 };
+/*
 
-/**
+/!**
  * Returns a set of all attributes of all items contained by the given container and its subcontainers. The returned
  * array is an array of ItemAttribute Objects.
  * @function
  * @param {Container} container     - Container from where to start gathering attributes
  * @returns {Array} Array of ItemAttributes
  * @author Marvin Therolf
- */
+ *!/
 getAllItemAttributes = function(container)
 {
     var allAttributes = [];
@@ -155,6 +156,7 @@ getAllItemAttributes = function(container)
     }
     return allAttributes;
 };
+*/
 
 /**
  * Adds all attributes of an item to a set of attributes. So if the set already contains an attribute it is not added
@@ -167,7 +169,7 @@ var addAttributes = function(attributes, item)
 {
      for (var i = 0; i < item.attributes.length; i++)
      {
-         var currentAttribute = attributes[i];
+         var currentAttribute = item.attributes[i];
          addToSet(attributes, currentAttribute);
      }
 };
@@ -180,27 +182,26 @@ var addAttributes = function(attributes, item)
  * @returns {Array} Array of Items
  * @author Marvin Therolf
  */
-getDataItems = function(containerItems)
+getDataItems = function(containerItems, callBackFunction)
 {
-    var dataItems = [];
 
+    var dataItems = [];
+    var counter = 0;
     for (var i = 0; i < containerItems.length; i++)
     {
         var currentContainerItem = containerItems[i];
-        var dataItem = null;
-        getDataItemFromCouch(currentContainerItem.itemID, function(boolean, data)
+        getDataItemFromCouch(currentContainerItem.itemID, function(status, data)
         {
-            if (boolean)
+            ++counter;
+            if (status)
             {
-                dataItem = data;
+                dataItems.push(data);
+            }
+            if(containerItems.length-1 == counter){
+                callBackFunction(true, dataItems);
             }
         });
-        if (dataItem !== null)
-        {
-            dataItems.push(dataItem);
-        }
     }
-    return dataItems;
 };
 
 /**
@@ -373,18 +374,22 @@ removeAllSubContainers = function(container)
  */
 addItem = function(container, itemID, amount)
 {
+    var result = false;
     var containerItem = containsItem(container, itemID);
 
     if (containerItem != null)
     {
         increaseAmount(containerItem, amount);
+        result = true;
     }
     else
     {
         containerItem = new ContainerItem(itemID, amount);
         containerItem.parentContainerID = container.containerID;
         container.items.push(containerItem);
+        result = true;
     }
+    return result;
 };
 
 /**
@@ -421,21 +426,23 @@ containsItem = function(container, itemID)
  */
 removeItem = function(container, itemID, amount)
 {
-    for (var i = 0; i < container.items.length; i++)
+    var result = false;
+    var containerItem = containsItem(container, itemID);
+
+    if (containerItem != null)
     {
-        if (container.items[i].itemID === itemID)
+        if (container.items[i].amount === amount)
         {
-            if (container.items[i].amount === amount)
-            {
-                removeFromArray(container.items, i);
-            }
-            else
-            {
-                decreaseAmount(container.items[i], amount);
-            }
-            break;
+            removeFromArray(container.items, i);
+            result = true;
+        }
+        else if (container.items[i].amount > amount)
+        {
+            decreaseAmount(container.items[i], amount);
+            result = true;
         }
     }
+    return result;
 };
 
 /**
@@ -695,6 +702,30 @@ var categoryStillReferenced = function(items, category_id)
     }
     return referenceFound;
 };
+
+/**
+ * Checks if an Item is still stored a storage
+ * @function
+ * @param itemID {String}       - ID of the item which gets checked
+ * @param storage {Container}   - Storage in which the item gets searched
+ * @returns {boolean} Whether item was found or not
+ */
+var itemStillStored = function(itemID, storage)
+{
+    var itemStored = false;
+    var allItems = getAllItems(storage);
+
+    for (var i = 0; i < allItems.length; i++)
+    {
+        if (allItems[i].itemID === itemID)
+        {
+            itemStored = true;
+            break;
+        }
+    }
+
+    return itemStored;
+}
 
 /**
  * An attribute object to set properties of items.

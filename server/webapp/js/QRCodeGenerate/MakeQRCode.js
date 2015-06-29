@@ -9,7 +9,7 @@ function makeCode()
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
     });
-    var text = "Hello World";
+    var text = "999999999";
 
     code.makeCode(text);
 }
