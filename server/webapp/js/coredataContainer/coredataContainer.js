@@ -321,11 +321,6 @@ var coredataContainer = Ractive.extend({
         </div>\
     ',
 
-    /* removed button from attributes
-    <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
-    </button>\ */
-
     data: {
         edit_enabled: false     // for checkbox in edit modal, if true then it is possible to edit the item in the modal
     },
@@ -551,52 +546,11 @@ var coredataContainer = Ractive.extend({
 
         updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
-
-                // check if no attributes were added to the item
-                if (attributes != null) {
-                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
-                }
-                else {
-                    window.currentRactive.refreshItems();
-                }
+                window.currentRactive.refreshItems();
             }
         })
 
         $('#edit-item-modal').modal('hide');
-    },
-
-    // check every attribute if it already exists in the attributes database
-    addItemAttributesToGeneralAttributeDB: function(attributes) {
-
-        attributes.map(function (item) {
-            if (loadAttributeByName(item.attributeName, function (success, result) {
-
-                    // if it does not exist in attributes database yet then add it
-                    if (success == false) {
-                        saveAttribute(function (success) {
-                            window.currentRactive.refreshItems();
-                        }, item.attributeName, item.unit, item.type);
-                    }
-                    else {
-                        window.currentRactive.refreshItems();
-                    }
-                }));
-        });
-    },
-
-    // prepare new edit attribute
-    addNewEditAttribute: function() {
-        // workaround if no attribute exists yet then create array, else you can just push it
-        if (window.currentRactive.get('currentItem.value.attributes') == null) {
-            window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
-        }
-        else {
-            window.currentRactive.push('currentItem.value.attributes', new ItemAttribute("","","",""));
-        }
-    },
-
-    removeEditAttributeRow: function(index) {
-        window.currentRactive.splice('currentItem.value.attributes', index, 1);
     },
 
     deleteItemFromTable: function() {
