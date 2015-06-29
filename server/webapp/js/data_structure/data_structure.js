@@ -184,17 +184,20 @@ var addAttributes = function(attributes, item)
  */
 getDataItems = function(containerItems, callBackFunction)
 {
+
     var dataItems = [];
+    var counter = 0;
     for (var i = 0; i < containerItems.length; i++)
     {
         var currentContainerItem = containerItems[i];
         getDataItemFromCouch(currentContainerItem.itemID, function(status, data)
         {
+            ++counter;
             if (status)
             {
                 dataItems.push(data);
             }
-            if(containerItems.length-1 == i){
+            if(containerItems.length-1 == counter){
                 callBackFunction(true, dataItems);
             }
         });
