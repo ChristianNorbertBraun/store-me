@@ -70,8 +70,9 @@ var english = {
     dashboard: {
 
         button: {
-            stock: "Manage Stock",
-            overview: "Stock Overview"
+            manager: "Manage Storage",
+            inventory: "Show Inventory",
+            coredata: "Manage Coredata"
         },
 
         panel: {
