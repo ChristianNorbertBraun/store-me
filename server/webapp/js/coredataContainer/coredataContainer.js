@@ -47,14 +47,22 @@ var coredataContainer = Ractive.extend({
                                 <tr>\
                                     <th>ID</th>\
                                     <th>Name</th>\
+                                    <th>Category</th>\
+                                    <th>QR</th>\
                                 </tr>\
                             </thead>\
                             \
                             <tbody>\
                                 {{#each items:i}}\
                                     <tr id="item_{{i}}" class="table-entry" on-click="selectItem(i)">\
-                                        <td>{{id}}\
-                                        <td>{{value.name}}\
+                                        <td>{{id}}</td>\
+                                        <td>{{value.name}}</td>\
+                                        <td>{{value.category_id}}</td>\
+                                        <td>\
+                                            <button class="btn btn-primary btn-sm" on-click="generateQRCode(id)">\
+                                                <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
+                                            </button>\
+                                        </td>\
                                     </tr>\
                                 {{/each}}\
                             </tbody>\
@@ -294,12 +302,24 @@ var coredataContainer = Ractive.extend({
                 </div>\
             </div>\
         </div>\
+        \
+        <div class="modal fade" id="qrcode-modal">\
+            <div class="modal-dialog">\
+                <div class="modal-content">\
+                    <div class="modal-header">\
+                        <h4 class="modal-title">QR Code</h4>\
+                    </div>\
+                    <div class="modal-body">\
+                        <div id="qrcode"></div>\
+                    </div>\
+                    <div class="modal-footer">\
+                        <button type="button" class="btn btn-default" on-click="closeQRModal()">Close</button>\
+                        <button type="button" class="btn btn-default" on-click="printQRCode()">Print</button>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
     ',
-
-    /* removed button from attributes
-    <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewEditAttribute()" {{#unless edit_enabled}}disabled{{/unless}}>\
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\
-    </button>\ */
 
     data: {
         edit_enabled: false     // for checkbox in edit modal, if true then it is possible to edit the item in the modal
@@ -526,52 +546,11 @@ var coredataContainer = Ractive.extend({
 
         updateItem(itemId, itemName, itemCategory, attributes, function(ready, data) {
             if (ready) {
-
-                // check if no attributes were added to the item
-                if (attributes != null) {
-                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
-                }
-                else {
-                    window.currentRactive.refreshItems();
-                }
+                window.currentRactive.refreshItems();
             }
         })
 
         $('#edit-item-modal').modal('hide');
-    },
-
-    // check every attribute if it already exists in the attributes database
-    addItemAttributesToGeneralAttributeDB: function(attributes) {
-
-        attributes.map(function (item) {
-            if (loadAttributeByName(item.attributeName, function (success, result) {
-
-                    // if it does not exist in attributes database yet then add it
-                    if (success == false) {
-                        saveAttribute(function (success) {
-                            window.currentRactive.refreshItems();
-                        }, item.attributeName, item.unit, item.type);
-                    }
-                    else {
-                        window.currentRactive.refreshItems();
-                    }
-                }));
-        });
-    },
-
-    // prepare new edit attribute
-    addNewEditAttribute: function() {
-        // workaround if no attribute exists yet then create array, else you can just push it
-        if (window.currentRactive.get('currentItem.value.attributes') == null) {
-            window.currentRactive.set('currentItem.value.attributes.0', new ItemAttribute("","","",""));
-        }
-        else {
-            window.currentRactive.push('currentItem.value.attributes', new ItemAttribute("","","",""));
-        }
-    },
-
-    removeEditAttributeRow: function(index) {
-        window.currentRactive.splice('currentItem.value.attributes', index, 1);
     },
 
     deleteItemFromTable: function() {
@@ -661,6 +640,34 @@ var coredataContainer = Ractive.extend({
             window.currentRactive.set('itemSelected', true);
         else
             window.currentRactive.set('itemSelected', false);
-    }
+    },
 
+    /* QR stuff */
+
+    generateQRCode: function(string) {
+        var qrcoder = new QRCode("qrcode",{
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            width: 200,
+            height: 200,
+            correctLevel : QRCode.CorrectLevel.H
+        });
+
+        qrcoder.makeCode(string);
+
+        $('#qrcode-modal').modal('show');
+    },
+
+    printQRCode: function() {
+        var newWindow = window.open();
+        newWindow.document.write(document.getElementById("qrcode").innerHTML);
+        newWindow.print();
+
+        this.closeQRModal();
+    },
+
+    closeQRModal: function() {
+        $('#qrcode-modal').modal('hide');
+        $('#qrcode').html('');
+    }
 });
