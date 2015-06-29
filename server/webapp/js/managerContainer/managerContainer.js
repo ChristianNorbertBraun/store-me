@@ -63,8 +63,7 @@ var managerContainer = Ractive.extend(
                         </div>\
                         <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-container-modal" on-click="prepareAddContainerPopup()">Add</button>\
                         <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Delete</button>\
-                        \
-                        \
+                        <button class="btn btn-primary manager-button" on-click="prepareQrCodeGeneration()" ><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></button>\
                     </div>\
                     <div class="col-sm-4">\
                         <itemPanel></itemPanel>\
@@ -80,6 +79,7 @@ var managerContainer = Ractive.extend(
         <addContainerPopup></addContainerPopup>\
         <addItemPopup></addItemPopup>\
         <depleteItemPopup></depleteItemPopup>\
+        <qrCodePopup></qrCodePopup>\
         {{else}}\
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
@@ -97,7 +97,8 @@ var managerContainer = Ractive.extend(
             addItemPopup: addItemPopup,
             itemPanel: itemPanel,
             depleteItemPopup:depleteItemPopup,
-            itemInfoPanel: itemInfoPanel
+            itemInfoPanel: itemInfoPanel,
+            qrCodePopup: qrCodePopup
         },
 
         oninit: function(){
@@ -252,6 +253,27 @@ var managerContainer = Ractive.extend(
             for(i = 0; i < GUIallSelectedContainer.length; ++i){
                 $(GUIallSelectedContainer[i]).toggleClass('list-group-item-selected');
             }
+        },
+
+        prepareQrCodeGeneration:function(){
+            var GUIselectedContainer = $('.list-group-item-selected').get();
+            index = $(GUIselectedContainer[0]).attr('id');
+            var selectedContainer = this.get('data.container.' + index);
+            this.generateQRCode(selectedContainer.containerID);
+        },
+
+        generateQRCode: function(string) {
+            var qrcoder = new QRCode("qrcode",{
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                width: 200,
+                height: 200,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            qrcoder.makeCode(string);
+
+            $('#qrcode-modal').modal('show');
         }
     })
 ;
