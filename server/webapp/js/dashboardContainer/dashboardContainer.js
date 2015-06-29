@@ -35,12 +35,12 @@ var dashboardContainer = Ractive.extend({
                     </div>\
                     \
                     <div class="col-sm-9">\
-                        <div class="panel panel-default">\
+                        <div id="item-panel-table" class="panel panel-default">\
                             <table id="item-table" class="table table-bordered">\
                                 <thead>\
                                     <tr>\
                                         {{#each table.header:i}}\
-                                            <th id="column_{{i}}" on-click="sortTable(this, i)">\
+                                            <th id="column_{{i}}" on-click="">\
                                                 {{column}}\
                                                 <span class="dropdown hidden">\
                                                     <span class="caret"></span>\
