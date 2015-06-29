@@ -167,7 +167,7 @@ var addAttributes = function(attributes, item)
 {
      for (var i = 0; i < item.attributes.length; i++)
      {
-         var currentAttribute = attributes[i];
+         var currentAttribute = item.attributes[i];
          addToSet(attributes, currentAttribute);
      }
 };
