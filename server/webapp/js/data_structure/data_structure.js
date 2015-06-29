@@ -108,15 +108,16 @@ getAllItems = function(container)
     }
     return allItems;
 };
+/*
 
-/**
+/!**
  * Returns a set of all attributes of all items contained by the given container and its subcontainers. The returned
  * array is an array of ItemAttribute Objects.
  * @function
  * @param {Container} container     - Container from where to start gathering attributes
  * @returns {Array} Array of ItemAttributes
  * @author Marvin Therolf
- */
+ *!/
 getAllItemAttributes = function(container)
 {
     var allAttributes = [];
@@ -155,6 +156,7 @@ getAllItemAttributes = function(container)
     }
     return allAttributes;
 };
+*/
 
 /**
  * Adds all attributes of an item to a set of attributes. So if the set already contains an attribute it is not added
@@ -180,27 +182,23 @@ var addAttributes = function(attributes, item)
  * @returns {Array} Array of Items
  * @author Marvin Therolf
  */
-getDataItems = function(containerItems)
+getDataItems = function(containerItems, callBackFunction)
 {
     var dataItems = [];
-
     for (var i = 0; i < containerItems.length; i++)
     {
         var currentContainerItem = containerItems[i];
-        var dataItem = null;
-        getDataItemFromCouch(currentContainerItem.itemID, function(boolean, data)
+        getDataItemFromCouch(currentContainerItem.itemID, function(status, data)
         {
-            if (boolean)
+            if (status)
             {
-                dataItem = data;
+                dataItems.push(data);
+            }
+            if(containerItems.length-1 == i){
+                callBackFunction(true, dataItems);
             }
         });
-        if (dataItem !== null)
-        {
-            dataItems.push(dataItem);
-        }
     }
-    return dataItems;
 };
 
 /**
