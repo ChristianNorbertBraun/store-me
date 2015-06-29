@@ -70,7 +70,7 @@ var managerContainer = Ractive.extend(
                         <itemPanel></itemPanel>\
                    </div>\
                    <div class="col-sm-4">\
-                        <itemInfoPanel intro-outro="slideh"></itemInfoPanel>\
+                        <itemInfoPanel></itemInfoPanel>\
                    </div>\
                 </div>\
             </div>\
@@ -118,18 +118,17 @@ var managerContainer = Ractive.extend(
 
         navigateUp: function(event, index){
             window.app.set('data.container',clickedContainerHistory[index]);
-            var latestClickedcontainer = clickedContainerHistory[clickedContainerHistory.length-1][0];
+            var latestClickedcontainer = clickedContainerHistory[index][0];
 
-
-            var substringLength = 0;
-            while(clickedContainerHistory.length > index){
-                substringLength += 2;
+            while(clickedContainerHistory.length > index+1){
                 window.app.pop('pathElements');
                 clickedContainerHistory.pop();
             }
 
-            var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
-            window.parentContainer = getContainerById(window.currentTableState, parentId);
+            if(latestClickedcontainer){
+                var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-2);
+                window.parentContainer = getContainerById(window.currentTableState, parentId);
+            }
             this.mapContainerItemOnDataItem();
             this.removeSelection();
 
@@ -147,7 +146,7 @@ var managerContainer = Ractive.extend(
 
 
             window.app.push('pathElements', clickedContainer);
-            clickedContainerHistory.push(parentContainers);
+            clickedContainerHistory.push(clickedContainer.subContainers);
 
             this.mapContainerItemOnDataItem();
             this.removeSelection();
@@ -158,11 +157,6 @@ var managerContainer = Ractive.extend(
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
             window.currentRactive.set('items',[]);
-            getDataItems(allContainerItems, function(status, data){
-                if(status){
-                    console.log(data);
-                }
-            });
             window.containerItems = allContainerItems;
             window.containerItemIndex = 0;
             for(i = 0; i < allContainerItems.length; ++i){
@@ -185,6 +179,8 @@ var managerContainer = Ractive.extend(
                if(window.firstLoad) {
                    window.parentContainer = window.currentTableState;
                    subContainer = window.currentTableState.subContainers;
+                   window.app.push('pathElements', window.parentContainer);
+                   clickedContainerHistory.push(window.parentContainer.subContainers);
                    window.firstLoad = false;
                }
                else{
