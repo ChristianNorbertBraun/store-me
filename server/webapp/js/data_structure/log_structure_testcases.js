@@ -15,3 +15,6 @@ loadAllLogContainer(function(loaded, data){
     console.log(loaded);
     console.log(data);
 });
+
+
+console.log(getCurrentTime());

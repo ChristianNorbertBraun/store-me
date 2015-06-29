@@ -33,16 +33,29 @@ var getCurrentTime = function ()
     var yyyy = now.getFullYear();
     var hh = now.getHours();
     var mm = now.getMinutes();
+    var ss = now.getSeconds();
 
     if (dd < 10)
     {
-        dd = '0' + dd;
+        dd = "0" + dd;
     }
-    if( mm < 10)
+    if (MM < 10)
     {
-        mm = '0' + mm;
+        MM = "0" + MM;
     }
-    var currentTime = dd + '.' + MM + '.' + yyyy + ' ' + hh + ':' + mm;
+    if (hh < 10)
+    {
+        hh = "0" + hh;
+    }
+    if (mm < 10)
+    {
+        mm = "0" + mm;
+    }
+    if (ss < 10)
+    {
+        ss = "0" + ss;
+    }
+    var currentTime = dd + "." + MM + "." + yyyy + " " + hh + ":" + mm  + ":" + ss;
     return currentTime;
 };
 
