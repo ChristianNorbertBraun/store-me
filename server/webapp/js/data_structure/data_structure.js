@@ -411,7 +411,7 @@ containsItem = function(container, itemID)
 
     for (var i = 0; i < container.items.length; i++)
     {
-        var currentContainerItem = conatiner.items[i];
+        var currentContainerItem = container.items[i];
 
         if (currentContainerItem.itemID === itemID)
         {
