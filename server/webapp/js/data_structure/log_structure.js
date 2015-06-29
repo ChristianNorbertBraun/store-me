@@ -15,37 +15,35 @@
  * @constructor
  * @author Marcel Gross
  */
-function LogContainer(stored, containerID, itemName, amount, employee){
-
-
-
+function LogContainer(stored, containerID, itemName, amount, employee)
+{
     this.stored = stored;
     this.date = getCurrentTime();
     this.containerID = containerID;
     this.itemName = itemName;
     this.amount = amount;
     this.employee = employee
-
 }
 
-var getCurrentTime = function () {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    var hh = today.getHours();
-    var minutes = today.getMinutes();
+var getCurrentTime = function ()
+{
+    var now = new Date();
+    var dd = now.getDate();
+    var MM = now.getMonth()+1; //January is 0!
+    var yyyy = now.getFullYear();
+    var hh = now.getHours();
+    var mm = now.getMinutes();
 
-    if(dd<10) {
-        dd='0'+dd
+    if (dd < 10)
+    {
+        dd = '0' + dd;
     }
-    if(mm<10) {
-        mm='0'+mm
+    if( mm < 10)
+    {
+        mm = '0' + mm;
     }
-
-    today = mm+'.'+dd+'.'+yyyy+' '+hh+':'+minutes;
-
-    return today;
+    var currentTime = dd + '.' + MM + '.' + yyyy + ' ' + hh + ':' + mm;
+    return currentTime;
 };
 
 /**
