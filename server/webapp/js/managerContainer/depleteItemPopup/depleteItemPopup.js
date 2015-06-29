@@ -60,7 +60,7 @@ var depleteItemPopup = Ractive.extend({
                     \
                     </div>\
                     <div class="modal-footer">\
-                        <button type="button" class="btn btn-default"  on-click="closeDepleteItemPopup">Close</button>\
+                        <button type="button" class="btn btn-default"  on-click="closeDepleteItemPopup()">Close</button>\
                         <button type="button" class="btn btn-primary" on-click="depleteItem()">Deplete</button>\
                     </div>\
                 </div>\
