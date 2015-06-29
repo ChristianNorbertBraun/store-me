@@ -8,7 +8,7 @@ var tryLogin = function(){
         getLoginValues();
         checkNullLoginValues();
 //        var base64 = "Basic " + btoa(loginName+":"+loginPassword);
-        var encryptedUserData = storeMeEncrypt(loginName + ":" + loginPassword);
+        var encryptedUserData = storeMeEncrypt(loginName + ":" + CryptoJS.SHA1(loginPassword));
 
         $.ajax({
             url: strings.link.backendConnection+":"+strings.link.port+"/login",

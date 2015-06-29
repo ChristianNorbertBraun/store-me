@@ -115,7 +115,7 @@ function checkPasswordConfirmation()
 var createUser = function(callBackFunction){
     var formData = {userType:"User",stores:""};
 //    var base64 = "Basic " + btoa(name+":"+pass);
-    var encryptedUserData = storeMeEncrypt(name + ":" + pass);
+    var encryptedUserData = storeMeEncrypt(name + ":" + CryptoJS.SHA1(pass));
     $.ajax({
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
         type: "POST",
