@@ -148,7 +148,9 @@ var english = {
                     employee: 'Christian Paling'
                 }
             ]
-        }
+        },
+
+        loggedIn: true
     },
 
     manager: {
@@ -166,7 +168,9 @@ var english = {
 
         data:{
             container:[]
-        }
+        },
+
+        loggedIn: true
     },
 
     inventory: {
@@ -176,7 +180,9 @@ var english = {
                 attribute: 'Attributes',
                 inventorytable: 'Inventory Table'
             }
-        }
+        },
+
+        loggedIn: true
     },
 
     coredata: {
@@ -184,7 +190,9 @@ var english = {
             title: {
                 category: 'Categories'
             }
-        }
+        },
+
+        loggedIn: true
     }
 };
 
