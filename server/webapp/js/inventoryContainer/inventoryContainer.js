@@ -68,7 +68,9 @@ var inventoryContainer = Ractive.extend({
                         </div>\
                         \
                         <div class="panel-body">\
-                        \
+                            {{#each attributes}}\
+                                <p>{{attributeName}}</p>\
+                            {{/each}}\
                         </div>\
                     </div>\
                 </div>\
@@ -106,12 +108,14 @@ var inventoryContainer = Ractive.extend({
 
     data: {
         newCriteriaName: '', // saves value of the new criteria modal input
-        items: null          // all items for item table
+        items: null,         // all items for item table
+        attributes: null     // all attributes for attributes panel
     },
 
     oninit: function() {
         window.currentRactive = this;           // often can't access this so we save it using a global var
         window.currentRactive.refreshItems();
+        window.currentRactive.refreshAttributes();
     },
 
     oncomplete: function() {
@@ -166,6 +170,30 @@ var inventoryContainer = Ractive.extend({
                         window.currentRactive.set('items', items);
                     });
                 });
+            }
+        });
+    },
+
+    refreshAttributes: function() {
+        loadStore(function(success, container) {
+            if (success) {
+                var itemIds = getAllItemIDs(container, []);
+
+                itemIds.map(function(id) {
+                    getDataItemFromCouch(id, function(success, data) {
+                        var attributes = window.currentRactive.get('attributes');
+
+                        if (attributes == null) {
+                            attributes = [];
+                        }
+
+                        if (data.attributes != null) {
+                            addAttributes(attributes, data);
+                        }
+
+                        window.currentRactive.set('attributes', attributes);
+                    });
+                })
             }
         });
     }

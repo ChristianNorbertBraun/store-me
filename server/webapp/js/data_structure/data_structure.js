@@ -698,6 +698,30 @@ var categoryStillReferenced = function(items, category_id)
 };
 
 /**
+ * Checks if an Item is still stored a storage
+ * @function
+ * @param itemID {String}       - ID of the item which gets checked
+ * @param storage {Container}   - Storage in which the item gets searched
+ * @returns {boolean} Whether item was found or not
+ */
+var itemStillStored = function(itemID, storage)
+{
+    var itemStored = false;
+    var allItems = getAllItems(storage);
+
+    for (var i = 0; i < allItems.length; i++)
+    {
+        if (allItems[i].itemID === itemID)
+        {
+            itemStored = true;
+            break;
+        }
+    }
+
+    return itemStored;
+}
+
+/**
  * An attribute object to set properties of items.
  * @constructor
  * @param {String} attributeName   - Name of the attribute
