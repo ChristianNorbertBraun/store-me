@@ -90,11 +90,16 @@ var depleteItemPopup = Ractive.extend({
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
 
-        deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount);
-        window.currentRactive.writeToDb();
+        if(deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount)){
+            saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
+            $('#deplete-item-modal').modal('hide');
+            window.currentRactive.writeToDb();
+        }
+        else{
+            alert('No Data');
+        }
 
 
-        saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
-        $('#deplete-item-modal').modal('hide');
+
     }
 });
