@@ -375,21 +375,25 @@ removeAllSubContainers = function(container)
 addItem = function(container, itemID, amount)
 {
     var result = false;
-    var containerItem = containsItem(container, itemID);
 
-    if (containerItem != null)
+    if (amount > 0)
     {
-        increaseAmount(containerItem, amount);
-        result = true;
+        var containerItem = containsItem(container, itemID);
+
+        if (containerItem != null)
+        {
+            increaseAmount(containerItem, amount);
+            result = true;
+        }
+        else
+        {
+            containerItem = new ContainerItem(itemID, amount);
+            containerItem.parentContainerID = container.containerID;
+            container.items.push(containerItem);
+            result = true;
+        }
+        return result;
     }
-    else
-    {
-        containerItem = new ContainerItem(itemID, amount);
-        containerItem.parentContainerID = container.containerID;
-        container.items.push(containerItem);
-        result = true;
-    }
-    return result;
 };
 
 /**
@@ -407,9 +411,11 @@ containsItem = function(container, itemID)
 
     for (var i = 0; i < container.items.length; i++)
     {
-        if (container.items[i].itemID === itemID)
+        var currentContainerItem = conatiner.items[i];
+
+        if (currentContainerItem.itemID === itemID)
         {
-            result = container.items[i];
+            result = currentContainerItem;
             break;
         }
     }
@@ -565,7 +571,6 @@ function ContainerAttribute(attributeName, value, unit, type, compulsory)
  */
 function ContainerItem(itemID, amount)
 {
-
     this.itemID = itemID;
     this.amount = amount;
     this.parentContainerID = "0";
@@ -574,7 +579,7 @@ function ContainerItem(itemID, amount)
 /**
  * Increases the amount of items held by a ContainerItem object by the given amount.
  * @function
- * @param {Container} containerItem     - ContainerItem the holds the item
+ * @param {ContainerItem} containerItem     - ContainerItem the holds the item
  * @param {Number} amount               - Amount to add to the total amount
  * @author Marvin Therolf
  */
