@@ -25,6 +25,12 @@ function LogContainer(stored, containerID, itemName, amount, employee)
     this.employee = employee
 }
 
+/**
+ * Returns a string representation for the current time stamp in the form dd.MM.yyyy hh:mm:ss.
+ * @function
+ * @returns {String} Time stamp
+ * @author Marcel Groß, Marvin Therolf
+ */
 var getCurrentTime = function ()
 {
     var now = new Date();
