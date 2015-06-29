@@ -15,37 +15,54 @@
  * @constructor
  * @author Marcel Gross
  */
-function LogContainer(stored, containerID, itemName, amount, employee){
-
-
-
+function LogContainer(stored, containerID, itemName, amount, employee)
+{
     this.stored = stored;
     this.date = getCurrentTime();
     this.containerID = containerID;
     this.itemName = itemName;
     this.amount = amount;
-    this.employee = employee
-
+    this.employee = employee;
 }
 
-var getCurrentTime = function () {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear();
-    var hh = today.getHours();
-    var minutes = today.getMinutes();
+/**
+ * Returns a string representation for the current time stamp in the form dd.MM.yyyy hh:mm:ss.
+ * @function
+ * @returns {String} Time stamp
+ * @author Marcel Groß, Marvin Therolf
+ */
+var getCurrentTime = function ()
+{
+    var now = new Date();
+    var dd = now.getDate();
+    var MM = now.getMonth()+1; //January is 0!
+    var yyyy = now.getFullYear();
+    var hh = now.getHours();
+    var mm = now.getMinutes();
+    var ss = now.getSeconds();
 
-    if(dd<10) {
-        dd='0'+dd
+    if (dd < 10)
+    {
+        dd = "0" + dd;
     }
-    if(mm<10) {
-        mm='0'+mm
+    if (MM < 10)
+    {
+        MM = "0" + MM;
     }
-
-    today = mm+'.'+dd+'.'+yyyy+' '+hh+':'+minutes;
-
-    return today;
+    if (hh < 10)
+    {
+        hh = "0" + hh;
+    }
+    if (mm < 10)
+    {
+        mm = "0" + mm;
+    }
+    if (ss < 10)
+    {
+        ss = "0" + ss;
+    }
+    var currentTime = dd + "." + MM + "." + yyyy + " " + hh + ":" + mm  + ":" + ss;
+    return currentTime;
 };
 
 /**
