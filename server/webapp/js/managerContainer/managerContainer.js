@@ -156,18 +156,23 @@ var managerContainer = Ractive.extend(
 
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
-            window.currentRactive.set('items',[]);
             window.containerItems = allContainerItems;
-            window.containerItemIndex = 0;
-            for(i = 0; i < allContainerItems.length; ++i){
-                getDataItemFromCouch(allContainerItems[i].itemID,function(success,data){
 
-                    data.amount = window.containerItems[window.containerItemIndex++].amount;
+            getDataItems(allContainerItems,function(success, data){
+                if(success){
+                    for(i = 0; i < window.containerItems.length; ++i){
 
-                    window.currentRactive.push('items',data);
+                        data[i].amount = window.containerItems[i].amount;
+                        data[i].parentContainerID = window.containerItems[i].parentContainerID;
+                        var containerName = getContainerById(window.currentTableState,data[i].parentContainerID).containerName;
+                        data[i].containerName = containerName;
+                    }
+                    window.currentRactive.set('items',data);
+                    console.log(data);
+                }
+            });
 
-                });
-            }
+
         },
 
        getStoreFromDb: function(error, result){

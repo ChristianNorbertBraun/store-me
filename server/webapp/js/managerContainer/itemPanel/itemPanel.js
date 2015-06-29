@@ -16,6 +16,7 @@ var itemPanel = Ractive.extend({
                             \
                             <div class="list-group-item-text attributes">\
                                 <span class=" badge">{{amount}} pieces</span>\
+                                <span class=" badge">{{containerName}}</span>\
                             </div>\
                             \
                         </div>\
@@ -53,7 +54,7 @@ var itemPanel = Ractive.extend({
 
         var item = this.get('items.'+index);
         //toDO fix container ID bug
-        var containerID = window.parentContainer.containerID;
+        var containerID = item.parentContainerID;
         window.currentRactive.set('stockItemStructure',item);
         window.currentRactive.set('stockItemStructure.containerID',containerID);
 

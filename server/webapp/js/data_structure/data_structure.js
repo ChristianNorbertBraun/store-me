@@ -197,7 +197,7 @@ getDataItems = function(containerItems, callBackFunction)
             {
                 dataItems.push(data);
             }
-            if(containerItems.length-1 == counter){
+            if(containerItems.length == counter){
                 callBackFunction(true, dataItems);
             }
         });

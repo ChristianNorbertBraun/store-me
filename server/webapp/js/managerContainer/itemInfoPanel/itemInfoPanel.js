@@ -10,6 +10,10 @@ var itemInfoPanel = Ractive.extend({
         <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{selectedItem.containerID}}" readonly></div>\
     </div>\
     <div class="row popup-entry">\
+        <label class="col-md-6 modal-label">ContainerN Name</label>\
+        <div class="col-md-6"><input id="container-name-stock" type="text" class="form-control" placeholder="Item Name" value="{{selectedItem.containerName}}" readonly></div>\
+    </div>\
+    <div class="row popup-entry">\
         <label class="col-md-6 modal-label">ItemID</label>\
         <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID"  value="{{selectedItem._id}}" readonly></div>\
     </div>\
