@@ -374,18 +374,22 @@ removeAllSubContainers = function(container)
  */
 addItem = function(container, itemID, amount)
 {
+    var result = false;
     var containerItem = containsItem(container, itemID);
 
     if (containerItem != null)
     {
         increaseAmount(containerItem, amount);
+        result = true;
     }
     else
     {
         containerItem = new ContainerItem(itemID, amount);
         containerItem.parentContainerID = container.containerID;
         container.items.push(containerItem);
+        result = true;
     }
+    return result;
 };
 
 /**
@@ -422,21 +426,23 @@ containsItem = function(container, itemID)
  */
 removeItem = function(container, itemID, amount)
 {
-    for (var i = 0; i < container.items.length; i++)
+    var result = false;
+    var containerItem = containsItem(container, itemID);
+
+    if (containerItem != null)
     {
-        if (container.items[i].itemID === itemID)
+        if (container.items[i].amount === amount)
         {
-            if (container.items[i].amount === amount)
-            {
-                removeFromArray(container.items, i);
-            }
-            else
-            {
-                decreaseAmount(container.items[i], amount);
-            }
-            break;
+            removeFromArray(container.items, i);
+            result = true;
+        }
+        else if (container.items[i].amount > amount)
+        {
+            decreaseAmount(container.items[i], amount);
+            result = true;
         }
     }
+    return result;
 };
 
 /**
