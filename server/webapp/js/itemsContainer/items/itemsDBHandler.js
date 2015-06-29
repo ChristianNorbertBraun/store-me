@@ -66,7 +66,6 @@ function getDataItemFromCouch(itemID, callBackFunction)
 
     $.couch.db(strings.database.items).openDoc(itemID, {
         success: function(data) {
-            console.log(data);
             callBackFunction(true, data);
             return data;
         },
