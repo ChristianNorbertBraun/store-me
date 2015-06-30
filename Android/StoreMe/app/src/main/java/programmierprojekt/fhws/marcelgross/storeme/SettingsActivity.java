@@ -3,6 +3,7 @@ package programmierprojekt.fhws.marcelgross.storeme;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,7 +53,12 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
     public void editAddress(){
         String address = input.getText().toString().trim();
         if(!address.isEmpty()){
-            db.updateServer(address);
+            Log.d("exits", db.getServerAddress()+"");
+            if(db.existsServer()){
+                db.updateServer(address);
+            } else {
+                db.saveServer(address);
+            }
         } else {
             Toast.makeText(getBaseContext(), R.string.fillInServer, Toast.LENGTH_LONG).show();
         }

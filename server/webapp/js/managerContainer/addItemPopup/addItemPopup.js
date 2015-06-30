@@ -19,7 +19,7 @@ var addItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ContainerID</label>\
                             <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan.performClick()" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -28,7 +28,7 @@ var addItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ItemID</label>\
                             <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -108,3 +108,11 @@ var addItemPopup = Ractive.extend({
         }
     }
 });
+
+
+function getScanResult(text, id) {
+    var element = document.getElementById(id);
+    element.value = text;
+    console.log(text);
+    consol.log(id);
+}

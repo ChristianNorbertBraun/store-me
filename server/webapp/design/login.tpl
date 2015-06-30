@@ -1,2 +1,0 @@
-<navbarContainer></navbarContainer>
-<loginContainer></loginContainer>
