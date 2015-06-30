@@ -34,7 +34,14 @@
     top: 0px;
 }
 
+.attributes-entry {
+}
 
+.checkbox-label {
+    position:relative;
+    top: 2.5px;
+    margin-left:5px;
+}
 
 #inventory-panel-table {
     max-height: 500px;

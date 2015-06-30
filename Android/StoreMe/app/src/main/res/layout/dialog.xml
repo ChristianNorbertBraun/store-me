@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A supporting application for the project StoreMe \n Implemented during a project for FHWS"
+        android:text="StorMe is an universal, intuitive and easy-to-use solution to organize your storage.\n\nTo use this application you need to install StoreMe on your local machine or server. \nVisit our website to learn more."
         android:id="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
