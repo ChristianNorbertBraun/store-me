@@ -42,7 +42,7 @@ var depleteItemPopup = Ractive.extend({
                             <div class="col-md-6"><input id="item-name-deplete" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
                         </div>\
                         <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Amount</label>\
+                            <label id="amount-label-deplete" class="col-md-4 modal-label">Amount</label>\
                             <div class="col-md-6"><input id="item-amount-deplete" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{stockItemStructure.amount}}></div>\
                         </div>\
                         <div id="attribute-container">\
@@ -92,17 +92,19 @@ var depleteItemPopup = Ractive.extend({
 
         var depleted = deplete(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure._id'), amount);
         if(depleted){
+            $('#amount-label-deplete').removeClass('red-text');
             window.currentRactive.writeToDb();
             saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
             this.closeDepleteItemPopup();
             console.log(window.currentTableState);
         }
         else{
-
+            $('#amount-label-deplete').addClass('red-text');
         }
     },
 
     closeDepleteItemPopup:function(){
+        $('#amount-label-deplete').removeClass('red-text');
         $('#deplete-item-modal').modal('hide');
         setTimeout(function(){
             $('.item-structure').remove();

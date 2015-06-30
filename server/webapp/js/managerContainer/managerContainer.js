@@ -172,6 +172,9 @@ var managerContainer = Ractive.extend(
 
                     window.currentRactive.set('items',data);
                 }
+                else{
+                    window.currentRactive.set('items',data);
+                }
 
             });
 

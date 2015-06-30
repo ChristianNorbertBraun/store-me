@@ -199,6 +199,7 @@ getDataItems = function(containerItems, callBackFunction)
             }
             if(containerItems.length == counter){
                 callBackFunction(true, dataItems);
+                return;
             }
         });
     }
