@@ -96,7 +96,6 @@ var depleteItemPopup = Ractive.extend({
             window.currentRactive.writeToDb();
             saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
             this.closeDepleteItemPopup();
-            console.log(window.currentTableState);
         }
         else{
             $('#amount-label-deplete').addClass('red-text');
