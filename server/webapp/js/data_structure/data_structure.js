@@ -108,6 +108,8 @@ getAllItems = function(container)
     }
     return allItems;
 };
+
+//todo delete this function it is not needed, remember the testcases
 /*
 
 /!**
