@@ -488,7 +488,7 @@ var coredataContainer = Ractive.extend({
         $('#add-item-modal').modal('hide');
     },
 
-    validateItemFields(itemId, itemName, itemCategory, attributes) {
+    validateItemFields: function(itemId, itemName, itemCategory, attributes) {
         // need global var because of map function
         window.tempReturn = true;
 
