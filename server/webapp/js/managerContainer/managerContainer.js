@@ -63,14 +63,13 @@ var managerContainer = Ractive.extend(
                         </div>\
                         <button class="btn btn-primary manager-button" data-toggle="modal" data-target="#add-container-modal" on-click="prepareAddContainerPopup()">Add</button>\
                         <button type="button" class="btn btn-primary manager-button" on-click="deleteContainer()">Delete</button>\
-                        \
-                        \
+                        <button class="btn btn-primary manager-button" on-click="prepareQrCodeGeneration()" ><span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span></button>\
                     </div>\
                     <div class="col-sm-4">\
                         <itemPanel></itemPanel>\
                    </div>\
                    <div class="col-sm-4">\
-                        <itemInfoPanel intro-outro="slideh"></itemInfoPanel>\
+                        <itemInfoPanel></itemInfoPanel>\
                    </div>\
                 </div>\
             </div>\
@@ -80,6 +79,7 @@ var managerContainer = Ractive.extend(
         <addContainerPopup></addContainerPopup>\
         <addItemPopup></addItemPopup>\
         <depleteItemPopup></depleteItemPopup>\
+        <qrCodePopup></qrCodePopup>\
         {{else}}\
         <noStockContainer entry="{{data}}" ></noStockContainer>\
         {{/if}}\
@@ -97,7 +97,8 @@ var managerContainer = Ractive.extend(
             addItemPopup: addItemPopup,
             itemPanel: itemPanel,
             depleteItemPopup:depleteItemPopup,
-            itemInfoPanel: itemInfoPanel
+            itemInfoPanel: itemInfoPanel,
+            qrCodePopup: qrCodePopup
         },
 
         oninit: function(){
@@ -118,18 +119,17 @@ var managerContainer = Ractive.extend(
 
         navigateUp: function(event, index){
             window.app.set('data.container',clickedContainerHistory[index]);
-            var latestClickedcontainer = clickedContainerHistory[clickedContainerHistory.length-1][0];
+            var latestClickedcontainer = clickedContainerHistory[index][0];
 
-
-            var substringLength = 0;
-            while(clickedContainerHistory.length > index){
-                substringLength += 2;
+            while(clickedContainerHistory.length > index+1){
                 window.app.pop('pathElements');
                 clickedContainerHistory.pop();
             }
 
-            var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-substringLength);
-            window.parentContainer = getContainerById(window.currentTableState, parentId);
+            if(latestClickedcontainer){
+                var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-2);
+                window.parentContainer = getContainerById(window.currentTableState, parentId);
+            }
             this.mapContainerItemOnDataItem();
             this.removeSelection();
 
@@ -147,7 +147,7 @@ var managerContainer = Ractive.extend(
 
 
             window.app.push('pathElements', clickedContainer);
-            clickedContainerHistory.push(parentContainers);
+            clickedContainerHistory.push(clickedContainer.subContainers);
 
             this.mapContainerItemOnDataItem();
             this.removeSelection();
@@ -157,23 +157,25 @@ var managerContainer = Ractive.extend(
 
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
-            window.currentRactive.set('items',[]);
-            getDataItems(allContainerItems, function(status, data){
-                if(status){
-                    console.log(data);
-                }
-            });
+            console.log(allContainerItems);
             window.containerItems = allContainerItems;
-            window.containerItemIndex = 0;
-            for(i = 0; i < allContainerItems.length; ++i){
-                getDataItemFromCouch(allContainerItems[i].itemID,function(success,data){
 
-                    data.amount = window.containerItems[window.containerItemIndex++].amount;
+            getDataItems(allContainerItems,function(success, data){
+                if(success){
+                    for(i = 0; i < window.containerItems.length; ++i){
 
-                    window.currentRactive.push('items',data);
+                        data[i].amount = window.containerItems[i].amount;
+                        data[i].parentContainerID = window.containerItems[i].parentContainerID;
+                        var containerName = getContainerById(window.currentTableState,data[i].parentContainerID).containerName;
+                        data[i].containerName = containerName;
+                    }
 
-                });
-            }
+                    window.currentRactive.set('items',data);
+                }
+
+            });
+
+
         },
 
        getStoreFromDb: function(error, result){
@@ -185,6 +187,8 @@ var managerContainer = Ractive.extend(
                if(window.firstLoad) {
                    window.parentContainer = window.currentTableState;
                    subContainer = window.currentTableState.subContainers;
+                   window.app.push('pathElements', window.parentContainer);
+                   clickedContainerHistory.push(window.parentContainer.subContainers);
                    window.firstLoad = false;
                }
                else{
@@ -224,6 +228,7 @@ var managerContainer = Ractive.extend(
 
 
         prepareAddContainerPopup:function(){
+            loadStore(this.getStoreFromDb);
             $("#parent-id").val(window.parentContainer.containerID);
             var newContainer = new Container("");
             var parentCompulsoryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
@@ -251,6 +256,27 @@ var managerContainer = Ractive.extend(
             for(i = 0; i < GUIallSelectedContainer.length; ++i){
                 $(GUIallSelectedContainer[i]).toggleClass('list-group-item-selected');
             }
+        },
+
+        prepareQrCodeGeneration:function(){
+            var GUIselectedContainer = $('.list-group-item-selected').get();
+            index = $(GUIselectedContainer[0]).attr('id');
+            var selectedContainer = this.get('data.container.' + index);
+            this.generateQRCode(selectedContainer.containerID);
+        },
+
+        generateQRCode: function(string) {
+            var qrcoder = new QRCode("qrcode",{
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                width: 200,
+                height: 200,
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            qrcoder.makeCode(string);
+
+            $('#qrcode-modal').modal('show');
         }
     })
 ;

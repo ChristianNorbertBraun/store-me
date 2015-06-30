@@ -1,13 +1,7 @@
-.criteria-add-button {
-    margin-top: -5px;
-}
-
-.criteria-panel {
-    min-height: 250px;
-}
-
 .attribute-panel {
     min-height: 250px;
+    max-height: 446px;
+    overflow-y: auto;
 }
 
 .same-height {
@@ -29,4 +23,20 @@
 
 .modal-title-color {
     color: black;
+}
+
+#filter {
+    margin-bottom: 20px;
+    height: 34px;
+}
+
+.glyphicon {
+    top: 0px;
+}
+
+
+
+#inventory-panel-table {
+    max-height: 500px;
+    overflow-y: auto;
 }
