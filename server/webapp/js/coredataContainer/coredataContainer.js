@@ -469,13 +469,7 @@ var coredataContainer = Ractive.extend({
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
 
-                // check if no attributes were added to the item
-                if (attributes != null) {
-                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
-                }
-                else {
-                    window.currentRactive.refreshItems();
-                }
+                window.currentRactive.refreshItems();
             }
         });
 
