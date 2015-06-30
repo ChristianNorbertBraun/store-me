@@ -4,6 +4,7 @@
 
 .login-panel {
     max-width: 400px;
+    background-color: #1670A9;
 }
 
 .login-input {
@@ -29,7 +30,10 @@
     margin-top: 60px;
 }
 
+#login-username {
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.25);
+}
 
-
-.create-account {
+#login-password {
+    box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.25);
 }
