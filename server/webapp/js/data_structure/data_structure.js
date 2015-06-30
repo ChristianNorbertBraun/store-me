@@ -202,6 +202,7 @@ getDataItems = function(containerItems, callBackFunction)
             }
         });
     }
+    callBackFunction(false, []);
 };
 
 /**
