@@ -7,11 +7,15 @@
  * A Constructor for Log files, a log file describes what happened to the store, was there something stoked or depleted
  *
  * @param {Boolean} stored      - Shows if the data is stoked (true) or depleted (false)
- * @param {String} date         - The time when the movement in the store happened
  * @param {String} containerID  - The container where the movement happened
  * @param {String} itemName     - The item which stoked or depleted
  * @param {Number} amount       - The amount of the item which is stoked or depleted
  * @param {String} employee     - The name of the employee who stoked/depleted items
+ * @prop {Boolean} stored       - Shows if the data is stoked (true) or depleted (false)
+ * @prop {String} date          - The time when the movement in the store happened
+ * @prop {String} itemName      - The item which stoked or depleted
+ * @prop {Number} amount        - The amount of the item which is stoked or depleted
+ * @prop {String} employee      - The name of the employee who stoked/depleted items
  * @constructor
  * @author Marcel Gross
  */

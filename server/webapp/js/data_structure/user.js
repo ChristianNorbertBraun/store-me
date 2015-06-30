@@ -6,6 +6,7 @@
  *
  * @constructor
  * @param {String} username     - Name and id of the constructed user
+ * @param {String} password     - Password for the constructed user
  * @prop {String} password      - Password for the user
  * @prop {String} userType      - Identifies the user role (admin, user, ...)
  * @prop {Array} stores         - stores owned by the user

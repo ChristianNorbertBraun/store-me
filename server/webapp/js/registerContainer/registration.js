@@ -3,10 +3,14 @@
  */
 var name, pass, passwordConfirmed;
 
+/**
+ * This function registers and saves a user into our database
+ * @function
+ * @author Marcel Waleska, Marcel Gross
+ */
 function register() {
     try
     {
-        $.couch.urlPrefix = strings.link.dbConnection;
         getValues();
         checkNull();
         checkIfUserAlreadyExist(function(exists, data){
@@ -14,10 +18,6 @@ function register() {
                 window.alert(strings.registration.userExist);
                 throw 'User already exists';
             }
-
-            // work with data
-            //console.log(data);
-            // end work with data
             checkSafePassword();
             checkPasswordConfirmation();
             createUser(function(created, sessionID){
@@ -29,11 +29,7 @@ function register() {
                 {
                     window.alert(strings.registration.creatingError);
                 }
-
             });
-
-            //TODO: secure Data transaction; maybe with https
-            //TODO: check if password safe
         });
 
     }
@@ -41,13 +37,25 @@ function register() {
     {
     }
 }
-
+/**
+ * This function listens for the key event enter.
+ * After enter is pressed it starts the method register
+ * @function
+ * @param {Number} event    - value of the key which is pressed
+ * @author Marcel Waleska
+ */
 function keyHandlerRegister(e)
 {
     var key = e.keyCode;
     if(key == 13) register();
 }
 
+/**
+ * Ensures that the given password has a minimum of safety requirements.
+ * It has to have at least a length of 7 characters, contains at least one small, big letter and one number
+ * @function
+ * @author Marcel Waleska
+ */
 function checkSafePassword()
 {
     if (this.pass.length < 7) notSafe();
@@ -63,13 +71,22 @@ function checkSafePassword()
     }
     if(!containBigLetter || !containSmallLetter || !containNumber) notSafe();
 }
-
+/**
+ * Is called if the password requirements are not adhered
+ * @function
+ * @author Marcel Waleska
+ */
 function notSafe()
 {
     window.alert(strings.registration.PasswordNotSafe);
     throw "Password not Safe";
 }
-
+/**
+ * This function takes the username,  password and confirmed-password from the input form and saves it to the variables loginName, loginPassword and passwordConfirmed
+ *
+ * @function
+ * @author Marcel Waleska
+ */
 function getValues()
 {
     name = $('#register-username').val();
@@ -77,8 +94,14 @@ function getValues()
     passwordConfirmed = $('#confirmed-password').val();
 }
 
+/**
+ * Starts a GET-request to ensure that no other user with the same username exits
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @function
+ * @author Marcel Waleska, Marcel Gross
+ */
 var checkIfUserAlreadyExist = function(callBackFunction){
-
+    $.couch.urlPrefix = strings.link.dbConnection;
     $.couch.db(strings.database.user).openDoc(name, {
         success: function(data) {
             callBackFunction(true);
@@ -89,7 +112,11 @@ var checkIfUserAlreadyExist = function(callBackFunction){
         }
     });
 };
-
+/**
+ * Checks if the username and password is filled into the form, otherwise it throws an exception.
+ * @function
+ * @author Marcel Waleska
+ */
 function checkNull()
 {
     if(!name) {
@@ -102,7 +129,11 @@ function checkNull()
         throw "missing password"
     }
 }
-
+/**
+ * Checks if password and passwordConfirmed are the same, otherwise it throws an exception.
+ * @function
+ * @author Marcel Waleska
+ */
 function checkPasswordConfirmation()
 {
     if(pass != passwordConfirmed)
@@ -111,10 +142,13 @@ function checkPasswordConfirmation()
         throw "Password doesn't match the confirmation";
     }
 }
-
+/**
+ * Creates an user via POST request, username and password are encrypted with storeMeEncrypt and additionally the password is SHA1 encrypted
+ * @param {function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Waleska, Marcel Gross
+ */
 var createUser = function(callBackFunction){
     var formData = {userType:"User",stores:""};
-//    var base64 = "Basic " + btoa(name+":"+pass);
     var encryptedUserData = storeMeEncrypt(name + ":" + CryptoJS.SHA1(pass));
     $.ajax({
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",

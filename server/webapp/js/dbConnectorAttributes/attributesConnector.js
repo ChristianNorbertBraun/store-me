@@ -63,8 +63,7 @@ var loadAllAttributes = function (callBackFunction) {
     });
 };
 
-/**
- * /**
+ /**
  * Returns an attribute object identified by its name
  *
  * @function
@@ -84,20 +83,4 @@ var loadAttributeByName = function(attributeName, callBackFunction){
             callBackFunction(false);
         }
     });
-    //todo remove this code if the function above works
-   /* try{
-        var link = strings.link.dbConnection+"/"+strings.database.attributes+"/"+attributeName;
-        var result = $.ajax({type: "GET", url: link, async: false});
-    } catch (err){
-        console.log(err);
-    }
-    if(result.status !== 200){
-        console.log("not Found");
-        callBackFunction(false);
-    } else {
-        result = result.responseText;
-        callBackFunction(true, result);
-    }
-
-    return result;*/
 };
