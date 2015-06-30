@@ -29,7 +29,7 @@
 }
 
 .manager-button {
-    width: 33%;
+    width: 32%;
     margin-bottom: 10px;
 }
 
@@ -40,5 +40,9 @@
 
 #attribute-container{
 
+}
+
+.red-text{
+    color:red;
 }
 

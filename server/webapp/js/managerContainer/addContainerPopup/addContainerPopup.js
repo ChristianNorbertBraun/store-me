@@ -97,7 +97,7 @@ var addContainerPopup = Ractive.extend({
                 --i;
             }
 
-            if (!newContainerAttributes[i].attributeName || !newContainerAttributes[i].value || !newContainerAttributes[i].unit) {
+            if (!newContainerAttributes[i].attributeName || !newContainerAttributes[i].value) {
                 newContainerAttributes.splice(i, 1);
                 --i;
             }

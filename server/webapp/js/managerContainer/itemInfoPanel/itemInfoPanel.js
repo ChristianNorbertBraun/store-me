@@ -10,6 +10,10 @@ var itemInfoPanel = Ractive.extend({
         <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{selectedItem.containerID}}" readonly></div>\
     </div>\
     <div class="row popup-entry">\
+        <label class="col-md-6 modal-label">ContainerN Name</label>\
+        <div class="col-md-6"><input id="container-name-stock" type="text" class="form-control" placeholder="Item Name" value="{{selectedItem.containerName}}" readonly></div>\
+    </div>\
+    <div class="row popup-entry">\
         <label class="col-md-6 modal-label">ItemID</label>\
         <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID"  value="{{selectedItem._id}}" readonly></div>\
     </div>\
@@ -18,8 +22,12 @@ var itemInfoPanel = Ractive.extend({
         <div class="col-md-6"><input id="item-name-stock" type="text" class="form-control" placeholder="Item Name" value="{{selectedItem.name}}" readonly></div>\
     </div>\
     <div class="row popup-entry">\
+        <label class="col-md-6 modal-label">Item Category</label>\
+        <div class="col-md-6"><input id="item-name-stock" type="text" class="form-control" placeholder="Item Category" value="{{selectedItem.category_id}}" readonly></div>\
+    </div>\
+    <div class="row popup-entry">\
         <label class="col-md-6 modal-label">Amount</label>\
-        <div class="col-md-6"><input id="item-amount-stock" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{selectedItem.amount}} readonly></div>\
+        <div class="col-md-6"><input id="item-category-stock" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{selectedItem.amount}} readonly></div>\
     </div>\
     <div id="attribute-container">\
     {{#if selectedItem.attributes}}\

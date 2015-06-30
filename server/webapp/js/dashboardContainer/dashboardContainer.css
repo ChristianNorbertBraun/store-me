@@ -11,3 +11,8 @@
 .icon-field {
     text-align: center;
 }
+
+#item-panel-table {
+    max-height: 500px;
+    overflow-y: auto;
+}

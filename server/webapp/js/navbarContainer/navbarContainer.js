@@ -7,7 +7,7 @@ var navbarContainer = Ractive.extend({
                 <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">\
                     <div class="container">\
                         <div class="navbar-header">\
-                            <img class="navbar-brand" src="resources/logo/logoText200px.png">\
+                            <img class="navbar-brand" on-click="loadDashboard()" src="resources/logo/logo215.png">\
                         </div>\
                         {{#if loggedIn}}\
                             <ul class="nav navbar-nav navbar-right">\
@@ -73,6 +73,10 @@ var navbarContainer = Ractive.extend({
            error: function(res, status, xhr) {
                alert("ERROR!");
            }
-       });;
+       });
+   },
+
+   loadDashboard: function() {
+       location.href = urlBuilder(strings.link.toDashboard, getSessionIDFromURL());
    }
 });

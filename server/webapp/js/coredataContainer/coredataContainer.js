@@ -469,13 +469,7 @@ var coredataContainer = Ractive.extend({
         var ret = createItem(newItemId, newItemName, newCategoryName, attributes, function (ready, data) {
             if(ready) {
 
-                // check if no attributes were added to the item
-                if (attributes != null) {
-                    window.currentRactive.addItemAttributesToGeneralAttributeDB(attributes);
-                }
-                else {
-                    window.currentRactive.refreshItems();
-                }
+                window.currentRactive.refreshItems();
             }
         });
 
@@ -488,7 +482,7 @@ var coredataContainer = Ractive.extend({
         $('#add-item-modal').modal('hide');
     },
 
-    validateItemFields(itemId, itemName, itemCategory, attributes) {
+    validateItemFields: function(itemId, itemName, itemCategory, attributes) {
         // need global var because of map function
         window.tempReturn = true;
 
@@ -502,7 +496,6 @@ var coredataContainer = Ractive.extend({
                 attributes.map(function(attr) {
                     if (attr.attributeName == null || attr.attributeName == '' ||
                         attr.value == null || attr.value == '' ||
-                        attr.unit == null || attr.unit == '' ||
                         attr.type == null || attr.type == '') {
 
                         window.tempReturn = false;

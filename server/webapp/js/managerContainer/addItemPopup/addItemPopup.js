@@ -38,7 +38,7 @@ var addItemPopup = Ractive.extend({
                             <div class="col-md-6"><input id="item-name-stock" type="text" class="form-control" placeholder="Item Name" value="{{stockItemStructure.name}}"></div>\
                         </div>\
                         <div class="row popup-entry">\
-                            <label class="col-md-4 modal-label">Amount</label>\
+                            <label id="amount-label-stock" class="col-md-4 modal-label">Amount</label>\
                             <div class="col-md-6"><input id="item-amount-stock" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{stockItemStructure.amount}}></div>\
                         </div>\
                         <div id="attribute-container">\
@@ -69,6 +69,7 @@ var addItemPopup = Ractive.extend({
     },
 
     closeAddItemPopup:function(){
+        $('#amount-label-stock').removeClass('red-text');
         $('#add-item-modal').modal('hide');
         setTimeout(function(){
             $('.item-structure').remove();
@@ -96,11 +97,13 @@ var addItemPopup = Ractive.extend({
 
         var stocked = stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
         if(stocked){
+            $('#amount-label-stock').removeClass('red-text');
             window.currentRactive.writeToDb();
             saveLogContainer(new LogContainer(true, parentContainerName, itemName,amount, username), function(saved){});
             this.closeAddItemPopup();
         }
         else{
+            $('#amount-label-stock').addClass('red-text');
 
         }
     }

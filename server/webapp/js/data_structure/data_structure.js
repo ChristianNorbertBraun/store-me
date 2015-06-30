@@ -108,6 +108,8 @@ getAllItems = function(container)
     }
     return allItems;
 };
+
+//todo delete this function it is not needed, remember the testcases
 /*
 
 /!**
@@ -197,11 +199,13 @@ getDataItems = function(containerItems, callBackFunction)
             {
                 dataItems.push(data);
             }
-            if(containerItems.length-1 == counter){
+            if(containerItems.length == counter){
                 callBackFunction(true, dataItems);
+                return;
             }
         });
     }
+    callBackFunction(false, []);
 };
 
 /**
@@ -434,23 +438,26 @@ removeItem = function(container, itemID, amount)
 {
     var result = false;
 
-    for (var i = 0; i < container.items.length; i++)
+    if (amount > 0)
     {
-        var containerItem = container.items[i];
-
-        if (containerItem.itemID = itemID)
+        for (var i = 0; i < container.items.length; i++)
         {
-            if (containerItem.amount === amount)
+            var containerItem = container.items[i];
+
+            if (containerItem.itemID = itemID)
             {
-                removeFromArray(container.items, i);
-                result = true;
+                if (containerItem.amount === amount)
+                {
+                    removeFromArray(container.items, i);
+                    result = true;
+                }
+                else if (containerItem.amount > amount)
+                {
+                    decreaseAmount(container.items[i], amount);
+                    result = true;
+                }
+                break;
             }
-            else if (containerItem.amount > amount)
-            {
-                decreaseAmount(container.items[i], amount);
-                result = true;
-            }
-            break;
         }
     }
     return result;
