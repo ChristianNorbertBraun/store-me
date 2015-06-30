@@ -30,6 +30,7 @@
 }
 
 .create-account {
+<<<<<<< HEAD
 }
 
 #register-username {
@@ -47,4 +48,6 @@
 .login-panel {
     max-width: 400px;
     background-color: #1670A9;
+=======
+>>>>>>> parent of ce066b7... bug fixed
 }

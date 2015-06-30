@@ -3,27 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_marginTop="90dp"
-        android:src="@mipmap/ic_logo"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/save_btn"
-        android:layout_gravity="center_horizontal"
-        android:visibility="invisible"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,34 +11,43 @@
         android:hint="@string/fillInServer"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/save_btn"
-        android:layout_marginBottom="16dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/save_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="false"
+        android:layout_marginTop="16dp"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignRight="@+id/editText"
+        android:layout_below="@+id/editText"
+        android:visibility="visible" />
+
+    <Button
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/start"
         android:id="@+id/start_btn"
-        android:layout_marginBottom="16dp"
-        android:layout_above="@+id/settings_btn"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:visibility="visible" />
+        android:layout_alignLeft="@+id/editText"
+        android:layout_marginTop="35dp"
+        android:visibility="gone" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action_settings"
         android:id="@+id/settings_btn"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/start_btn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:visibility="visible"
+        android:layout_marginTop="16dp"
         android:layout_alignLeft="@+id/start_btn"
-        android:layout_alignRight="@+id/start_btn" />
+        android:layout_alignRight="@+id/start_btn"
+        android:visibility="gone" />
 
 </RelativeLayout>
