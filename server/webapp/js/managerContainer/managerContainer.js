@@ -157,6 +157,7 @@ var managerContainer = Ractive.extend(
 
         mapContainerItemOnDataItem:function(){
             var allContainerItems = getAllItems(window.parentContainer);
+            console.log(allContainerItems);
             window.containerItems = allContainerItems;
 
             getDataItems(allContainerItems,function(success, data){
@@ -168,9 +169,10 @@ var managerContainer = Ractive.extend(
                         var containerName = getContainerById(window.currentTableState,data[i].parentContainerID).containerName;
                         data[i].containerName = containerName;
                     }
+
                     window.currentRactive.set('items',data);
-                    console.log(data);
                 }
+
             });
 
 
@@ -226,6 +228,7 @@ var managerContainer = Ractive.extend(
 
 
         prepareAddContainerPopup:function(){
+            loadStore(this.getStoreFromDb);
             $("#parent-id").val(window.parentContainer.containerID);
             var newContainer = new Container("");
             var parentCompulsoryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
