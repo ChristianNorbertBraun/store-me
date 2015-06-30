@@ -9,7 +9,7 @@ var inventoryContainer = Ractive.extend({
                 <div class="col-sm-3">\
                 \
                     <div id="filter" class="input-group">\
-                        <input type="text" class="form-control" placeholder="Filter...">\
+                        <input on-change="filterItems()" value={{filter}} type="text" class="form-control" placeholder="Filter...">\
                         <span class="input-group-addon glyphicon glyphicon-search"></span>\
                     </div>\
                     \
@@ -60,6 +60,8 @@ var inventoryContainer = Ractive.extend({
 
     data: {
         items: null,         // all items for item table
+        filteredItems: null,
+        backupItems: null,
         attributes: null     // all attributes for attributes panel
     },
 
@@ -89,6 +91,7 @@ var inventoryContainer = Ractive.extend({
                         item.parentContainerName = getContainerById(window.tempContainer, item.parentContainerID).containerName;
 
                         window.currentRactive.set('items', items);
+                        window.currentRactive.set('backupItems', items);
                     });
                 });
             }
@@ -120,5 +123,45 @@ var inventoryContainer = Ractive.extend({
                 })
             }
         });
+    },
+
+    /* filter */
+    filterItems: function() {
+
+        /* restore backup in case there was already a filter */
+        var backupItemsArray = window.currentRactive.get('backupItems');
+        window.currentRactive.set('items', backupItemsArray);
+
+        /* copy current items to new filter array */
+        var allItemsArray = window.currentRactive.get('items');
+        var filterArray = allItemsArray.slice();
+        var filterText = window.currentRactive.get('filter');
+
+        /* filter */
+        for (var i = 0; i < filterArray.length; i++) {
+
+            if (window.currentRactive.isFiltered(filterArray[i], filterText)) {
+                filterArray.splice(i, 1);
+                i--;
+            }
+        }
+
+        /* set filter array to current items */
+        window.currentRactive.set('items', filterArray);
+    },
+
+    /* filter condition */
+    isFiltered: function(item, filter) {
+        if (
+            (item.name.indexOf(filter) == -1) &&
+            (item.itemID.indexOf(filter) == -1) &&
+            (item.category_id.indexOf(filter) == -1) &&
+            (item.parentContainerName.indexOf(filter) == -1)
+        ) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 });
