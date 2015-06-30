@@ -502,7 +502,6 @@ var coredataContainer = Ractive.extend({
                 attributes.map(function(attr) {
                     if (attr.attributeName == null || attr.attributeName == '' ||
                         attr.value == null || attr.value == '' ||
-                        attr.unit == null || attr.unit == '' ||
                         attr.type == null || attr.type == '') {
 
                         window.tempReturn = false;
