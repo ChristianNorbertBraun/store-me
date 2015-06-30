@@ -23,39 +23,6 @@ function addItemToDB(item, cbFn)
     }
 }
 
-function updateItemToDB(oldItemId, itemName, categoryID, attributes, cbFn)
-{
-    $.couch.urlPrefix = strings.link.dbConnection;
-
-    try
-    {
-        $.couch.db(strings.database.items).openDoc(oldItemId, {
-            success: function(data) {
-
-                data[rows[0[value[itemName]]]] = itemName;
-                data[rows[0[value[categoryID]]]] = categoryID;
-                data[rows[0[value[attributes]]]] = attributes;
-
-                $.couch.db(strings.database.items).saveDoc(data, {
-                    success: function(data) {
-                        cbFn(true, data);
-                    },
-                    error: function(status) {
-                        console.log(status);
-                    }
-                });
-            },
-            error: function(status) {
-                console.log(status);
-            }
-        });
-    }
-    catch(err)
-    {
-        console.log(err.message);
-    }
-}
-
 
 function getDataItemFromCouch(itemID, callBackFunction)
 {
