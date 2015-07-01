@@ -9,7 +9,7 @@ var inventoryContainer = Ractive.extend({
                 <div class="col-sm-3">\
                 \
                     <div id="filter" class="input-group">\
-                        <input on-change="filterItemsByAttributes()" value={{filter}} type="text" class="form-control" placeholder="Filter...">\
+                        <input on-change="filterItemsFull()" value={{filter}} type="text" class="form-control" placeholder="Filter...">\
                         <span class="input-group-addon glyphicon glyphicon-search"></span>\
                     </div>\
                     \
@@ -21,13 +21,13 @@ var inventoryContainer = Ractive.extend({
                         <div class="panel-body">\
                             <div class="checkbox attributes-entry">\
                                 <label>\
-                                    <input on-change="filterItemsByAttributes()" checked={{allAttributes}} type="checkbox"><p class="checkbox-label">  Show All Attributes</p>\
+                                    <input on-change="filterItemsFull()" checked={{allAttributes}} type="checkbox"><p class="checkbox-label">  Show All Attributes</p>\
                                 </label>\
                             </div>\
                             {{#each attributes:i}}\
                                 <div class="checkbox attributes-entry">\
                                     <label>\
-                                        <input on-click="filterItemsByAttributes()" checked={{.status}} type="checkbox"><p class="checkbox-label">  {{attributeName}}</p>\
+                                        <input on-change="filterItemsFull()" checked={{.status}} type="checkbox"><p class="checkbox-label">  {{attributeName}}</p>\
                                     </label>\
                                 </div>\
                             {{/each}}\
@@ -114,22 +114,24 @@ var inventoryContainer = Ractive.extend({
             var allContainerItems = getAllItems(window.storage);
             window.containerItems = allContainerItems;
 
-            getDataItems(allContainerItems,function(success, data){
-                if(success){
+            getDataItems(allContainerItems,function(success, data) {
+                if(success) {
                     for(i = 0; i < window.containerItems.length; ++i){
 
                         data[i].amount = window.containerItems[i].amount;
                         data[i].parentContainerID = window.containerItems[i].parentContainerID;
-                        var containerName = getContainerById(window.storage,data[i].parentContainerID).containerName;
+                        var containerName = getContainerById(window.storage, data[i].parentContainerID).containerName;
                         data[i].parentContainerName = containerName;
                     }
 
-                    window.currentRactive.set('items',data);
-                    window.currentRactive.set('backupItems', data);
+                    window.currentRactive.set('items', data);
+                    var backup = data.slice();
+                    window.currentRactive.set('backupItems', backup);
                 }
-                else{
-                    window.currentRactive.set('items',data);
-                    window.currentRactive.set('backupItems', data);
+                else {
+                    window.currentRactive.set('items', data);
+                    var backup = data.slice();
+                    window.currentRactive.set('backupItems', backup);
                 }
 
                 window.currentRactive.refreshAttributes();
@@ -189,6 +191,7 @@ var inventoryContainer = Ractive.extend({
                     }
 
                     if (newAttribute) {
+                        item.attributes[i].status = true;
                         allAttributes.push(item.attributes[i]);
                     }
                 }
@@ -201,9 +204,10 @@ var inventoryContainer = Ractive.extend({
     /* filter */
     filterItems: function() {
 
-        /* restore backup in case there was already a filter */
+        /* restore backup in case there was already a filter (call by reference --> copy) */
         var backupItemsArray = window.currentRactive.get('backupItems');
-        window.currentRactive.set('items', backupItemsArray);
+        var copy = backupItemsArray.slice();
+        window.currentRactive.set('items', copy);
 
         /* copy current items to new filter array */
         var allItemsArray = window.currentRactive.get('items');
@@ -238,26 +242,36 @@ var inventoryContainer = Ractive.extend({
         }
     },
 
-    filterItemsByAttributes: function() {
+    filterItemsFull: function() {
         var allAttributesGetShown = window.currentRactive.get('allAttributes');
 
         if (!allAttributesGetShown) {
-            console.log("filter");
+            /* call text filter to first filter by text */
             window.currentRactive.filterItems();
 
+            /* copy items in new filter Array */
             var currentItems = window.currentRactive.get('items');
             var filterArray = currentItems.slice();
             var filteredAttributes = window.currentRactive.get('attributes');
 
-            /*filteredAttributes.map(function (attr) {
+            console.log("before");
+            console.log(filterArray);
+
+            /* extract all attributes with status false from items in filter Array */
+            filteredAttributes.map(function (attr) {
                 if (attr.status == false) {
+                    console.log("will check " + attr.attributeName);
                     for (var i = 0; i < filterArray.length; i++) {
-                        console.log(filterArray[i]);
-                        window.currentRactive.checkAndRemoveAttributes(filterArray[i], attr.attributeName);
+                        if (filterArray[i].attributes != null) {
+                            window.currentRactive.checkAndRemoveAttributes(filterArray[i], attr.attributeName);
+                        }
                     }
                 }
-            });*/
+            });
 
+            console.log(filterArray);
+
+            /* now extract all items with now attributes from the filter Array */
             for (var i = 0; i < filterArray.length; i++) {
                 if (filterArray[i].attributes == null || filterArray[i].attributes.length == 0) {
                     filterArray.splice(i, 1);
@@ -265,19 +279,21 @@ var inventoryContainer = Ractive.extend({
                 }
             }
 
+            /* set the filter array to the normal items object */
             window.currentRactive.set('items', filterArray);
         }
         else {
             window.currentRactive.filterItems();
-            console.log("show all");
         }
     },
 
     checkAndRemoveAttributes: function(item, attrName) {
         if (item.attributes != null) {
             for (var i = 0; i < item.attributes.length; i++) {
-                if (item.attributes[i] == attrName) {
+                if (item.attributes[i].attributeName == attrName) {
                     item.attributes.splice(i, 1);
+                    i--;
+                    console.log('spliced attribute');
                 }
             }
         }
