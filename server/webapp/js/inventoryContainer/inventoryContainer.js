@@ -87,27 +87,6 @@ var inventoryContainer = Ractive.extend({
 
     /* items */
 
-    /*refreshItems: function() {
-        loadStore(function(success, container) {
-            if (success) {
-                var items = getAllItems(container);
-
-                window.tempContainer = container;
-
-                items.map(function(item) {
-                    getDataItemFromCouch(item.itemID, function(status, data) {
-                        item.name = data.name;
-                        item.category_id = data.category_id;
-                        item.parentContainerName = getContainerById(window.tempContainer, item.parentContainerID).containerName;
-
-                        window.currentRactive.set('items', items);
-                        window.currentRactive.set('backupItems', items);
-                    });
-                });
-            }
-        });
-    },*/
-
     refreshItems: function() {
         loadStore(function(success, container) {
             window.storage = container;
@@ -125,12 +104,22 @@ var inventoryContainer = Ractive.extend({
                     }
 
                     window.currentRactive.set('items', data);
-                    var backup = data.slice();
+
+                    /* deep clone */
+                    var backup = JSON.parse(JSON.stringify(data));
+
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i].attributes)
+                            backup[i].attributes = JSON.parse(JSON.stringify(data[i].attributes));
+                    }
+
+
+
                     window.currentRactive.set('backupItems', backup);
                 }
                 else {
                     window.currentRactive.set('items', data);
-                    var backup = data.slice();
+                    var backup = JSON.parse(JSON.stringify(data));
                     window.currentRactive.set('backupItems', backup);
                 }
 
@@ -140,36 +129,6 @@ var inventoryContainer = Ractive.extend({
     },
 
     /* attributes */
-    /*
-    refreshAttributes: function() {
-        loadStore(function(success, container) {
-            if (success) {
-                var itemIds = getAllItemIDs(container, []);
-
-                // iterates over all items and adds attributes in case they are not added yet
-                itemIds.map(function(id) {
-                    getDataItemFromCouch(id, function(success, data) {
-                        var attributes = window.currentRactive.get('attributes');
-
-                        if (attributes == null) {
-                            attributes = [];
-                        }
-
-                        if (data.attributes != null) {
-                            addAttributes(attributes, data);
-                        }
-
-                        /* since we don't know the index just set everytime the whole status on false
-                        attributes.map(function(attr) {
-                            attr.status = true;
-                        });
-
-                        window.currentRactive.set('attributes', attributes);
-                    });
-                })
-            }
-        });
-    },*/
 
     refreshAttributes: function() {
         /* load all items */
@@ -206,7 +165,11 @@ var inventoryContainer = Ractive.extend({
 
         /* restore backup in case there was already a filter (call by reference --> copy) */
         var backupItemsArray = window.currentRactive.get('backupItems');
-        var copy = backupItemsArray.slice();
+
+        /* deep clone */
+        var copy = JSON.parse(JSON.stringify(backupItemsArray));
+
+
         window.currentRactive.set('items', copy);
 
         /* copy current items to new filter array */
