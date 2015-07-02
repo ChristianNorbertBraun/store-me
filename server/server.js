@@ -111,6 +111,7 @@ app.get("/coredata(.html)?", function(req,res){
 
 
 app.post("/registeruser", function(req, res){
+    console.log('register User');
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
@@ -125,6 +126,7 @@ app.post("/registeruser", function(req, res){
        }
     });
     var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
+    console.log('register User');
     res.send(sessionID);
 });
 
