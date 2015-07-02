@@ -9,6 +9,7 @@ var name, pass, passwordConfirmed;
  * @author Marcel Waleska, Marcel Gross
  */
 function register() {
+    console.log('register()');
     try
     {
         getValues();

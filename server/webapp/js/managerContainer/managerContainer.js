@@ -137,10 +137,8 @@ var managerContainer = Ractive.extend(
 
         navigateDown: function(event, index){
             var clickedContainer = window.app.get('data.container.'+index);
-            console.log(clickedContainer);
             var subContainers = clickedContainer.subContainers ;
 
-            console.dir(clickedContainer);
             window.parentContainer = clickedContainer;
             clickedContainerHistory.push(clickedContainer.subcontainers);
             window.app.set('data.container', subContainers);
@@ -186,7 +184,6 @@ var managerContainer = Ractive.extend(
                currentContainer = getContainerById(window.currentTableState, clickedContainerPath[i].containerID);
                clickedContainerHistory[i] = currentContainer.subContainers;
            }
-           console.dir(clickedContainerHistory);
 
        },
 
@@ -244,7 +241,7 @@ var managerContainer = Ractive.extend(
             loadStore(this.getStoreFromDb);
             $("#parent-id").val(window.parentContainer.containerID);
             var newContainer = new Container("");
-            console.log(window.parentContainer);
+
             var parentCompulsoryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
             newContainer.attributes = parentCompulsoryAttributes;
             this.set('newContainer', newContainer);
