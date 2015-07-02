@@ -24,6 +24,7 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Headers', 'authorization');
+    res.header('Access-Control-Allow-Headers', 'sessionid');
     next();
 });
 
