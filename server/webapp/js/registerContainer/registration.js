@@ -159,9 +159,9 @@ var createUser = function(callBackFunction){
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        headers: {
-            'authorization': encryptedUserData
-        },
+        //headers: {
+         //   'authorization': encryptedUserData
+        //},
         data : formData,
         success: function(data, textStatus, jqXHR)
         {
