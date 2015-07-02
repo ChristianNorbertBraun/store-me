@@ -136,19 +136,17 @@ var managerContainer = Ractive.extend(
         },
 
         navigateDown: function(event, index){
-
-            var parentContainers = window.app.get('data.container');
             var clickedContainer = window.app.get('data.container.'+index);
-            var subContainer = clickedContainer.subContainers ;
+            console.log(clickedContainer);
+            var subContainers = clickedContainer.subContainers ;
 
+            console.dir(clickedContainer);
             window.parentContainer = clickedContainer;
-
-            window.app.set('data.container', subContainer);
-
-
+            clickedContainerHistory.push(clickedContainer.subcontainers);
+            window.app.set('data.container', subContainers);
             window.app.push('pathElements', clickedContainer);
-            clickedContainerHistory.push(clickedContainer.subContainers);
 
+            this.mapDbDataOnPath(window.currentTableState);
             this.mapContainerItemOnDataItem();
             this.removeSelection();
             $('#'+index).toggleClass('list-group-item-selected');
@@ -180,11 +178,24 @@ var managerContainer = Ractive.extend(
 
         },
 
+
+       mapDbDataOnPath:function(data){
+           var clickedContainerPath = window.currentRactive.get('pathElements');
+
+           for(i = 0; i < clickedContainerPath.length; ++i){
+               currentContainer = getContainerById(window.currentTableState, clickedContainerPath[i].containerID);
+               clickedContainerHistory[i] = currentContainer.subContainers;
+           }
+           console.dir(clickedContainerHistory);
+
+       },
+
        getStoreFromDb: function(error, result){
            if(result) {
                window.app.set('stockExists',true);
-               var subContainer;
+               window.currentRactive.mapDbDataOnPath();
                window.currentTableState = result;
+               var subContainer;
 
                if(window.firstLoad) {
                    window.parentContainer = window.currentTableState;
@@ -195,7 +206,7 @@ var managerContainer = Ractive.extend(
                }
                else{
                    var currentParentId = window.parentContainer.containerID;
-                   //have to rebin the parentcontainer to the currenttable stort to make sure that cbr works fine
+                   //have to rebind the parentcontainer to the currenttable stort to make sure that cbr works fine
                    window.parentContainer = getContainerById(window.currentTableState, currentParentId);
                    subContainer = window.parentContainer.subContainers;
                }
@@ -233,6 +244,7 @@ var managerContainer = Ractive.extend(
             loadStore(this.getStoreFromDb);
             $("#parent-id").val(window.parentContainer.containerID);
             var newContainer = new Container("");
+            console.log(window.parentContainer);
             var parentCompulsoryAttributes = getAllCompulsoryContainerAttributes(window.parentContainer);
             newContainer.attributes = parentCompulsoryAttributes;
             this.set('newContainer', newContainer);
