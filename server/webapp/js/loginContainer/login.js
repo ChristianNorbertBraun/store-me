@@ -24,7 +24,7 @@ var tryLogin = function(){
             type: 'GET',
             crossDomain: true,
             dataType: 'json',
-            headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
+            headers: {'authorization': encryptedUserData},
             success: function(res, status, xhr) {
                 location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
             },
