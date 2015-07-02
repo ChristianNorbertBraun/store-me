@@ -133,9 +133,10 @@ app.post("/registeruser", function(req, res){
 
     var userInfo = prepareAuthentication(req);
     var user = userScript.newUser(userInfo[0], userInfo[1]);
-
+    console.log(user);
     db.save(user, function (err, res) {
-       if(err !== null){
+       console.log(res);
+        if(err !== null){
            console.log(err);
        }
     });
