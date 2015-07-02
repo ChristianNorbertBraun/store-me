@@ -23,8 +23,6 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, authorization, sessionid');
-//    res.header('Access-Control-Allow-Headers', 'authorization');
-    //res.header('Access-Control-Allow-Headers', 'sessionid');
     next();
 });
 
@@ -43,7 +41,7 @@ app.get("/login", function (req, res) {
     var userInfo = prepareAuthentication(req);
     db.get(userInfo[0], function(err, doc){
         if(doc == undefined){
-            res.statusCode = err.headers.status;
+            //  res.statusCode = err.headers.status;
             res.send("user does not exits");
         } else if (userInfo[1] !== doc.password){
             res.statusCode = 400;
