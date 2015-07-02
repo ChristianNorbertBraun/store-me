@@ -156,7 +156,7 @@ var createUser = function(callBackFunction){
     var encryptedUserData = storeMeEncrypt(name + ":" + CryptoJS.SHA1(pass));
     $.ajax({
         beforeSend: function(xhr) {
-          xhr.setRequestHeader("Access-Control-Allow-Origin',"*");
+          xhr.setRequestHeader("Access-Control-Allow-Origin","*");
           xhr.setRequestHeader("My-Second-Header", "second value");
         },
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
