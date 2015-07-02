@@ -15,6 +15,7 @@ function register() {
         getValues();
         checkNull();
         checkIfUserAlreadyExist(function(exists, data){
+            console.log('check User existence');
             if (exists) {
                 window.alert(strings.registration.userExist);
                 throw 'User already exists';
@@ -36,6 +37,7 @@ function register() {
     }
     catch(err)
     {
+        console.dir(err);
     }
 }
 /**
@@ -137,6 +139,7 @@ function checkNull()
  */
 function checkPasswordConfirmation()
 {
+    console.log('check password confirmation');
     if(pass != passwordConfirmed)
     {
         window.alert(strings.registration.passwordDontMatch);
