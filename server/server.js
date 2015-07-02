@@ -105,6 +105,7 @@ app.options(/^(.+)$/, function(req, res){
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'authorization');
     res.end('');
 });
  /** serves all the static files */
@@ -120,6 +121,12 @@ app.options(/^(.+)$/, function(req, res){
 
 app.post("/registeruser", function(req, res){
     console.log('register User');
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'authorization');
 
     var userInfo = prepareAuthentication(req);
     var user = userScript.newUser(userInfo[0], userInfo[1]);
