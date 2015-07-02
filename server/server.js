@@ -111,6 +111,7 @@ app.get("/coredata(.html)?", function(req,res){
 
 app.options(/^(.+)$/, function(req, res){
     console.log("writing headers only");
+    res.end('');
 
 });
  /** serves all the static files */
