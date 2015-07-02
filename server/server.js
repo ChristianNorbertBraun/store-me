@@ -6,6 +6,7 @@ var sessionScript = require('./webapp/js/sessions/session_handler.js');
 var databaseInit = require('./database/databaseConfig.js');
 var userScript = require('./webapp/js/data_structure/user.js');
 var encryptionScript = require('./webapp/js/encryption/stormecryptBE.js');
+var dbSettings = require('./database/dbSettings.js');
 
 var cradle = require('cradle');
 var db = new(cradle.Connection)(dbSettings.url, dbSettings.port).database(stringsFile.database.user);
