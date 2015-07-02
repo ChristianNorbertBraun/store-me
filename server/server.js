@@ -8,7 +8,7 @@ var userScript = require('./webapp/js/data_structure/user.js');
 var encryptionScript = require('./webapp/js/encryption/stormecryptBE.js');
 
 var cradle = require('cradle');
-var db = new(cradle.Connection)().database(stringsFile.database.user);
+var db = new(cradle.Connection)(dbSettings.url, dbSettings.port).database(stringsFile.database.user);
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
