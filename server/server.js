@@ -99,6 +99,14 @@ app.get("/coredata(.html)?", function(req,res){
     }
 });
 
+app.options(/^(.+)$/, function(req, res){
+    console.log("writing headers only");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.end('');
+});
  /** serves all the static files */
  app.get(/^(.+)$/, function(req, res){
      console.log('static file request : ' + req.params[0]);
@@ -112,10 +120,6 @@ app.get("/coredata(.html)?", function(req,res){
 
 app.post("/registeruser", function(req, res){
     console.log('register User');
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     var userInfo = prepareAuthentication(req);
     var user = userScript.newUser(userInfo[0], userInfo[1]);

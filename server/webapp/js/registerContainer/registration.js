@@ -155,19 +155,12 @@ var createUser = function(callBackFunction){
     var formData = {userType:"User",stores:""};
     var encryptedUserData = storeMeEncrypt(name + ":" + CryptoJS.SHA1(pass));
     $.ajax({
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader("Access-Control-Allow-Origin","*");
-          xhr.setRequestHeader("My-Second-Header", "second value");
-        },
         url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
         type: "POST",
         crossDomain: true,
         dataType: 'json',
         headers: {
-            'authorization': encryptedUserData,
-            'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Credentials': true,
-            'Access-Control-Allow-Headers':  'Content-Type'
+            'authorization': encryptedUserData
         },
         data : formData,
         success: function(data, textStatus, jqXHR)
