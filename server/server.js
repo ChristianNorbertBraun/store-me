@@ -40,13 +40,17 @@ app.get("/register(.html)?", function(req,res){
 app.get("/login", function (req, res) {
     var userInfo = prepareAuthentication(req);
     db.get(userInfo[0], function(err, doc){
+        console.log(typeof doc);
         if(doc == undefined){
             //  res.statusCode = err.headers.status;
             res.send("user does not exits");
+            console.log("no user");
         } else if (userInfo[1] !== doc.password){
             res.statusCode = 400;
+            console.log("no password");
             res.send("login failed");
         } else if (userInfo[1] === doc.password){
+            console.log("done");
             res.statusCode = 200;
             var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
             res.send(sessionID);
