@@ -12,4 +12,6 @@
     <string name="edit">Edit</string>
     <string name="about">About</string>
 
+    <string name="aboutText">StorMe is an universal, intuitive and easy-to-use solution to organize your storage.\n\nTo use this application you need to install StoreMe on your local machine or server. \nVisit our website to learn more."</string>
+
 </resources>

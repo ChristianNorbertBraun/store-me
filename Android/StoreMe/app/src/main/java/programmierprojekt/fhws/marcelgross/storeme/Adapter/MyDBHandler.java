@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Marcel on 29.06.2015.
  */
@@ -21,7 +18,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String TABLE = "server";
     private static final String COLUMN_SERVER_ID = "id";
     private static final String COLUMN_SERVER_ADDRESS = "serverAdress";
-
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,6 +49,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             address = "http://" + address;
         }
         ContentValues values = new ContentValues();
+        values.put(COLUMN_SERVER_ID, 1);
         values.put(COLUMN_SERVER_ADDRESS, address);
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -61,12 +58,19 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     public boolean existsServer(){
-        String query = "SELECT * FROM " + TABLE;
+        String query = "SELECT * FROM " + TABLE + " WHERE " + COLUMN_SERVER_ID + "= '1'";
         SQLiteDatabase db = this.getWritableDatabase();
+
         Cursor cursor = db.rawQuery(query, null);
-        boolean result = cursor.moveToFirst();
+        String result = "";
+        if (cursor.moveToFirst()) {
+            do {
+                result = cursor.getString(1);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
         db.close();
-        return result;
+        return result.startsWith("http://");
     }
 
     public void updateServer(String address){
@@ -92,12 +96,15 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 result = cursor.getString(1);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
         Log.d("address", result);
         return result;
     }
 
     public void deleteSeverAdress() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE, COLUMN_SERVER_ID + " = ?", new String[]{String.valueOf(1)});
+        db.execSQL("DELETE FROM " + TABLE);
+        db.close();
     }
 }

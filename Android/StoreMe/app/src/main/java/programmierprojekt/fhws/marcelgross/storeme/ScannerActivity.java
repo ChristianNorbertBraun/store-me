@@ -13,7 +13,7 @@ import programmierprojekt.fhws.marcelgross.storeme.Adapter.ActivityRegistry;
 public class ScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
 
     private ZXingScannerView mScannerView;
-    private String result1, result2;
+    private String result1, result2, url;
     private int resultPosition;
     private ActivityRegistry ar = ActivityRegistry.getInstance();
 
@@ -28,6 +28,7 @@ public class ScannerActivity extends Activity implements ZXingScannerView.Result
         resultPosition = intent.getIntExtra("Scan", -1);
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
+        url = intent.getStringExtra("url");
 
     }
 
@@ -57,7 +58,7 @@ public class ScannerActivity extends Activity implements ZXingScannerView.Result
             intent.putExtra("result2", rawResult.getText());
 
         }
-
+        intent.putExtra("url", url);
         startActivity(intent);
     }
 

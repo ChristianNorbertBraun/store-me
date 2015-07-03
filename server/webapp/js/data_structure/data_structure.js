@@ -194,15 +194,16 @@ getDataItems = function(containerItems, callBackFunction)
         var currentContainerItem = containerItems[i];
         getDataItemFromCouch(currentContainerItem.itemID, function(status, data)
         {
-            ++counter;
             if (status)
             {
-                dataItems.push(data);
+                dataItems[counter] = data;
             }
-            if(containerItems.length == counter){
+            //added -1 and changed line above from dataItems.push(data);
+            if(containerItems.length-1 == counter){
                 callBackFunction(true, dataItems);
                 return;
             }
+            ++counter;
         });
     }
     callBackFunction(false, []);

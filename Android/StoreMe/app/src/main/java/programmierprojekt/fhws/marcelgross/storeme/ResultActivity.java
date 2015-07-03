@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -15,9 +16,8 @@ import programmierprojekt.fhws.marcelgross.storeme.Adapter.MyDBHandler;
 
 public class ResultActivity extends Activity {
 
-    private String result1, result2;
+    private String result1, result2, url;
     private ActivityRegistry ar = ActivityRegistry.getInstance();
-    private MyDBHandler db = new MyDBHandler(this);
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -27,11 +27,15 @@ public class ResultActivity extends Activity {
         ar.register(this);
 
         Intent intent = getIntent();
+        if (intent.getStringArrayExtra("url") != null){
+            url = intent.getStringExtra("url");
+            Log.wtf("url", url);
+        }
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
 
 
-        WebView browser = (WebView) findViewById(R.id.webView);
+        final WebView browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setLoadsImagesAutomatically(true);
         browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -43,6 +47,7 @@ public class ResultActivity extends Activity {
                 intent.putExtra("Scan", 1);
                 intent.putExtra("result1", result1);
                 intent.putExtra("result2", result2);
+                intent.putExtra("url", browser.getUrl());
                 startActivity(intent);
             }
         }, "scan");
@@ -54,6 +59,7 @@ public class ResultActivity extends Activity {
                 intent.putExtra("Scan", 2);
                 intent.putExtra("result1", result1);
                 intent.putExtra("result2", result2);
+                intent.putExtra("url", browser.getUrl());
                 startActivity(intent);
             }
         }, "scan2");
@@ -69,7 +75,8 @@ public class ResultActivity extends Activity {
             }
         });
 
-        browser.loadUrl(db.getServerAddress());
+        browser.loadUrl(url);
+        url = browser.getUrl();
     }
 
     @Override

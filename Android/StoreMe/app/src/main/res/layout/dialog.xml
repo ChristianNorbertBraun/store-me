@@ -6,12 +6,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A supporting application for the project StoreMe \n Implemented during a project for FHWS"
         android:id="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:text="@string/aboutText" />
 </RelativeLayout>

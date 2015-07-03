@@ -89,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void startStoreMe(){
         Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
+        intent.putExtra("url", db.getServerAddress());
         intent.putExtra("result1", "");
         intent.putExtra("result2", "");
         startActivity(intent);

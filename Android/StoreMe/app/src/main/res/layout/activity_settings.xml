@@ -18,19 +18,21 @@
         android:layout_alignParentStart="false" />
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/delete"
         android:id="@+id/del_btn"
         android:layout_below="@+id/settings_input_et"
         android:layout_alignStart="@+id/settings_input_et"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp" />
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/edit"
         android:id="@+id/edit_btn"
         android:layout_alignTop="@+id/del_btn"
-        android:layout_alignEnd="@+id/settings_input_et" />
+        android:layout_alignEnd="@+id/settings_input_et"
+        android:layout_marginRight="16dp" />
 </RelativeLayout>
