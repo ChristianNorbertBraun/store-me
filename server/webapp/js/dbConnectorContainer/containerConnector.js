@@ -16,7 +16,6 @@ var saveStore = function(callBackFunction, container){
     var storeName = container.containerName;
     loadStoreByName(storeName, function(loaded, db){
         if(loaded){
-            console.log(db);
             container["_id"] = db._id;
             container["_rev"] = db._rev;
         } else {

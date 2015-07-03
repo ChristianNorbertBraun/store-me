@@ -1,9 +1,11 @@
 .coredata-category-button {
     width: 49.22%;
+    margin-bottom: 10px;
 }
 
 .coredata-table-button {
-    width: 33%;
+    width: 32.9%;
+    margin-bottom: 10px;
 }
 
 .no-padding {

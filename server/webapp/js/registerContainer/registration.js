@@ -9,11 +9,13 @@ var name, pass, passwordConfirmed;
  * @author Marcel Waleska, Marcel Gross
  */
 function register() {
+    console.log('register()');
     try
     {
         getValues();
         checkNull();
         checkIfUserAlreadyExist(function(exists, data){
+            console.log('check User existence');
             if (exists) {
                 window.alert(strings.registration.userExist);
                 throw 'User already exists';
@@ -35,6 +37,7 @@ function register() {
     }
     catch(err)
     {
+        console.dir(err);
     }
 }
 /**
@@ -136,6 +139,7 @@ function checkNull()
  */
 function checkPasswordConfirmation()
 {
+    console.log('check password confirmation');
     if(pass != passwordConfirmed)
     {
         window.alert(strings.registration.passwordDontMatch);
@@ -155,7 +159,9 @@ var createUser = function(callBackFunction){
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        headers: {'authorization': encryptedUserData, 'Access-Control-Allow-Origin': '*'},
+        headers: {
+           'authorization': encryptedUserData
+        },
         data : formData,
         success: function(data, textStatus, jqXHR)
         {
