@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(function(req, res, next) {
-    console.log('set CORS Header');
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
