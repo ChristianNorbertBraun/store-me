@@ -31,12 +31,12 @@ app.use(function(req, res, next) {
 databaseInit.prepareDB();
 
  app.get("/", function(req, res) {
-    consolelog('on login');
+    console.log('on login');
      res.sendfile('webapp/index.html')
  });
 
 app.get("/register(.html)?", function(req,res){
-    consolelog('on register');
+    console.log('on register');
     res.sendfile('webapp/register.html');
 });
 
