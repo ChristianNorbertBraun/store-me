@@ -3,6 +3,7 @@ package programmierprojekt.fhws.marcelgross.storeme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.zxing.Result;
 
@@ -29,7 +30,7 @@ public class ScannerActivity extends Activity implements ZXingScannerView.Result
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
         url = intent.getStringExtra("url");
-
+        Log.wtf("intent url", url);
     }
 
     @Override

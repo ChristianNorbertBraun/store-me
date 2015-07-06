@@ -186,7 +186,8 @@ var addAttributes = function(attributes, item)
  */
 getDataItems = function(containerItems, callBackFunction)
 {
-
+    console.log("input");
+    console.dir(containerItems);
     var dataItems = [];
     var counter = 0;
     for (var i = 0; i < containerItems.length; i++)
@@ -201,6 +202,8 @@ getDataItems = function(containerItems, callBackFunction)
             //added -1 and changed line above from dataItems.push(data);
             if(containerItems.length-1 == counter){
                 callBackFunction(true, dataItems);
+                console.log("output");
+                console.dir(dataItems);
                 return;
             }
             ++counter;

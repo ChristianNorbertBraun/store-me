@@ -9,6 +9,7 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import programmierprojekt.fhws.marcelgross.storeme.Adapter.ActivityRegistry;
 import programmierprojekt.fhws.marcelgross.storeme.Adapter.MyDBHandler;
@@ -16,24 +17,24 @@ import programmierprojekt.fhws.marcelgross.storeme.Adapter.MyDBHandler;
 
 public class ResultActivity extends Activity {
 
-    private String result1, result2, url;
+    private String result1, result2, url, tempurl;
     private ActivityRegistry ar = ActivityRegistry.getInstance();
 
     @SuppressLint("JavascriptInterface")
     @Override
-    public void onCreate(Bundle state) {
+    public void onCreate(final Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.webview);
         ar.register(this);
 
         Intent intent = getIntent();
-        if (intent.getStringArrayExtra("url") != null){
+        if(tempurl == null){
             url = intent.getStringExtra("url");
-            Log.wtf("url", url);
+        } else {
+            url = tempurl;
         }
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
-
 
         final WebView browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
@@ -47,7 +48,7 @@ public class ResultActivity extends Activity {
                 intent.putExtra("Scan", 1);
                 intent.putExtra("result1", result1);
                 intent.putExtra("result2", result2);
-                intent.putExtra("url", browser.getUrl());
+                intent.putExtra("url", getTempurl());
                 startActivity(intent);
             }
         }, "scan");
@@ -59,7 +60,7 @@ public class ResultActivity extends Activity {
                 intent.putExtra("Scan", 2);
                 intent.putExtra("result1", result1);
                 intent.putExtra("result2", result2);
-                intent.putExtra("url", browser.getUrl());
+                intent.putExtra("url", getTempurl());
                 startActivity(intent);
             }
         }, "scan2");
@@ -72,16 +73,24 @@ public class ResultActivity extends Activity {
                     view.loadUrl("javascript:getScanResult(\"" + result1 + "\", \"item-id-stock\")");
                 if (!result2.isEmpty())
                     view.loadUrl("javascript:getScanResult(\"" + result2 + "\", \"container-id-stock\")");
+                setTempurl(url);
             }
         });
 
         browser.loadUrl(url);
-        url = browser.getUrl();
     }
 
     @Override
     public void onBackPressed() {
        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
+    }
+
+    public String getTempurl() {
+        return tempurl;
+    }
+
+    public void setTempurl(String tempurl) {
+        this.tempurl = tempurl;
     }
 }
