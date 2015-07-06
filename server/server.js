@@ -30,28 +30,29 @@ app.use(function(req, res, next) {
 databaseInit.prepareDB();
 
  app.get("/", function(req, res) {
-     console.log(req.headers);
-    res.sendfile('webapp/index.html')
+    console.log('on login');
+     res.sendfile('webapp/index.html')
  });
 
 app.get("/register(.html)?", function(req,res){
+    console.log('on register');
     res.sendfile('webapp/register.html');
 });
 
 app.get("/login", function (req, res) {
     var userInfo = prepareAuthentication(req);
+    console.log(userInfo[0] + 'trys to login');
     db.get(userInfo[0], function(err, doc){
-        console.log(typeof doc);
         if(doc == undefined){
             //  res.statusCode = err.headers.status;
             res.send("user does not exits");
             console.log("no user");
         } else if (userInfo[1] !== doc.password){
             res.statusCode = 400;
-            console.log("no password");
+            console.log("password wrong");
             res.send("login failed");
         } else if (userInfo[1] === doc.password){
-            console.log("done");
+            console.log(userInfo[0] + "logged in successful!");
             res.statusCode = 200;
             var sessionID = sessionScript.newSession(userInfo[0], userInfo[1]);
             res.send(sessionID);
@@ -60,12 +61,14 @@ app.get("/login", function (req, res) {
 });
 
 app.get("/logout", function(req, res){
+    console.log('user logged out');
     var sessionID =  req.header('sessionID');
     sessionScript.endSession(sessionID);
     res.sendfile('webapp/index.html');
 });
 
 app.get("/manager(.html)?",function(req, res){
+    console.log('on manager');
     if(debugMode){
         res.sendfile('webapp/manager.html');
     } else {
@@ -78,6 +81,7 @@ app.get("/manager(.html)?",function(req, res){
 });
 
 app.get("/dashboard(.html)?", function(req, res){
+    console.log('on dashboard');
     if(debugMode){
         res.sendfile('webapp/dashboard.html');
     } else {
@@ -90,6 +94,7 @@ app.get("/dashboard(.html)?", function(req, res){
 });
 
 app.get("/inventory(.html)?", function(req,res){
+    console.log('on inventory');
     if(debugMode){
         res.sendfile('webapp/inventory.html');
     } else {
@@ -102,6 +107,7 @@ app.get("/inventory(.html)?", function(req,res){
 });
 
 app.get("/coredata(.html)?", function(req,res){
+    console.log('on coredata');
     if(debugMode){
         res.sendfile('webapp/coredata.html');
     } else {
@@ -114,13 +120,12 @@ app.get("/coredata(.html)?", function(req,res){
 });
 
 app.options(/^(.+)$/, function(req, res){
-    console.log("writing headers only");
+    console.log('received options request');
     res.end('');
 
 });
  /** serves all the static files */
  app.get(/^(.+)$/, function(req, res){
-     console.log('static file request : ' + req.params[0]);
      res.sendfile( __dirname+ "/webapp" + req.params[0]);
  });
 
@@ -130,7 +135,7 @@ app.options(/^(.+)$/, function(req, res){
 
 
 app.post("/registeruser", function(req, res){
-    console.log('register User');
+    console.log('register user');
 
     var userInfo = prepareAuthentication(req);
     var user = userScript.newUser(userInfo[0], userInfo[1]);
@@ -151,12 +156,4 @@ function prepareAuthentication(req)
     var auth = req.header('authorization');
     var decryptedString = (encryptionScript.storeMeDecrypt(auth));
     return decryptedString.split(":");
-
-/*
-    var auth =  req.header('authorization');
-    var buffer = new Buffer(auth.split(" ")[1], 'base64');
-    var decryptedString = buffer.toString();
-
-    return decryptedString.split(":");
-*/
 }
