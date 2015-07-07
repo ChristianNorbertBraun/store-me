@@ -55,7 +55,6 @@ var itemPanel = Ractive.extend({
         var item = this.get('items.'+index);
         //toDO fix container ID bug
         var containerID = item.parentContainerID;
-        console.log(item);
         window.currentRactive.set('stockItemStructure',item);
         window.currentRactive.set('stockItemStructure.containerID',containerID);
 

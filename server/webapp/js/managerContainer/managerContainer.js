@@ -109,7 +109,6 @@ var managerContainer = Ractive.extend(
         },
 
         oncomplete:function(){
-
         },
 
         selectContainer: function(event, index){
@@ -288,7 +287,28 @@ var managerContainer = Ractive.extend(
             qrcoder.makeCode(string);
 
             $('#qrcode-modal').modal('show');
+        },
+
+        getQueryParamForModal: function(paramName){
+            var queryString = location.search;
+            var startIndex = queryString.indexOf(paramName);
+            var subString = queryString.substring(startIndex);
+            var endIndex = subString.indexOf('&')+1;
+            var queryParamString;
+
+            if(endIndex != 0){
+                queryParamString = queryString.substring(startIndex,endIndex);
+            }
+            else{
+                queryParamString = subString;
+            }
+
+            var queryParam = queryParamString.split("=")[1];
+            return queryParam;
+
         }
+
     })
+
 ;
 

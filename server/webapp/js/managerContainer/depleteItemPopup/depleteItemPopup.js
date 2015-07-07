@@ -72,6 +72,13 @@ var depleteItemPopup = Ractive.extend({
         window.depleteItemRactive = this;
     },
 
+    oncomplete:function(){
+        var modalValue = window.currentRactive.getQueryParamForModal("modal");
+        if(modalValue == "deplete"){
+            $('#deplete-item-modal').modal('show');
+        }
+    },
+
     loadItemDeplete:function(){
         getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
             if(success){

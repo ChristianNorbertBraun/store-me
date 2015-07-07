@@ -68,9 +68,17 @@ var addItemPopup = Ractive.extend({
         window.addItemRactive = this;
     },
 
+    oncomplete:function(){
+        var modalValue = window.currentRactive.getQueryParamForModal("modal");
+        if(modalValue == "stock"){
+            $('#add-item-modal').modal('show');
+        }
+    },
+
     closeAddItemPopup:function(){
         $('#amount-label-stock').removeClass('red-text');
         $('#add-item-modal').modal('hide');
+        //only for GUI purposes don't want the user to see the deletion
         setTimeout(function(){
             $('.item-structure').remove();
         },200);
