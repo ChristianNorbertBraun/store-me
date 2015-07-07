@@ -123,5 +123,5 @@ function getScanResult(text, id) {
     var element = document.getElementById(id);
     element.value = text;
     console.log(text);
-    consol.log(id);
+    console.log(id);
 }
