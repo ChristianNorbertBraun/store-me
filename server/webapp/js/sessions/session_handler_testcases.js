@@ -29,3 +29,4 @@ console.log(currentSessions.length === 0);
 console.log(!isValidSession(session.sessionID));
 
 console.log(getSessionIDFromURL());
+console.log(getDialogInfoFromURL());

@@ -234,6 +234,16 @@ var getSessionIDFromURL = function()
     return sessionID;
 };
 
+var getDialogInfoFromURL = function()
+{
+    var query = location.search;
+    var queryParams = query.substring(1, query.length);
+    var queryParamsArray = queryParams.split('&');
+    var queryDialogInfo = queryParamsArray[1].split('=');
+    var dialogInfo = queryDialogInfo[1];
+    return dialogInfo;
+};
+
 /**
  * Returns a username corresponding to a given session id if the session id is valid. Returns null otherwise;
  * @function
