@@ -440,6 +440,7 @@ containsItem = function(container, itemID)
  */
 removeItem = function(container, itemID, amount)
 {
+    console.dir(container);
     var result = false;
 
     if (amount > 0)
@@ -464,6 +465,7 @@ removeItem = function(container, itemID, amount)
             }
         }
     }
+    console.dir(container);
     return result;
 };
 
