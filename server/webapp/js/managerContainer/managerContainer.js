@@ -164,7 +164,7 @@ var managerContainer = Ractive.extend(
                         data[i].containerName = containerName;
                     }
 
-                    consoloe-log("mapdbItems");
+                    console.log("mapdbItems");
                     console.dir(data);
                     window.currentRactive.set('items',data);
                 }
