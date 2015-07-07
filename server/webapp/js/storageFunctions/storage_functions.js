@@ -30,6 +30,5 @@ var deplete = function(storage, containerID, itemID, amount)
 {
 
     var container = getContainerById(storage, containerID);
-    console.dir("container");
     return removeItem(container, itemID, amount);
 };

@@ -112,7 +112,6 @@ var addItemPopup = Ractive.extend({
         }
         else{
             $('#amount-label-stock').addClass('red-text');
-
         }
     }
 });
@@ -122,6 +121,5 @@ function getScanResult(text, id) {
     console.log('test');
     console.log(text);
     console.log(id);
-    var element = document.getElementById(id);
-    element.value = text;
+    $('#'+id).val(text);
 }
