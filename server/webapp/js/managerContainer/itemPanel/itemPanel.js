@@ -32,6 +32,8 @@ var itemPanel = Ractive.extend({
    ',
 
     prepareAddItemPopup:function(){
+        window.containerInputValue = null;
+        window.itemInputValue = null;
         loadStore(window.currentRactive.getStoreFromDb);
         var stockItemStructure = {
             containerID: window.parentContainer.containerID
@@ -41,7 +43,7 @@ var itemPanel = Ractive.extend({
 
 
     prepareDepleteItemPopup:function(){
-
+        loadStore(window.currentRactive.getStoreFromDb);
        window.currentRactive.set('stockItemStructure.amount',"");
         console.log('deplete button press');
         console.dir(window.currentTableState);
