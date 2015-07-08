@@ -116,15 +116,25 @@ var addItemPopup = Ractive.extend({
     }
 });
 
+function bindEvent(element, type, handler) {
+    if(element.addEventListener) {
+        element.addEventListener(type, handler, false);
+    } else {
+        element.attachEvent('on'+type, handler);
+    }
+}
 
 function getScanResult(text, id) {
     console.log('test');
     console.log(text);
     console.log(id);
-    if(id.indexOf('item') != -1) {
-        window.currentRactive.set('stockItemStructure.itemID', text);
-    }
-    else{
-        window.currentRactive.set('stockItemStructure.containerID', text);
-    }
+
+    bindEvent(window, 'load', function() {
+        if(id.indexOf('item') != -1) {
+            window.currentRactive.set('stockItemStructure.itemID', text);
+        }
+        else{
+            window.currentRactive.set('stockItemStructure.containerID', text);
+        }
+    });
 }
