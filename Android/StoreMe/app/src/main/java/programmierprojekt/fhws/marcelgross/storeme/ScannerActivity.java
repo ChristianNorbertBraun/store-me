@@ -30,7 +30,6 @@ public class ScannerActivity extends Activity implements ZXingScannerView.Result
         result1 = intent.getStringExtra("result1");
         result2 = intent.getStringExtra("result2");
         url = intent.getStringExtra("url");
-        Log.wtf("intent url", url);
     }
 
     @Override

@@ -109,10 +109,8 @@ var depleteItemPopup = Ractive.extend({
         var amount = this.get('stockItemStructure.amount');
         var parentContainerID = this.get('stockItemStructure.containerID');
 
-        debugger;
         var depleted = deplete(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
-        debugger;
-      /*  if(depleted){
+        if(depleted){
             $('#amount-label-deplete').removeClass('red-text');
             window.currentRactive.writeToDb();
             saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
@@ -120,7 +118,7 @@ var depleteItemPopup = Ractive.extend({
         }
         else{
             $('#amount-label-deplete').addClass('red-text');
-        }*/
+        }
 
     },
 
