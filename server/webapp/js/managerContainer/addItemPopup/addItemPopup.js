@@ -130,20 +130,20 @@ function getScanResult(val, id) {
         document.addEventListener("ractiveLoaded",function(){
             console.log('hi bind Event');
             if(window.inputID.indexOf('item') != -1) {
-                window.currentRactive.set('stockItemStructure.itemID', "hi");
+                window.currentRactive.set('stockItemStructure.itemID', window.inputValue);
             }
             else{
-                window.currentRactive.set('stockItemStructure.containerID', "hi");
+                window.currentRactive.set('stockItemStructure.containerID', window.inputValue);
             }
         },false);
     }
     else{
         console.log("hi");
         if(id.indexOf('item') != -1) {
-            window.currentRactive.set('stockItemStructure.itemID', "hi");
+            window.currentRactive.set('stockItemStructure.itemID', window.inputValue);
         }
         else{
-            window.currentRactive.set('stockItemStructure.containerID', "hi");
+            window.currentRactive.set('stockItemStructure.containerID', window.inputValue);
         }
     }
 
