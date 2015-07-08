@@ -124,26 +124,33 @@ var addItemPopup = Ractive.extend({
 
 function getScanResult(val, id) {
 
-    window.inputID = id;
-    window.inputValue = val;
+    window.inputID = val;
+    if(id.indexOf("item") !=-1){
+
+        window.itemInputValue = val;
+    }
+    else{
+        window.containerInputValue = val;
+    }
+
     if(!window.ractiveLoaded){
         document.addEventListener("ractiveLoaded",function(){
             console.log('hi bind Event');
             if(window.inputID.indexOf('item') != -1) {
-                window.currentRactive.set('stockItemStructure.itemID', window.inputValue);
+                window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
             }
             else{
-                window.currentRactive.set('stockItemStructure.containerID', window.inputValue);
+                window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
             }
         },false);
     }
     else{
         console.log("hi");
         if(id.indexOf('item') != -1) {
-            window.currentRactive.set('stockItemStructure.itemID', window.inputValue);
+            window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
         }
         else{
-            window.currentRactive.set('stockItemStructure.containerID', window.inputValue);
+            window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
         }
     }
 
