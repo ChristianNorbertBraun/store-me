@@ -69,6 +69,11 @@ var addItemPopup = Ractive.extend({
     },
 
     oncomplete:function(){
+        window.ractiveLoaded = true;
+        var event = new CustomEvent("ractiveLoaded");
+        document.dispatchEvent(event);
+        console.log("done");
+
         var modalValue = window.currentRactive.getQueryParamForModal("modal");
         if(modalValue == "stock"){
             $('#add-item-modal').modal('show');
@@ -116,25 +121,30 @@ var addItemPopup = Ractive.extend({
     }
 });
 
-function bindEvent(element, type, handler) {
-    if(element.addEventListener) {
-        element.addEventListener(type, handler, false);
-    } else {
-        element.attachEvent('on'+type, handler);
+
+function getScanResult(val, id) {
+
+    window.inputID = id;
+    window.inputValue = val;
+    if(!window.ractiveLoaded){
+        document.addEventListener("ractiveLoaded",function(){
+            console.log('hi bind Event');
+            if(window.inputID.indexOf('item') != -1) {
+                window.currentRactive.set('stockItemStructure.itemID', "hi");
+            }
+            else{
+                window.currentRactive.set('stockItemStructure.containerID', "hi");
+            }
+        },false);
     }
-}
-
-function getScanResult(text, id) {
-    console.log('test');
-    console.log(text);
-    console.log(id);
-
-    bindEvent(window, 'load', function() {
+    else{
+        console.log("hi");
         if(id.indexOf('item') != -1) {
-            window.currentRactive.set('stockItemStructure.itemID', text);
+            window.currentRactive.set('stockItemStructure.itemID', "hi");
         }
         else{
-            window.currentRactive.set('stockItemStructure.containerID', text);
+            window.currentRactive.set('stockItemStructure.containerID', "hi");
         }
-    });
+    }
+
 }
