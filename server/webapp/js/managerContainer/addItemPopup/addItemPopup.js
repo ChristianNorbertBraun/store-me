@@ -128,9 +128,11 @@ function getScanResult(val, id) {
     if(id.indexOf("item") !=-1){
 
         window.itemInputValue = val;
+        console.log("item");
     }
     else{
         window.containerInputValue = val;
+        console.log("container");
     }
 
     if(!window.ractiveLoaded){
