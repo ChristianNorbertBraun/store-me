@@ -32,6 +32,7 @@ var itemPanel = Ractive.extend({
    ',
 
     prepareAddItemPopup:function(){
+        loadStore(window.currentRactive.getStoreFromDb);
         var stockItemStructure = {
             containerID: window.parentContainer.containerID
         };
@@ -40,11 +41,15 @@ var itemPanel = Ractive.extend({
 
 
     prepareDepleteItemPopup:function(){
+
        window.currentRactive.set('stockItemStructure.amount',"");
+        console.log('deplete button press');
+        console.dir(window.currentTableState);
     },
 
     selectItem:function(event, index){
-
+        console.log('selectItem start');
+        console.dir(window.currentTableState);
         $('#item'+index).toggleClass('list-group-item-selected');
         if( $(".list-group-item-selected").get().length > 1){
             window.currentRactive.removeSelection();
@@ -65,7 +70,8 @@ var itemPanel = Ractive.extend({
             window.currentRactive.set('selectedItem', item);
         }
 
-
+        console.log('selectItem ende');
+        console.dir(window.currentTableState);
 
     }
 });

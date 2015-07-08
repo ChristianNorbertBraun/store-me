@@ -43,7 +43,7 @@ var depleteItemPopup = Ractive.extend({
                         </div>\
                         <div class="row popup-entry">\
                             <label id="amount-label-deplete" class="col-md-4 modal-label">Amount</label>\
-                            <div class="col-md-6"><input id="item-amount-deplete" min="1.0" type="number" class="form-control" placeholder="Item Amount" value={{stockItemStructure.amount}}></div>\
+                            <div class="col-md-6"><input id="item-amount-deplete" min="1.0" type="number" class="form-control" placeholder="Item Amount" on-change="test()" value={{stockItemStructure.amount}}></div>\
                         </div>\
                         <div id="attribute-container">\
                             {{#if stockItemStructure.attributes}}\
@@ -61,15 +61,20 @@ var depleteItemPopup = Ractive.extend({
                     </div>\
                     <div class="modal-footer">\
                         <button type="button" class="btn btn-default"  on-click="closeDepleteItemPopup()">Close</button>\
-                        <button type="button" class="btn btn-primary" on-click="depleteItem()">Deplete</button>\
+                        <button type="button" class="btn btn-primary" on-click="depleteItem">Deplete</button>\
                     </div>\
                 </div>\
             </div>\
         </div>\
     ',
 
+    test:function(){
+        console.log('onChange');
+        console.dir(window.currentTableState);
+    },
     oninit:function(){
         window.depleteItemRactive = this;
+        this.on('depleteItem', this.depleteItem);
     },
 
     oncomplete:function(){
@@ -80,6 +85,8 @@ var depleteItemPopup = Ractive.extend({
     },
 
     loadItemDeplete:function(){
+        console.log('load Deplete');
+        console.dir(window.currentTableState);
         getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
@@ -87,20 +94,25 @@ var depleteItemPopup = Ractive.extend({
                 stockItemStructure.attributes = data.attributes;
 
                 window.currentRactive.set('stockItemStructure',stockItemStructure);
+                console.log('load Deplete ende');
+                console.dir(window.currentTableState);
             }
         });
     },
 
     depleteItem:function(){
+        console.dir(window.currentTableState);
+
         var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
-        var parentContainerID = this.get('stockItemStructure.containerID')
+        var parentContainerID = this.get('stockItemStructure.containerID');
 
-        console.dir(window.currentTableState);
+        debugger;
         var depleted = deplete(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
-        if(depleted){
+        debugger;
+      /*  if(depleted){
             $('#amount-label-deplete').removeClass('red-text');
             window.currentRactive.writeToDb();
             saveLogContainer(new LogContainer(false, parentContainerName, itemName,amount, username), function(saved){});
@@ -108,7 +120,8 @@ var depleteItemPopup = Ractive.extend({
         }
         else{
             $('#amount-label-deplete').addClass('red-text');
-        }
+        }*/
+
     },
 
     closeDepleteItemPopup:function(){

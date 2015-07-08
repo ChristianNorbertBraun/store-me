@@ -121,5 +121,10 @@ function getScanResult(text, id) {
     console.log('test');
     console.log(text);
     console.log(id);
-    $('#'+id).val(text);
+    if(id.indexOf('item') != -1) {
+        window.currentRactive.set('stockItemStructure.itemID', text);
+    }
+    else{
+        window.currentRactive.set('stockItemStructure.containerID', text);
+    }
 }
