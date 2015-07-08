@@ -19,7 +19,7 @@ var addItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ContainerID</label>\
                             <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" onclick="scan.performClick()" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan2.performClick()" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -138,10 +138,10 @@ function getScanResult(val, id) {
     if(!window.ractiveLoaded){
         document.addEventListener("ractiveLoaded",function(){
             console.log('hi bind Event');
-            if(window.inputID.indexOf('item') != -1) {
+            if(window.itemInputValue){
                 window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
             }
-            else{
+            if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
             }
         },false);
