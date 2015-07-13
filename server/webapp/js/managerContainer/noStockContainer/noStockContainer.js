@@ -20,6 +20,10 @@ var noStockContainer = Ractive.extend({
         var stockName = $('#storage-name').val();
         stockName = stockName.trim();
 
+        if(stockName == "Nicolas Cage"){
+            var newLocation = "http://33.media.tumblr.com/5a4fa9b3ba14d727f0b1aa6df6c2ecf8/tumblr_mf5c3t2pvF1r4etbjo1_r1_500.gif";
+            window.location = newLocation;
+        }
         if(stockName){
             var stock = new Container(stockName);
             window.currentRactive.writeToDb(stock);
