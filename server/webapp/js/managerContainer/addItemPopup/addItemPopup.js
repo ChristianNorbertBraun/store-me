@@ -98,7 +98,7 @@ var addItemPopup = Ractive.extend({
         else{
             inputItemID = this.get('stockItemStructure.itemID');
         }
-        getDataItemFromCouch(this.get(inputItemID,function(success,data){
+        getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
