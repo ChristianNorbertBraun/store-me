@@ -2,6 +2,12 @@
  * Created by Waleska on 09.06.2015.
  */
 
+/**
+ * Creates an new Category in the Database
+ * @param {function} cbFn       - necessary callBackFunction
+ * @param {Number} categoryId
+ * @author Marcel Waleska
+ */
 function categoryAdd(categoryId,cbFn)
 {
     try
@@ -19,7 +25,13 @@ function categoryAdd(categoryId,cbFn)
     }
 }
 
-
+/**
+ * Update an existed Category in Database
+ * @param {function} cbFn       - necessary callBackFunction
+ * @param {Number} oldCategory
+ * @param {Number} newCategory
+ * @author Marcel Waleska
+ */
 function categoryUpdate(oldCategory, newCategory, cbFn)
 {
     setItemsToNewCategory(oldCategory, newCategory, function (itemsReady){
@@ -40,7 +52,12 @@ function categoryUpdate(oldCategory, newCategory, cbFn)
     });
 }
 
-
+/**
+ * Delete Category from Database
+ * @param {function} cbFn       - necessary callBackFunction
+ * @param {Number} categoryId
+ * @author Marcel Waleska
+ */
 function categoryDelete(categoryId, cbFn)
 {
     try
@@ -59,7 +76,11 @@ function categoryDelete(categoryId, cbFn)
     }
 }
 
-
+/**
+ * Return all existed Categories in the CallBackFunction
+ * @param {function} cbFn       - necessary callBackFunction
+ * @author Marcel Waleska
+ */
 function getAllCategories(cbFn)
 {
     var mapFunction = function (doc)
