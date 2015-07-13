@@ -38,3 +38,5 @@ var modulo = function(x, y)
 {
     return ((x%y)+y)%y;
 };
+
+console.log(storeMeEncrypt("HalloWelt"));
