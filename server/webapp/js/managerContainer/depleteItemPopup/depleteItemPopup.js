@@ -78,6 +78,8 @@ var depleteItemPopup = Ractive.extend({
     },
 
     oncomplete:function(){
+        var event = new CustomEvent("ractiveLoaded");
+        document.dispatchEvent(event);
         var modalValue = window.currentRactive.getQueryParamForModal("modal");
         if(modalValue == "deplete"){
             $('#deplete-item-modal').modal('show');
@@ -85,8 +87,6 @@ var depleteItemPopup = Ractive.extend({
     },
 
     loadItemDeplete:function(){
-        console.log('load Deplete');
-        console.dir(window.currentTableState);
         getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
@@ -94,8 +94,6 @@ var depleteItemPopup = Ractive.extend({
                 stockItemStructure.attributes = data.attributes;
 
                 window.currentRactive.set('stockItemStructure',stockItemStructure);
-                console.log('load Deplete ende');
-                console.dir(window.currentTableState);
             }
         });
     },

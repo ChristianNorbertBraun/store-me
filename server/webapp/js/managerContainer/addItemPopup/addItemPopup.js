@@ -133,6 +133,7 @@ var addItemPopup = Ractive.extend({
 
 function getScanResult(val, id) {
 
+    console.log('start get Scan Reult');
     window.inputID = val;
     if(id.indexOf("item") !=-1){
 
