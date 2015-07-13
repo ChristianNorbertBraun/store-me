@@ -109,57 +109,6 @@ getAllItems = function(container)
     return allItems;
 };
 
-//todo delete this function it is not needed, remember the testcases
-/*
-
-/!**
- * Returns a set of all attributes of all items contained by the given container and its subcontainers. The returned
- * array is an array of ItemAttribute Objects.
- * @function
- * @param {Container} container     - Container from where to start gathering attributes
- * @returns {Array} Array of ItemAttributes
- * @author Marvin Therolf
- *!/
-getAllItemAttributes = function(container)
-{
-    var allAttributes = [];
-    var allItems = getAllItems(container);
-    var allDataItems = getDataItems(allItems);
-
-    // special contains function for internal usage only
-    var containsAttribute = function(attributes, attribute)
-    {
-        var result = false;
-
-        for (var i = 0; i < attributes.length; i++)
-        {
-            if (attributes[i].attributeName === attribute.attributeName)
-            {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    };
-
-    for (var i = 0; i < allDataItems.length; i++)
-    {
-        var currentItem = allDataItems[i];
-
-        for (var k = 0; k < currentItem.attributes.length; k++)
-        {
-            var currentAttribute = currentItem.attributes[k];
-
-            if (!containsAttribute(allAttributes, currentAttribute))
-            {
-                allAttributes.push(currentAttribute);
-            }
-        }
-    }
-    return allAttributes;
-};
-*/
-
 /**
  * Adds all attributes of an item to a set of attributes. So if the set already contains an attribute it is not added
  * once more. Because it's a set. :)
@@ -197,8 +146,8 @@ getDataItems = function(containerItems, callBackFunction)
             {
                 dataItems[counter] = data;
             }
-            //added -1 and changed line above from dataItems.push(data);
             if(containerItems.length-1 == counter){
+                dataItems = sortArrayByGivenArray(containerItems, dataItems);
                 callBackFunction(true, dataItems);
                 return;
             }
@@ -206,6 +155,27 @@ getDataItems = function(containerItems, callBackFunction)
         });
     }
     callBackFunction(false, []);
+};
+
+/**
+ * Orders an array of items in the same order of a containerItems array
+ * @function
+ * @param {Array} givenArray        - an array of containerItems with the right order
+ * @param {Array} resultArray       - an array with probably a false order of items
+ * @returns {Array}                 - the right ordered items array
+ * @author Marcel Gross
+ */
+sortArrayByGivenArray = function(givenArray, resultArray){
+    var result = [];
+    for (var i = 0; i < givenArray.length; i++){
+        for (var j = 0; j < resultArray.length; j++){
+            if(givenArray[i].itemID == resultArray[j]._id){
+                result[i] = resultArray[j];
+                break;
+            }
+        }
+    }
+    return result;
 };
 
 /**
