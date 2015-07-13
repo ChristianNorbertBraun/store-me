@@ -160,7 +160,7 @@ function getScanResult(val, id) {
         if(window.itemInputValue) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
         }
-        else{
+        if(window.containerInputValue){
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
         }
     }
