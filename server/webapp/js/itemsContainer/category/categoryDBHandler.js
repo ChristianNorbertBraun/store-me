@@ -84,7 +84,12 @@ function deleteCategoryFromDB(categoryId, cbFn)
     }
 }
 
-
+/**
+ * Checks if an Category has Items
+ * @param {function} cbFn       - necessary callBackFunction
+ * @param {Number} categoryId
+ * @author Marcel Waleska
+ */
 function checkIfCategoryHasItems(categoryId, cbFn)
 {
     var mapFunction = function (doc)
@@ -118,7 +123,13 @@ function checkIfCategoryHasItems(categoryId, cbFn)
     }
 }
 
-
+/**
+ * Set all Item to a other Category. If an CategoryId is changed all Items have to be referenced to the new CategoryId
+ * @param {function} cbFn       - necessary callBackFunction
+ * @param {Number} oldCategory
+ * @param {Number} newCategory
+ * @author Marcel Waleska
+ */
 function setItemsToNewCategory(oldCategory, newCategory, cbFn)
 {
     try

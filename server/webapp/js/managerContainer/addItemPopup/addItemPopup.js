@@ -19,14 +19,14 @@ var addItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ContainerID</label>\
                             <div class="col-md-6"><input id="container-id-stock" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" onclick="scan.performClick()" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan2.performClick()" >\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ItemID</label>\
-                            <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure._id}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" onclick="scan.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -69,6 +69,11 @@ var addItemPopup = Ractive.extend({
     },
 
     oncomplete:function(){
+        window.ractiveLoaded = true;
+        var event = new CustomEvent("ractiveLoaded");
+        document.dispatchEvent(event);
+        console.log("done");
+
         var modalValue = window.currentRactive.getQueryParamForModal("modal");
         if(modalValue == "stock"){
             $('#add-item-modal').modal('show');
@@ -84,9 +89,16 @@ var addItemPopup = Ractive.extend({
         },200);
     },
 
-    loadItem:function(){
+    loadItem:function(itemID){
+        var inputItemID;
 
-        getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
+        if(itemID){
+            inputItemID = itemID;
+        }
+        else{
+            inputItemID = this.get('stockItemStructure._id');
+        }
+        getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
@@ -98,12 +110,14 @@ var addItemPopup = Ractive.extend({
     },
 
     stockItem:function(){
-        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
+        var parentContainerID = this.get('stockItemStructure.containerID');
+        var parentContainerName = getContainerById(window.currentTableState, parentContainerID).containerName;
+        console.log(parentContainerName);
 
-        var stocked = stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
+        var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
         if(stocked){
             $('#amount-label-stock').removeClass('red-text');
             window.currentRactive.writeToDb();
@@ -117,14 +131,38 @@ var addItemPopup = Ractive.extend({
 });
 
 
-function getScanResult(text, id) {
-    console.log('test');
-    console.log(text);
-    console.log(id);
-    if(id.indexOf('item') != -1) {
-        window.currentRactive.set('stockItemStructure.itemID', text);
+function getScanResult(val, id) {
+
+    console.log('start get Scan Reult');
+    window.inputID = val;
+    if(id.indexOf("item") !=-1){
+
+        window.itemInputValue = val;
+        console.log("item");
     }
     else{
-        window.currentRactive.set('stockItemStructure.containerID', text);
+        window.containerInputValue = val;
+        console.log("container");
     }
+
+    if(!window.ractiveLoaded){
+        document.addEventListener("ractiveLoaded",function(){
+            if(window.itemInputValue){
+                window.currentRactive.set('stockItemStructure._id', window.itemInputValue);
+            }
+            if(window.containerInputValue){
+                window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
+            }
+            window.addItemRactive.loadItem(window.itemInputValue);
+        },false);
+    }
+    else{
+        if(window.itemInputValue) {
+            window.currentRactive.set('stockItemStructure._id', window.itemInputValue);
+        }
+        if(window.containerInputValue){
+            window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
+        }
+    }
+
 }

@@ -154,8 +154,6 @@ var managerContainer = Ractive.extend(
             var allContainerItems = getAllItems(window.parentContainer);
             window.containerItems = allContainerItems;
 
-            console.log('map db items start');
-            console.dir(window.currentTableState);
             getDataItems(allContainerItems,function(success, data){
                 if(success){
                     for(i = 0; i < window.containerItems.length; ++i){
@@ -166,10 +164,7 @@ var managerContainer = Ractive.extend(
                         data[i].containerName = containerName;
                     }
 
-                    console.log("mapdbItems");
-                    console.dir(data);
                     window.currentRactive.set('items',data);
-                    console.dir(window.currentTableState);
                 }
                 else{
                     window.currentRactive.set('items',data);
@@ -214,8 +209,6 @@ var managerContainer = Ractive.extend(
 
                window.app.set('data.container', subContainer);
                window.currentRactive.mapContainerItemOnDataItem();
-               console.log('getStoreFromdb');
-               console.dir(window.currentTableState);
            }
            else{
 

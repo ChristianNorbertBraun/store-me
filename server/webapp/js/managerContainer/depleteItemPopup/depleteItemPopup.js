@@ -23,7 +23,7 @@ var depleteItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ContainerID</label>\
                             <div class="col-md-6"><input id="container-id-deplete" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan4.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -32,7 +32,7 @@ var depleteItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ItemID</label>\
                             <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItemDeplete()" value="{{stockItemStructure._id}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan3.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -84,30 +84,33 @@ var depleteItemPopup = Ractive.extend({
         }
     },
 
-    loadItemDeplete:function(){
-        console.log('load Deplete');
-        console.dir(window.currentTableState);
-        getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
+    loadItemDeplete:function(itemID){
+        var inputItemID;
+
+        if(itemID){
+            inputItemID = itemID;
+        }
+        else{
+            inputItemID = this.get('stockItemStructure._id');
+        }
+
+        getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
                 stockItemStructure.attributes = data.attributes;
 
                 window.currentRactive.set('stockItemStructure',stockItemStructure);
-                console.log('load Deplete ende');
-                console.dir(window.currentTableState);
             }
         });
     },
 
     depleteItem:function(){
-        console.dir(window.currentTableState);
-
-        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
         var parentContainerID = this.get('stockItemStructure.containerID');
+        var parentContainerName = getContainerById(window.currentTableState, parentContainerID).containerName;
 
         var depleted = deplete(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
         if(depleted){
