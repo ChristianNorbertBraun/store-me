@@ -35,7 +35,7 @@ databaseInit.prepareDB();
  });
 
 app.get("/reset(.html)?", function (req,res){
-   res.sendfile('webapp/misc/reset.html');
+   res.sendfile('webapp/misc/reset/reset.html');
 });
 app.get("/register(.html)?", function(req,res){
     console.log('on register');
