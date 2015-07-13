@@ -140,18 +140,22 @@ function getScanResult(val, id) {
             console.log('hi bind Event');
             if(window.itemInputValue){
                 window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+                window.currentRactive.loadItem();
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
+                window.currentRactive.loadItem();
             }
         },false);
     }
     else{
         if(id.indexOf('item') != -1) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+            window.currentRactive.loadItem();
         }
         else{
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
+            window.currentRactive.loadItem();
         }
     }
 
