@@ -147,7 +147,6 @@ function getScanResult(val, id) {
         },false);
     }
     else{
-        console.log("hi");
         if(id.indexOf('item') != -1) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
         }

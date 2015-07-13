@@ -23,7 +23,7 @@ var depleteItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ContainerID</label>\
                             <div class="col-md-6"><input id="container-id-deplete" type="text" class="form-control" placeholder="ContainerID" value="{{stockItemStructure.containerID}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan4.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
@@ -32,7 +32,7 @@ var depleteItemPopup = Ractive.extend({
                             <label class="col-md-4 modal-label">ItemID</label>\
                             <div class="col-md-6"><input id="item-id-deplete" type="text" class="form-control" placeholder="ItemID" on-change="loadItemDeplete()" value="{{stockItemStructure._id}}"></div>\
                             <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" >\
+                                    <button class="btn btn-primary btn-sm" onclick="scan3.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
                                     </button>\
                             </div>\
