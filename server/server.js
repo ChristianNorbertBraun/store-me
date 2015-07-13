@@ -34,6 +34,9 @@ databaseInit.prepareDB();
      res.sendfile('webapp/index.html')
  });
 
+app.get("/reset(.html)?", function (req,res){
+   res.sendfile('webapp/misc/reset.html');
+});
 app.get("/register(.html)?", function(req,res){
     console.log('on register');
     res.sendfile('webapp/register.html');
@@ -150,6 +153,7 @@ app.post("/registeruser", function(req, res){
     console.log('register User');
     res.send(sessionID);
 });
+
 
 function prepareAuthentication(req)
 {
