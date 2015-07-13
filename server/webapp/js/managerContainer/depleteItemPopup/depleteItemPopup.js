@@ -84,8 +84,17 @@ var depleteItemPopup = Ractive.extend({
         }
     },
 
-    loadItemDeplete:function(){
-        getDataItemFromCouch(this.get('stockItemStructure._id'),function(success,data){
+    loadItemDeplete:function(itemID){
+        var inputItemID;
+
+        if(itemID){
+            inputItemID = itemID;
+        }
+        else{
+            inputItemID = this.get('stockItemStructure._id');
+        }
+
+        getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
