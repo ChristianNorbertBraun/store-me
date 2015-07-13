@@ -101,13 +101,11 @@ var depleteItemPopup = Ractive.extend({
     },
 
     depleteItem:function(){
-        console.dir(window.currentTableState);
-
-        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
         var parentContainerID = this.get('stockItemStructure.containerID');
+        var parentContainerName = getContainerById(parentContainerID).containerName;
 
         var depleted = deplete(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
         if(depleted){
