@@ -2,7 +2,7 @@
  * Created by christian on 14.05.15.
  */
 
-function loadTemplate(template, components, dbdata) {
+function loadTemplate(template, components, hardStrings) {
     $.ajax({
         url: template,
         async: true
@@ -12,7 +12,7 @@ function loadTemplate(template, components, dbdata) {
             el: $('#container'),
             template: data,
             components: components,
-            data:dbdata
+            data:hardStrings
         });
     });
 }
