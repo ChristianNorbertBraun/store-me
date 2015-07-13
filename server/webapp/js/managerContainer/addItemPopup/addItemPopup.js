@@ -113,7 +113,7 @@ var addItemPopup = Ractive.extend({
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
-        var parentContainerID = this.get('stockItemStructure.containerID');s
+        var parentContainerID = this.get('stockItemStructure.containerID');
         var parentContainerName = getContainerById(parentContainerID).containerName;
 
         var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure.itemID'), amount);
