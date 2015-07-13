@@ -146,17 +146,16 @@ function getScanResult(val, id) {
         document.addEventListener("ractiveLoaded",function(){
             if(window.itemInputValue){
                 window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
-                window.currentRactive.loadItem(window.itemInputValue);
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
             }
+            window.addItemRactive.loadItem(window.itemInputValue);
         },false);
     }
     else{
         if(id.indexOf('item') != -1) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
-            window.currentRactive.loadItem(window.itemInputValue);
         }
         else{
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
