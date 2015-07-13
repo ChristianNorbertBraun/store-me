@@ -78,8 +78,6 @@ var depleteItemPopup = Ractive.extend({
     },
 
     oncomplete:function(){
-        var event = new CustomEvent("ractiveLoaded");
-        document.dispatchEvent(event);
         var modalValue = window.currentRactive.getQueryParamForModal("modal");
         if(modalValue == "deplete"){
             $('#deplete-item-modal').modal('show');

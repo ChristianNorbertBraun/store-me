@@ -26,7 +26,7 @@ var addItemPopup = Ractive.extend({
                         </div>\
                          <div class="row popup-entry">\
                             <label class="col-md-4 modal-label">ItemID</label>\
-                            <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure.itemID}}"></div>\
+                            <div class="col-md-6"><input id="item-id-stock" type="text" class="form-control" placeholder="ItemID" on-change="loadItem()" value="{{stockItemStructure._id}}"></div>\
                             <div class="col-md-2">\
                                     <button class="btn btn-primary btn-sm" onclick="scan.performClick()">\
                                         <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>\
@@ -96,7 +96,7 @@ var addItemPopup = Ractive.extend({
             inputItemID = itemID;
         }
         else{
-            inputItemID = this.get('stockItemStructure.itemID');
+            inputItemID = this.get('stockItemStructure._id');
         }
         getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
@@ -117,7 +117,7 @@ var addItemPopup = Ractive.extend({
         var parentContainerName = getContainerById(window.currentTableState, parentContainerID).containerName;
         console.log(parentContainerName);
 
-        var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure.itemID'), amount);
+        var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure._id'), amount);
         if(stocked){
             $('#amount-label-stock').removeClass('red-text');
             window.currentRactive.writeToDb();
@@ -148,7 +148,7 @@ function getScanResult(val, id) {
     if(!window.ractiveLoaded){
         document.addEventListener("ractiveLoaded",function(){
             if(window.itemInputValue){
-                window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+                window.currentRactive.set('stockItemStructure._id', window.itemInputValue);
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
@@ -158,7 +158,7 @@ function getScanResult(val, id) {
     }
     else{
         if(window.itemInputValue) {
-            window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+            window.currentRactive.set('stockItemStructure._id', window.itemInputValue);
         }
         if(window.containerInputValue){
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
