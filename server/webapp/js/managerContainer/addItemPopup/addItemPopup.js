@@ -107,14 +107,15 @@ var addItemPopup = Ractive.extend({
                 window.currentRactive.set('stockItemStructure',stockItemStructure);
             }
         });
-    },  
+    },
 
     stockItem:function(){
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
         var parentContainerID = this.get('stockItemStructure.containerID');
-        var parentContainerName = getContainerById(parentContainerID).containerName;
+        console.log(parentContainerID);
+//        var parentContainerName = getContainerById(parentContainerID).containerName;
 
         var stocked = stock(window.currentTableState,window.parentContainerID,this.get('stockItemStructure.itemID'), amount);
         if(stocked){
