@@ -144,7 +144,6 @@ function getScanResult(val, id) {
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
-                window.currentRactive.loadItem();
             }
         },false);
     }
@@ -155,7 +154,6 @@ function getScanResult(val, id) {
         }
         else{
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
-            window.currentRactive.loadItem();
         }
     }
 
