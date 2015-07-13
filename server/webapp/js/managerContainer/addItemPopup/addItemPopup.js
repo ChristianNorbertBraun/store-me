@@ -137,10 +137,8 @@ function getScanResult(val, id) {
 
     if(!window.ractiveLoaded){
         document.addEventListener("ractiveLoaded",function(){
-            console.log('hi bind Event');
             if(window.itemInputValue){
                 window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
-                window.currentRactive.loadItem();
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
@@ -150,7 +148,6 @@ function getScanResult(val, id) {
     else{
         if(id.indexOf('item') != -1) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
-            window.currentRactive.loadItem();
         }
         else{
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
