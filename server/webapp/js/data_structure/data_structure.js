@@ -246,7 +246,7 @@ getAllContainerAttributes = function(container)
  * @function
  * @param {Container} container     - Container from where to start gathering items
  * @returns {Array} Array of ContainerAttributes
- * @author Marcel Groß
+ * @author Marcel Gross
  */
 getAllCompulsoryContainerAttributes = function(container)
 {
