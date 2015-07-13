@@ -89,9 +89,16 @@ var addItemPopup = Ractive.extend({
         },200);
     },
 
-    loadItem:function(){
+    loadItem:function(itemID){
+        var inputItemID;
 
-        getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
+        if(itemID){
+            inputItemID = itemID;
+        }
+        else{
+            inputItemID = this.get('stockItemStructure.itemID');
+        }
+        getDataItemFromCouch(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
@@ -103,12 +110,13 @@ var addItemPopup = Ractive.extend({
     },
 
     stockItem:function(){
-        var parentContainerName = window.parentContainer.containerName;
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
+        var parentContainerID = this.get('stockItemStructure.containerID');
+        var parentContainerName = getContainerById(parentContainerID).containerName;
 
-        var stocked = stock(window.currentTableState,window.parentContainer.containerID,this.get('stockItemStructure.itemID'), amount);
+        var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure.itemID'), amount);
         if(stocked){
             $('#amount-label-stock').removeClass('red-text');
             window.currentRactive.writeToDb();
@@ -143,6 +151,7 @@ function getScanResult(val, id) {
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
             }
+            window.addItemRactive.loadItem(window.itemInputValue);
         },false);
     }
     else{
