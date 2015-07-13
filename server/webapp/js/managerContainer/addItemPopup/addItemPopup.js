@@ -113,11 +113,10 @@ var addItemPopup = Ractive.extend({
         var itemName = this.get('stockItemStructure.name');
         var username = getUserNameBySessionID(getSessionIDFromURL());
         var amount = this.get('stockItemStructure.amount');
-        var parentContainerID = this.get('stockItemStructure.containerID');
-        console.log(parentContainerID);
-//        var parentContainerName = getContainerById(parentContainerID).containerName;
+        var parentContainerID = this.get('stockItemStructure.containerID');s
+        var parentContainerName = getContainerById(parentContainerID).containerName;
 
-        var stocked = stock(window.currentTableState,window.parentContainerID,this.get('stockItemStructure.itemID'), amount);
+        var stocked = stock(window.currentTableState,parentContainerID,this.get('stockItemStructure.itemID'), amount);
         if(stocked){
             $('#amount-label-stock').removeClass('red-text');
             window.currentRactive.writeToDb();
