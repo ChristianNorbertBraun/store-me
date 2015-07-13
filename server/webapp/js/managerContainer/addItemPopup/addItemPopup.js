@@ -89,9 +89,16 @@ var addItemPopup = Ractive.extend({
         },200);
     },
 
-    loadItem:function(){
+    loadItem:function(itemID){
+        var inputItemID;
 
-        getDataItemFromCouch(this.get('stockItemStructure.itemID'),function(success,data){
+        if(itemID){
+            inputItemID = itemID;
+        }
+        else{
+            inputItemID = this.get('stockItemStructure.itemID');
+        }
+        getDataItemFromCouch(this.get(inputItemID,function(success,data){
             if(success){
                 var stockItemStructure = window.currentRactive.get('stockItemStructure');
                 stockItemStructure.name = data.name;
@@ -139,6 +146,7 @@ function getScanResult(val, id) {
         document.addEventListener("ractiveLoaded",function(){
             if(window.itemInputValue){
                 window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+                window.currentRactive.loadItem(window.itemInputValue);
             }
             if(window.containerInputValue){
                 window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
@@ -148,6 +156,7 @@ function getScanResult(val, id) {
     else{
         if(id.indexOf('item') != -1) {
             window.currentRactive.set('stockItemStructure.itemID', window.itemInputValue);
+            window.currentRactive.loadItem(window.itemInputValue);
         }
         else{
             window.currentRactive.set('stockItemStructure.containerID', window.containerInputValue);
