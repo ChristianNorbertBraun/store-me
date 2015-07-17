@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: storme.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: storme.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by Marvin Therolf on 15.06.15.
+ */
+
+/**
+ * The container object is the main data structure in the StorMe business logic. It consists of a container name, a
+ * unique id which also encodes the position of the container inside the storage and three arrays holding the containers
+ * attributes, sub containers and contained items.&lt;br>
+ * &lt;br>
+ * A StorMe storage basically consists of a singe container given the container id "0".The storage is organized by
+ * adding containers to the sub container array. The first sub container will get the id "0-0", the second will get the
+ * id "0-1", the first sub container of container "0-0" will get the id "0-0-0" and so on. This creates a tree structure
+ * that greatly represents the reality of the storage situation and supports a fast search.
+ * @constructor
+ * @param {String} containerName    - Name of the constructed container
+ * @prop {String} containerID       - Unique identifier (form: 0-1-...-2)
+ * @prop {String} containerName     - Container name
+ * @prop {Array} attributes         - Attributes of this container (see class ContainerAttribute)
+ * @prop {Array} subContainers      - Sub containers of this container
+ * @prop {Array} items              - Items contained by this container (see class ContainerItem)
+ * @author Marvin Therolf
+ */
+function Container(containerName)
+{
+    this.containerID = "0";
+    this.containerName = containerName;
+    this.attributes = [];
+    this.subContainers = [];
+    this.items = [];
+}
+
+/**
+ * Returns a set of item IDs contained by a container and all of its sub containers.
+ * @function
+ * @param container {Container}     - Container to start the search from
+ * @param setOfIDs {Array}          - Set of IDs
+ * @returns {Array} Set of IDs
+ * @author Marvin Therolf
+ */
+var getAllItemIDs = function (container, setOfIDs)
+{
+    for (var i = 0; i &lt; container.items.length; i++)
+    {
+        var currentID = container.items[i].itemID;
+        addToSet(setOfIDs, currentID);
+    }
+    for (var k = 0; k &lt; container.subContainers.length; k++)
+    {
+        var currentSubContainer = container.subContainers[k];
+        getAllItemIDs(currentSubContainer, setOfIDs);
+    }
+    return setOfIDs;
+};
+
+/**
+ * Adds an item to an array if it doesn't contain this item already.
+ * @param array {Array}     - Set
+ * @param item {*}          - Item to add to the set
+ * @author Marvin Therolf
+ * */
+var addToSet = function (array, item)
+{
+    if (!contains(array, item))
+    {
+        array.push(item);
+    }
+};
+
+/**
+ * Checks if item already exits in array.
+ * @function
+ * @param array
+ * @param item
+ * @returns {boolean}
+ * @author Marvin Therolf
+ */
+var contains = function (array, item)
+{
+    var result = false;
+
+    for (var i = 0; i &lt; array.length; i++)
+    {
+        if (array[i] === item)
+        {
+            result = true;
+            break;
+        }
+    }
+    return result;
+};
+
+/**
+ * Returns all items contained by the given container and its sub containers. The returned array is an array of
+ * ContainerItem objects.
+ * @function
+ * @param {Container} container     - Container from where to start gathering items
+ * @returns {Array} Array of ContainerItems
+ * @author Marvin Therolf
+ */
+getAllItems = function(container)
+{
+    var allItems = container.items;
+
+    for (var i = 0; i &lt; container.subContainers.length; i++)
+    {
+        var subContainer = container.subContainers[i];
+        allItems = allItems.concat(getAllItems(subContainer));
+    }
+    return allItems;
+};
+
+/**
+ * Adds all attributes of an item to a set of attributes. So if the set already contains an attribute it is not added
+ * once more. Because it's a set. :)
+ * @function
+ * @param attributes {Array}    - Set of ItemAttribute objects
+ * @param item {Item}           - Item object to get attributes from
+ */
+var addAttributes = function(attributes, item)
+{
+     for (var i = 0; i &lt; item.attributes.length; i++)
+     {
+         var currentAttribute = item.attributes[i];
+         addToSet(attributes, currentAttribute);
+     }
+};
+
+/**
+ * Transfers an array of ContainerItems into an array of Items enabling a data base connection in the process to fetch
+ * the item information.
+ * @function
+ * @param {Array} containerItems        - Array of ContainerItems
+ * @returns {Array} Array of Items
+ * @author Marvin Therolf
+ */
+getDataItems = function(containerItems, callBackFunction)
+{
+    var dataItems = [];
+    var counter = 0;
+    for (var i = 0; i &lt; containerItems.length; i++)
+    {
+        var currentContainerItem = containerItems[i];
+        getDataItemFromCouch(currentContainerItem.itemID, function(status, data)
+        {
+            if (status)
+            {
+                dataItems[counter] = data;
+            }
+            if(containerItems.length-1 == counter){
+                dataItems = sortArrayByGivenArray(containerItems, dataItems);
+                callBackFunction(true, dataItems);
+                return;
+            }
+            ++counter;
+        });
+    }
+    callBackFunction(false, []);
+};
+
+/**
+ * Orders an array of items in the same order of a containerItems array
+ * @function
+ * @param {Array} givenArray        - an array of containerItems with the right order
+ * @param {Array} resultArray       - an array with probably a false order of items
+ * @returns {Array}                 - the right ordered items array
+ * @author Marcel Gross
+ */
+sortArrayByGivenArray = function(givenArray, resultArray){
+    var result = [];
+    for (var i = 0; i &lt; givenArray.length; i++){
+        for (var j = 0; j &lt; resultArray.length; j++){
+            if(givenArray[i].itemID == resultArray[j]._id){
+                result[i] = resultArray[j];
+                break;
+            }
+        }
+    }
+    return result;
+};
+
+/**
+ * Adds a ContainerAttribute to a container.
+ * @function
+ * @param {Container} container             - Container to add attribute to
+ * @param {ContainerAttribute} attribute    - Attribute added to container
+ * @author Marvin Therolf
+ */
+addContainerAttribute = function(container, attribute)
+{
+    container.attributes.push(attribute);
+};
+
+/**
+ * Removes a ContainerAttribute from a container.
+ * @function
+ * @param {Container} container     - Container to remove attribute from
+ * @param {String} attributeName    - Name of the attribute removed from container
+ * @author Marvin Therolf
+ */
+removeContainerAttribute = function(container, attributeName)
+{
+    for (var i = 0; i &lt; container.attributes.length; i++)
+    {
+        if (container.attributes[i].attributeName === attributeName)
+        {
+            removeFromArray(container.attributes, i);
+            break;
+        }
+    }
+};
+
+/**
+ * Removes all ContainerAttributes from a container.
+ * @function
+ * @param {Container} container     - Container to remove attributes from
+ * @author Marvin Therolf
+ */
+removeAllContainerAttributes = function(container)
+{
+    container.attributes = [];
+};
+
+/**
+ * Returns all container attributes contained by the given container and its sub containers. The returned array is an array of
+ * ContainerAttributes objects.
+ * @function
+ * @param {Container} container     - Container from where to start gathering items
+ * @returns {Array} Array of ContainerAttributes
+ * @author Marcel Groß
+ */
+getAllContainerAttributes = function(container)
+{
+    var allAttributes = container.attributes;
+
+    for (var i = 0; i &lt; container.subContainers.length; i++)
+    {
+        var subContainer = container.subContainers[i];
+        allAttributes = allAttributes.concat(getAllContainerAttributes(subContainer));
+    }
+    return allAttributes;
+};
+
+/**
+ * Returns all compulsory container attributes contained by the given container and its sub containers. The returned array is an array of
+ * ContainerAttributes objects.
+ * @function
+ * @param {Container} container     - Container from where to start gathering items
+ * @returns {Array} Array of ContainerAttributes
+ * @author Marcel Gross
+ */
+getAllCompulsoryContainerAttributes = function(container)
+{
+    var allCompulsoryAttributes = [];
+    var allContainerAttributes = container.attributes;
+
+    for (var i = 0; i &lt; allContainerAttributes.length; i++)
+    {
+        var currentContainerAttribute = allContainerAttributes[i];
+
+        if (currentContainerAttribute.compulsory)
+        {
+            allCompulsoryAttributes.push(currentContainerAttribute);
+        }
+    }
+    return allCompulsoryAttributes;
+};
+
+
+/**
+ * Adds a sub container to a container.
+ * @function
+ * @param {Container} container     - Container to add sub container to
+ * @param {Container} subContainer  - Sub container added to container
+ * @author Marvin Therolf
+ */
+addSubContainer = function(container, subContainer)
+{
+    var id = findFreeID(container);
+    subContainer.containerID = id;
+    container.subContainers.push(subContainer);
+
+    var subContainers = copyArray(subContainer.subContainers);
+    removeAllSubContainers(subContainer);
+
+    for (var i = 0; i &lt; subContainers.length; i++)
+    {
+        addSubContainer(subContainer, subContainers[i]);
+    }
+};
+
+/**
+ * Adds the given Amount of sub containers to the given container. Sub containers are all created within this function
+ * and are named after the given prefix followed by an upcounting number (starting with 0);
+ * @function
+ * @param {Container} container         - Container to add sub containers to
+ * @param {String} subContainerPrefix   - Prefix after which sub containers are named
+ * @param {Number} amount               - Amount of sub containers to created and add
+ * @param {Array} attributes            - Array of ContainerAttribute objects (may be null)
+ * @author Marvin Therolf
+ */
+addSubContainers = function(container, subContainerPrefix, amount, attributes)
+{
+    for (var i = 0; i &lt; amount; i++)
+    {
+        var subContainer = new Container(subContainerPrefix + i);
+        subContainer.attributes = attributes;
+        addSubContainer(container, subContainer);
+    }
+};
+
+/**
+ * Removes a sub container from a given container using the sub containers containerID.
+ * @function
+ * @param {Container} container     - Container to remove sub container from
+ * @param {String} subContainerID   - ContainerID of the sub container to remove
+ * @author Marvin Therolf
+ */
+removeSubContainer = function(container, subContainerID)
+{
+    for (var i = 0; i &lt; container.subContainers.length; i++)
+    {
+        if (container.subContainers[i].containerID === subContainerID)
+        {
+            removeFromArray(container.subContainers, i);
+            break;
+        }
+    }
+};
+
+/**
+ * Removes all sub containers from a given container.
+ * @function
+ * @param {Container} container     - Container to remove sub containers from
+ * @author Marvin Therolf
+ */
+removeAllSubContainers = function(container)
+{
+    container.subContainers = [];
+};
+
+/**
+ * Adds a given amount of ContainerItems to the container.
+ * @function
+ * @param {Container} container     - Container to add items to
+ * @param {String} itemID           - ItemID of the item to add
+ * @param {Number} amount           - Amount of items to add to the container
+ * @author Marvin Therolf
+ */
+addItem = function(container, itemID, amount)
+{
+    var result = false;
+
+    if (amount > 0)
+    {
+        var containerItem = containsItem(container, itemID);
+
+        if (containerItem != null)
+        {
+            increaseAmount(containerItem, amount);
+            result = true;
+        }
+        else
+        {
+            containerItem = new ContainerItem(itemID, amount);
+            containerItem.parentContainerID = container.containerID;
+            container.items.push(containerItem);
+            result = true;
+        }
+    }
+    return result;
+};
+
+/**
+ * Checks if a container contains an item by checking the items id. Doesn't check sub containers. Returns the item if
+ * found in form of a ContainerItem. Returns null otherwise.
+ * @function
+ * @param {Container} container     - Container to check
+ * @param {String} itemID           - ID of searched item
+ * @returns {ContainerItem} ContainerItem if found, null otherwise
+ * @author Marvin Therolf
+ */
+containsItem = function(container, itemID)
+{
+    var result = null;
+
+    for (var i = 0; i &lt; container.items.length; i++)
+    {
+        var currentContainerItem = container.items[i];
+
+        if (currentContainerItem.itemID === itemID)
+        {
+            result = currentContainerItem;
+            break;
+        }
+    }
+    return result;
+};
+
+/**
+ * Removes an amount of items from a given container.
+ * @function
+ * @param {Container} container     - Container to remove items from
+ * @param {String} itemID           - ItemID of item to remove
+ * @param {Number} amount           - amount of items to remove
+ * @author Marvin Therolf
+ */
+removeItem = function(container, itemID, amount)
+{
+    var result = false;
+
+    if (amount > 0)
+    {
+        for (var i = 0; i &lt; container.items.length; i++)
+        {
+            var containerItem = container.items[i];
+
+            if (containerItem.itemID === itemID)
+            {
+                if (containerItem.amount === amount)
+                {
+                    removeFromArray(container.items, i);
+                    result = true;
+                }
+                else if (containerItem.amount > amount)
+                {
+                    decreaseAmount(container.items[i], amount);
+                    result = true;
+                }
+                break;
+            }
+        }
+    }
+    console.dir(container);
+    return result;
+};
+
+/**
+ * Removes all items from a given container.
+ * @function
+ * @param {Container} container     - Container to removes all items from
+ * @author Marvin Therolf
+ */
+removeAllItems = function(container)
+{
+    container.items = [];
+};
+
+/**
+ * Dynamically finds the first free container id for a newly added sub container. If you e.g. already have a container with
+ * the container id "0-1" and this container contains the sub containers "0-1-0", "0-1-1" and "0-1-3", this function
+ * will return "0-1-2" as this is the first free sub container id.
+ * @function
+ * @param {Container} container     - Container from where to start looking for an id
+ * @returns {String} Next free container id
+ * @author Marvin Therolf
+ */
+findFreeID = function(container)
+{
+    var freeSubID = container.subContainers.length;
+    var subContainerSubIDs = [];
+
+    for (var i = 0; i &lt; container.subContainers.length; i++)
+    {
+        var subContainerID = container.subContainers[i].containerID;
+        var subContainerIDAsArray = subContainerID.split("-");
+        var subContainerSubID = subContainerIDAsArray.pop();
+        subContainerSubIDs.push(subContainerSubID);
+    }
+    subContainerSubIDs.sort(sortNumerically);
+
+    for (var k = 0; k &lt; subContainerSubIDs.length; k++)
+    {
+        if (subContainerSubIDs[k] != k)
+        {
+            freeSubID = k;
+            break;
+        }
+    }
+    return container.containerID + "-" + freeSubID;
+};
+
+/**
+ * Finds and returns a container starting at a given container recursively checking the container id.
+ * @function
+ * @param {Container} container     - Container to start the search at
+ * @param {String} searchedID       - ContainerID of the searched container
+ * @returns {Container} Searched container, or null if container wasn't found
+ * @author Marvin Therolf and Marcel Groß
+ */
+getContainerById = function(container, searchedID)
+{
+    var result = null;
+
+    if (container.containerID === searchedID)
+    {
+        result = container;
+    }
+    else
+    {
+        var subContainers = container.subContainers;
+
+        for (var i = 0; i &lt; subContainers.length; i++)
+        {
+            var subContainer = subContainers[i];
+            var subContainerID = subContainer.containerID;
+            var searchedSubID = searchedID.substring(0, subContainer.containerID.length);
+
+            if (subContainerID === searchedSubID)
+            {
+                result = getContainerById(subContainer, searchedID);
+                break;
+            }
+        }
+    }
+    return result;
+};
+
+/**
+ * An attribute object to set properties of containers.
+ * @constructor
+ * @param {String} attributeName    - Name of the attribute
+ * @param {Number} value            - Will normally a number but can be sth else (like boolean)
+ * @param {String} unit             - The unit matching the value
+ * @param {String} type             - Sets this attributes type (e.g. quantity or property)
+ * @param {Boolean} compulsory      - True if items contained by this container must fulfill this requirement
+ * @prop {String} attributeName    - Name of the attribute
+ * @prop {Number} value            - Will normally a number but can be sth else (like boolean)
+ * @prop {String} unit             - The unit matching the value
+ * @prop {String} type             - Sets this attributes type (e.g. quantity or property)
+ * @prop {Boolean} compulsory      - True if items contained by this container must fulfill this requirement
+ * @author Marvin Therolf
+ */
+function ContainerAttribute(attributeName, value, unit, type, compulsory)
+{
+    this.attributeName = attributeName;
+    this.value = value;
+    this.unit = unit;
+    this.type = type;
+    this.compulsory = compulsory;
+}
+
+/**
+ * A ContainerItem holds an ItemID as well as the amount of contained items of the id. For working with real items
+ * there has to be a mapping process with the item data base. Directly storing items inside the container tree
+ * structure would unnecessarily blow up the data structure and would be unhandy when trying to access the items
+ * attributes outside of the container structure.
+ * @constructor
+ * @param {String} itemID           - ID of the contained item
+ * @param {Number} amount           - Amount of items hold by the ContainerItem
+ * @prop {String} itemID            - ID of the contained item
+ * @prop {Number} amount            - Amount of items hold by the ContainerItem
+ * @prop {String} parentContainerID - ID of the container that holds this ContainerItem
+ * @author Marvin Therolf
+ */
+function ContainerItem(itemID, amount)
+{
+    this.itemID = itemID;
+    this.amount = amount;
+    this.parentContainerID = "0";
+}
+
+/**
+ * Increases the amount of items held by a ContainerItem object by the given amount.
+ * @function
+ * @param {ContainerItem} containerItem     - ContainerItem the holds the item
+ * @param {Number} amount               - Amount to add to the total amount
+ * @author Marvin Therolf
+ */
+increaseAmount = function(containerItem, amount)
+{
+    containerItem.amount += amount;
+};
+
+/**
+ * Decreases the amount of items held by a ContainerItem object by the given amount.
+ * @function
+ * @param {Container} containerItem     - ContainerItem the holds the item
+ * @param {Number} amount               - Amount to sub from the total amount
+ * @author Marvin Therolf
+ */
+decreaseAmount = function(containerItem, amount)
+{
+    containerItem.amount -= amount;
+};
+
+/**
+ * This object holds the actual item objects stored in the database. Whenever it is necessary to work with the real
+ * item data it is necessary to fetch the information from the database using the getDataItems function.
+ * @constructor
+ * @param {String} itemID           - Unique Identifier of the item
+ * @param {String} itemName         - Name of the item
+ * @param {String} category_id      - Unique Identifier of the category
+ * @param {Array} attributes        - Array of ItemAttributes
+ * @prop {String} _id               - Unique Identifier of the item in DB
+ * @prop {String} category_id       - Unique Identifier of the category
+ * @prop {String} itemName          - Name of the item
+ * @prop {Array} attributes         - Array of ItemAttributes
+ * @author Marvin Therolf
+ */
+function Item(itemID, itemName, category_id, attributes)
+{
+    this._id = itemID;
+    this.category_id = category_id;
+    this.attributes = attributes;
+    this.name = itemName;
+}
+
+/**
+ * Adds an ItemAttribute object to the attributes array of a given item.
+ * @function
+ * @param {Item} item                   - Item to add the attribute to
+ * @param {ItemAttribute} attribute     - Attribute to add to the item
+ * @author Marvin Therolf
+ */
+addItemAttribute = function(item, attribute)
+{
+    item.attributes.push(attribute);
+};
+
+/**
+ * Removes an ItemAttribute object from the attributes array of a given item.
+ * @function
+ * @param {Item} item                   - Item to remove the attribute from
+ * @param {String} attributeName        - Name of the attribute to remove from the item
+ * @author Marvin Therolf
+ */
+removeItemAttribute = function(item, attributeName)
+{
+    for (var i = 0; i &lt; item.attributes.length; i++)
+    {
+        if (item.attributes[i].attributeName === attributeName)
+        {
+            removeFromArray(item.attributes, i);
+            break;
+        }
+    }
+};
+
+/**
+ * Removes all attributes from a given item.
+ * @function
+ * @param {Item} item       - Item to remove all attributes from
+ * @author Marvin Therolf
+ */
+removeAllItemAttributes = function(item)
+{
+    item.attributes = [];
+};
+
+/**
+ * Checks an array of Item objects taken from the database for a given categoryID.
+ * Returns true if category id was found. Returns false otherwise.
+ * @function
+ * @param items {Array}         - Array of items from database to search
+ * @param category_id {String}  - Category id to search for
+ * @returns {boolean} Whether or not category id was found
+ */
+var categoryStillReferenced = function(items, category_id)
+{
+    var referenceFound = false;
+
+    for (var i = 0; i &lt; items.length; i++)
+    {
+        if (items[i].value.category_id === category_id)
+        {
+            referenceFound = true;
+            break;
+        }
+    }
+    return referenceFound;
+};
+
+/**
+ * Checks if an Item is still stored a storage
+ * @function
+ * @param itemID {String}       - ID of the item which gets checked
+ * @param storage {Container}   - Storage in which the item gets searched
+ * @returns {boolean} Whether item was found or not
+ */
+var itemStillStored = function(itemID, storage)
+{
+    var itemStored = false;
+    var allItems = getAllItems(storage);
+
+    for (var i = 0; i &lt; allItems.length; i++)
+    {
+        if (allItems[i].itemID === itemID)
+        {
+            itemStored = true;
+            break;
+        }
+    }
+
+    return itemStored;
+}
+
+/**
+ * An attribute object to set properties of items.
+ * @constructor
+ * @param {String} attributeName   - Name of the attribute
+ * @param {Number} value           - Will normally a number but can be sth else (like boolean)
+ * @param {String} unit            - The unit matching the value
+ * @param {String} type            - Sets this attributes type (e.g. quantity or property)
+ * @prop {String} attributeName    - Name of the attribute
+ * @prop {Number} value            - Will normally a number but can be sth else (like boolean)
+ * @prop {String} unit             - The unit matching the value
+ * @prop {String} type             - Sets this attributes type (e.g. quantity or property)
+ * @author Marvin Therolf
+ */
+function ItemAttribute(attributeName, value, unit, type)
+{
+    this.attributeName = attributeName;
+    this.value = value;
+    this.unit = unit;
+    this.type = type;
+}
+
+/**
+ * Function to quickly remove an object from an array by providing the array and the object's index.
+ * @function
+ * @param {Array} array     - Array to remove object from
+ * @param index             - Index of the object to remove
+ * @author Marvin Therolf
+ */
+var removeFromArray = function(array, index)
+{
+    var hold = array[index];
+    array[index] = array[array.length-1];
+    array[array.length-1] = hold;
+    array.pop();
+};
+
+/**
+ * Copies a given array and returns the copy.
+ * @function
+ * @param {Array} array - Original of the array to copy
+ * @returns {Array} Copy of the given array.
+ */
+var copyArray = function(array)
+{
+    var result = [];
+
+    for (var i = 0; i &lt; array.length; i++)
+    {
+        result.push(array[i]);
+    }
+    return result;
+};
+
+/**
+ * Helping function to compare two objects (numbers). Used in the sorting algorithm.
+ * @param {Number} a    - A number
+ * @param {Number} b    - Another number
+ * @returns {number} The difference between a and b.
+ * @author Marvin Therolf
+ */
+var sortNumerically = function (a, b)
+{
+    return a - b;
+};
+
+/**
+ * Counts the amount of items stored in a container and its sub containers.
+ * @function
+ * @param container {Container}     - Container to start counting from
+ * @returns {Number} Amount of stored items.
+ * @author Marvin Therolf
+ */
+var countItems = function(container)
+{
+    var amount = 0;
+    var allItems = getAllItems(container);
+
+    for (var i = 0; i &lt; allItems.length; i++)
+    {
+        amount += allItems[i].amount;
+    }
+    return amount;
+};
+
+/**
+ * Recursively counts the amount of sub containers contained by a given container.
+ * @function
+ * @param container {Container}     - Container to start counting from
+ * @returns {Number} Amount of sub containers (recursive).
+ * @author Marvin Therolf
+ */
+var countContainers = function(container)
+{
+    var amount = 1;
+    var subContainers = container.subContainers;
+
+    for (var i = 0; i &lt; subContainers.length; i++)
+    {
+        amount += countContainers(subContainers[i]);
+    }
+    return amount;
+};
+
+/**
+ * Searches a list of items for a sub string included in the item name. Returns an array of results.
+ * @function
+ * @param items {Array}      - Array of items to search
+ * @param subString {String} - Substring to search for
+ * @returns {Array} Results
+ */
+var searchForItemName = function(items, subString)
+{
+    var result = [];
+
+    for (var i = 0; i &lt; items.length; i++)
+    {
+        var currentItem = items[i];
+
+        if (currentItem.name.indexOf(subString) > -1)
+        {
+            result.push(currentItem);
+        }
+    }
+    return result;
+};
+
+
+
+
+// TODO: plausibility (already exists, etc.)
+// TODO: rename CRUD operations (Marcel W.)
+// TODO: what if I someone use an object which has been successfully removed from the data structure
+// TODO: think about parent managing
+// TODO: parent handling in container item
+// TODO: scope (inklusive Doku-Annotations)
+// TODO: exclude from misc => refresh all references???
+
+/**
+ * Created by Marcel on 25.06.2015.
+ */
+
+
+/**
+ * A Constructor for Log files, a log file describes what happened to the store, was there something stoked or depleted
+ *
+ * @param {Boolean} stored      - Shows if the data is stoked (true) or depleted (false)
+ * @param {String} containerID  - The container where the movement happened
+ * @param {String} itemName     - The item which stoked or depleted
+ * @param {Number} amount       - The amount of the item which is stoked or depleted
+ * @param {String} employee     - The name of the employee who stoked/depleted items
+ * @prop {Boolean} stored       - Shows if the data is stoked (true) or depleted (false)
+ * @prop {String} date          - The time when the movement in the store happened
+ * @prop {String} itemName      - The item which stoked or depleted
+ * @prop {Number} amount        - The amount of the item which is stoked or depleted
+ * @prop {String} employee      - The name of the employee who stoked/depleted items
+ * @constructor
+ * @author Marcel Gross
+ */
+function LogContainer(stored, containerID, itemName, amount, employee)
+{
+    this.stored = stored;
+    this.date = getCurrentTime();
+    this.containerID = containerID;
+    this.itemName = itemName;
+    this.amount = amount;
+    this.employee = employee;
+}
+
+/**
+ * Returns a string representation for the current time stamp in the form dd.MM.yyyy hh:mm:ss.
+ * @function
+ * @returns {String} Time stamp
+ * @author Marcel Groß, Marvin Therolf
+ */
+var getCurrentTime = function ()
+{
+    var now = new Date();
+    var dd = now.getDate();
+    var MM = now.getMonth()+1; //January is 0!
+    var yyyy = now.getFullYear();
+    var hh = now.getHours();
+    var mm = now.getMinutes();
+    var ss = now.getSeconds();
+
+    if (dd &lt; 10)
+    {
+        dd = "0" + dd;
+    }
+    if (MM &lt; 10)
+    {
+        MM = "0" + MM;
+    }
+    if (hh &lt; 10)
+    {
+        hh = "0" + hh;
+    }
+    if (mm &lt; 10)
+    {
+        mm = "0" + mm;
+    }
+    if (ss &lt; 10)
+    {
+        ss = "0" + ss;
+    }
+    var currentTime = dd + "." + MM + "." + yyyy + " " + hh + ":" + mm  + ":" + ss;
+    return currentTime;
+};
+
+/**
+ * A function to save a logContainer into the database
+ * @function
+ * @param {LogContainer} logContainer       - The logContainer which should be stored into the database
+ * @param {Function} callBackFunction       - Necessary callBackFunction
+ * @author Marcel Gross
+ */
+var saveLogContainer = function(logContainer, callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.log).saveDoc(logContainer, {
+        success: function(data) {
+            callBackFunction(true);
+        },
+        error: function(error){
+            console.log(error);
+            callBackFunction(false);
+        }
+    })
+};
+
+/**
+ * A function to load logContainer from the database
+ * @function
+ * @param {Function} callBackFunction       - Necessary callBackFunction
+ * @author Marcel Gross
+ */
+var loadAllLogContainer = function (callBackFunction) {
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var mapFunction = function(doc) {
+        emit(null, doc);
+    };
+    $.couch.db(strings.database.log).query(mapFunction, "_count", "javascript", {
+        success: function(data) {
+            try {
+                var logs = data["rows"];
+                callBackFunction(true, logs);
+            } catch(err){
+                callBackFunction(true);
+            }
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        },
+        reduce: false
+    });
+};
+
+/**
+ * Created by Marcel on 24.06.2015.
+ */
+/**
+ * A basic user object which is stored in the database. A user is uniquely identified by its name
+ *
+ * @constructor
+ * @param {String} username     - Name and id of the constructed user
+ * @param {String} password     - Password for the constructed user
+ * @prop {String} password      - Password for the user
+ * @prop {String} userType      - Identifies the user role (admin, user, ...)
+ * @prop {Array} stores         - stores owned by the user
+ * @author Marcel Gross
+ */
+function User(username, password){
+    this._id = username;
+    this.name = username;
+    this.password = password;
+    this.userType = "User";
+    this.stores = [];
+}
+
+/**
+ * Add a given store (referenced by its name) to a given user (referenced by its name)
+ *
+ * @function
+ * @param {String} userName                 - the name of the user where to add the store
+ * @param {String} store                    - the name of the store which to add to the user
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Gross
+ */
+addStore = function(userName, store, callBackFunction){
+    loadUserFromDB(userName, function(exists, data){
+        if(exists){
+            if($.inArray(store, data.stores )== true){
+                data.stores.push(store);
+                saveUserInDB(data, function(saved, status){
+                    if(!saved) {
+                        console.log(status);
+                    }
+                });
+            }
+            callBackFunction(true);
+        } else {
+            callBackFunction(false);
+        }
+    })
+};
+
+/**
+ * Remove a given store (referenced by its name) from a given user (referenced by its name)
+ *
+ * @function
+ * @param {String} userName                 - the name of the user where to remove the store
+ * @param {String} store                    - the name of the store which to remove from the user
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Gross
+ */
+removeStore = function(userName, store, callBackFunction){
+    loadUserFromDB(userName, function(exists, data){
+        if(exists){
+            var index = -1;
+            for(var i = 0; i &lt; data.stores.length; i++){
+                if(data.stores[i] === store){
+                    index = i;
+                    break;
+                }
+            }
+            if(index > -1){
+                removeFromArray(data.stores, index);
+            }
+            saveUserInDB(data, function(saved, status){
+                if(!saved) {
+                    console.log(status);
+                }
+            });
+            callBackFunction(true);
+        } else {
+            callBackFunction(false);
+        }
+    })
+};
+
+/**
+ * Change the userType of a given user (referenced by its name) to the given userType
+ *
+ * @function
+ * @param {String} userName                 - the name of the user which userType should be changed
+ * @param {String} newUserType              - the new type for the user
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Gross
+ */
+changeUserType = function(userName, newUserType, callBackFunction){
+    loadUserFromDB(userName, function(exists, data){
+        if(exists){
+            data.userType = newUserType;
+
+            saveUserInDB(data, function(saved, status){
+                if(!saved) {
+                    console.log(status);
+                }
+            });
+            callBackFunction(true);
+        } else {
+            callBackFunction(false);
+        }
+    })
+};
+
+/**
+ * Load a user by its name from the database
+ *
+ * @function
+ * @param {String} userName                 - the name of the user which should be loaded from the database
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Gross
+ */
+loadUserFromDB = function(userName, callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.user).openDoc(userName, {
+        success: function(data) {
+            callBackFunction(true, data);
+        },
+        error: function(status) {
+            console.log("war heir");
+            console.log(status);
+            callBackFunction(false, status);
+        }
+    });
+};
+
+/**
+ * Save or update a user into the database
+ *
+ * @function
+ * @param {User} user                       - the user object to store into the database
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Gross
+ */
+saveUserInDB = function(user, callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.user).saveDoc(user, {
+        success: function(data) {
+            callBackFunction(true);
+        },
+        error: function(error){
+            console.log(error);
+            callBackFunction(false);
+        }
+    })
+};
+
+if(typeof exports !== "undefined"){
+    exports.newUser = function(username, password){
+        return new User(username, password);
+    }
+}
+
+/**
+ * Created by Marcel on 22.06.2015.
+ */
+
+/**
+ * Save an attribute from given name, unit and type to the database
+ *
+ * @function
+ * @param {Function} callBackFunction   - Necessary callBackFunction
+ * @param {String} name                 - name of the attribute
+ * @param {String} unit                 - type of unit for the current attribute
+ * @param {String} type                 - describes the type of unit e.g. boolean
+ * @author Marcel Gross
+ */
+var saveAttribute = function(callBackFunction, name, unit, type) {
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var attribute =
+    {
+        _id : name,
+        "unit" : unit,
+        "type" : type
+    };
+
+    $.couch.db(strings.database.attributes).saveDoc(attribute, {
+        success: function(data) {
+            callBackFunction(true);
+        },
+        error: function(status){
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+};
+
+/**
+ * Returns an array with all saved attributes
+ *
+ * @function
+ * @param {Function} callBackFunction   - Necessary callBackFunction
+ * @author Marcel Gross
+ */
+var loadAllAttributes = function (callBackFunction) {
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var mapFunction = function(doc) {
+        emit(null, doc);
+    };
+    $.couch.db(strings.database.attributes).query(mapFunction, "_count", "javascript", {
+        success: function(data) {
+            try {
+                var attributes = data["rows"];
+                callBackFunction(true, attributes);
+            } catch(err){
+                callBackFunction(true);
+            }
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        },
+        reduce: false
+    });
+};
+
+ /**
+ * Returns an attribute object identified by its name
+ *
+ * @function
+ * @param {Function} callBackFunction            - necessary callBackFunction
+ * @param {String} attributeName                 - name which identifies the needed attribute object
+ * @returns {Attribute}                          - returns the attribute, which is identified by attributeName
+ * @author Marcel Gross
+ */
+var loadAttributeByName = function(attributeName, callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.attributes).openDoc(attributeName, {
+        success: function(data) {
+            callBackFunction(true, data);
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+};
+
+/**
+ * Created by Marcel on 10.06.2015.
+ */
+
+
+/**
+ * Saves or update the given container in the database
+ *
+ * @function
+ * @param {Function} callBackFunction   - Necessary callBackFunction
+ * @param {Container} container         - Complete store
+ * @author Marcel Gross
+ */
+var saveStore = function(callBackFunction, container){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    var storeName = container.containerName;
+    loadStoreByName(storeName, function(loaded, db){
+        if(loaded){
+            container["_id"] = db._id;
+            container["_rev"] = db._rev;
+        } else {
+            container["_id"] = storeName;
+        }
+        $.couch.db(strings.database.container).saveDoc(container, {
+
+
+            success: function (data) {
+                callBackFunction(true);
+            },
+            error: function (status) {
+                console.log(status);
+                callBackFunction(false);
+            }
+        });
+    });
+  };
+
+/**
+ * Load the root container and its subcontainers from database identified by its storeName
+ *
+ * @function
+ * @param {String} storeName    - the name which identifies the database
+ * @returns {Container}         - the container identified by the given storeName
+ * @author Marcel Gross
+ */
+var loadStoreByName = function(storeName, callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.container).openDoc(storeName, {
+
+
+        success: function(data) {
+            callBackFunction(true, data);
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+};
+
+/**
+ * Load complete store from database
+ *
+ * @function
+ * @param {Function} callBackFunction   - Necessary callBackFunction
+ * @author Marcel Gross
+ */
+var loadStore = function(callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+
+    var mapFunction = function(doc) {
+        emit(null, doc);
+    };
+    $.couch.db(strings.database.container).query(mapFunction, "_count", "javascript", {
+
+        success: function(data) {
+            try {
+                var containerObject = data["rows"][0].value;
+                callBackFunction(true, containerObject, containerObject["_id"], containerObject["_rev"]);
+            } catch(err){
+                callBackFunction(true);
+            }
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        },
+        reduce: false
+    });
+};
+
+/**
+ * Created by Waleska on 02.06.2015.
+ */
+var name, pass, passwordConfirmed;
+
+/**
+ * This function registers and saves a user into our database
+ * @function
+ * @author Marcel Waleska, Marcel Gross
+ */
+function register() {
+    console.log('register()');
+    try
+    {
+        getValues();
+        checkNull();
+        checkIfUserAlreadyExist(function(exists, data){
+            console.log('check User existence');
+            if (exists) {
+                window.alert(strings.registration.userExist);
+                throw 'User already exists';
+            }
+            checkSafePassword();
+            checkPasswordConfirmation();
+            createUser(function(created, sessionID){
+                if(created)
+                {
+                    location.href = urlBuilder(strings.link.toDashboard, sessionID);
+                }
+                else
+                {
+                    window.alert(strings.registration.creatingError);
+                }
+            });
+        });
+
+    }
+    catch(err)
+    {
+        console.dir(err);
+    }
+}
+/**
+ * This function listens for the key event enter.
+ * After enter is pressed it starts the method register
+ * @function
+ * @param {Number} event    - value of the key which is pressed
+ * @author Marcel Waleska
+ */
+function keyHandlerRegister(e)
+{
+    var key = e.keyCode;
+    if(key == 13) register();
+}
+
+/**
+ * Ensures that the given password has a minimum of safety requirements.
+ * It has to have at least a length of 7 characters, contains at least one small, big letter and one number
+ * @function
+ * @author Marcel Waleska
+ */
+function checkSafePassword()
+{
+    if (this.pass.length &lt; 7) notSafe();
+    var passwordArray = pass.split("");
+    var containBigLetter = false;
+    var containSmallLetter = false;
+    var containNumber = false;
+    for(var i = 0; i&lt;this.pass.length; i++)
+    {
+        if(passwordArray[i] >= 'A' &amp;&amp; passwordArray[i] &lt;= 'Z') containBigLetter = true;
+        if(passwordArray[i] >= 'a' &amp;&amp; passwordArray[i] &lt;= 'z') containSmallLetter = true;
+        if(passwordArray[i] >= '0' &amp;&amp; passwordArray[i] &lt;= '9') containNumber = true;
+    }
+    if(!containBigLetter || !containSmallLetter || !containNumber) notSafe();
+}
+/**
+ * Is called if the password requirements are not adhered
+ * @function
+ * @author Marcel Waleska
+ */
+function notSafe()
+{
+    window.alert(strings.registration.PasswordNotSafe);
+    throw "Password not Safe";
+}
+/**
+ * This function takes the username,  password and confirmed-password from the input form and saves it to the variables loginName, loginPassword and passwordConfirmed
+ *
+ * @function
+ * @author Marcel Waleska
+ */
+function getValues()
+{
+    name = $('#register-username').val();
+    pass = $('#register-password').val();
+    passwordConfirmed = $('#confirmed-password').val();
+}
+
+/**
+ * Starts a GET-request to ensure that no other user with the same username exits
+ * @param {Function} callBackFunction       - necessary callBackFunction
+ * @function
+ * @author Marcel Waleska, Marcel Gross
+ */
+var checkIfUserAlreadyExist = function(callBackFunction){
+    $.couch.urlPrefix = strings.link.dbConnection;
+    $.couch.db(strings.database.user).openDoc(name, {
+        success: function(data) {
+            callBackFunction(true);
+        },
+        error: function(status) {
+            console.log(status);
+            callBackFunction(false);
+        }
+    });
+};
+/**
+ * Checks if the username and password is filled into the form, otherwise it throws an exception.
+ * @function
+ * @author Marcel Waleska
+ */
+function checkNull()
+{
+    if(!name) {
+        window.alert(strings.registration.noUsername);
+        throw "missing username";
+    }
+    else if(!pass)
+    {
+        window.alert(strings.registration.noPassword);
+        throw "missing password"
+    }
+}
+/**
+ * Checks if password and passwordConfirmed are the same, otherwise it throws an exception.
+ * @function
+ * @author Marcel Waleska
+ */
+function checkPasswordConfirmation()
+{
+    console.log('check password confirmation');
+    if(pass != passwordConfirmed)
+    {
+        window.alert(strings.registration.passwordDontMatch);
+        throw "Password doesn't match the confirmation";
+    }
+}
+/**
+ * Creates an user via POST request, username and password are encrypted with storeMeEncrypt and additionally the password is SHA1 encrypted
+ * @param {function} callBackFunction       - necessary callBackFunction
+ * @author Marcel Waleska, Marcel Gross
+ */
+var createUser = function(callBackFunction){
+    var formData = {userType:"User",stores:""};
+    var encryptedUserData = storeMeEncrypt(name + ":" + CryptoJS.SHA1(pass));
+    $.ajax({
+        url : strings.link.backendConnection + ":" + strings.link.port + "/registeruser",
+        type: "POST",
+        crossDomain: true,
+        dataType: 'json',
+        headers: {
+           'authorization': encryptedUserData
+        },
+        data : formData,
+        success: function(data, textStatus, jqXHR)
+        {
+            callBackFunction(true, data.sessionID);
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            callBackFunction(false);
+        }
+    });
+};
+
+/**
+ * Created by Marvin Therolf on 23.06.15.
+ */
+
+if (typeof require !== "undefined")
+{
+    var encryptionScript = require('../encryption/stormecryptBE.js');
+}
+
+var currentSessions = [];
+var EXPIRE_TIME = 600000; //milliseconds
+var CHECK_STAMP_LENGTH = 2;
+var HASH_CODE_LENGTH = 8;
+
+/**
+ * A Session object contains a session id and an expire timestamp (10 min after creation). A session id is created
+ * during a successful login process. The session id is build by hashing the username, the password and the current
+ * time. All active sessions are stored in a static array called currentSessions. Every time a function iterates over
+ * this array it will delete all expired sessions. &lt;br>
+ * &lt;br>Never use this constructor! Use function newSession instead! Otherwise the session will not be pushed to the
+ * array of valid sessions. &lt;br>
+ * &lt;br> The Session ID does contain the username and is Base64-encoded.
+ * @constructor
+ * @param userName {String} - The username of a successfully logged in user
+ * @param password {String} - The password of the given user
+ * @prop userName {String}  - Username
+ * @prop sessionID {String} - 10 digit session id plus username encoded with Base64
+ * @prop expires {Number}   - Long integer representing the expire date
+ * @author Marvin Therolf
+ */
+function Session(userName, password)
+{
+    this.userName = userName;
+    var timeStamp = Date.now();
+    this.sessionID = getSessionID(userName, password, timeStamp);
+    this.expires = getExpireTimeStamp(timeStamp);
+}
+
+var newSession = function(username, password)
+{
+    var session = new Session(username, password);
+    currentSessions.push(session);
+    return session;
+};
+
+/**
+ * Generates a session id out of a name, a password and a time stamp. The first two digits of the session id will
+ * correspond to the username and will always be the same for the same username. The following eight digits are the
+ * session hash code.
+ * @function
+ * @param userName {String}     - Name of the given user
+ * @param password {String}     - This users password
+ * @param timeStamp {Number}    - The given timestamp
+ * @returns {String} Session ID
+ * @author Marvin Therolf
+ */
+var getSessionID = function(userName, password, timeStamp)
+{
+    var key = userName + password;
+    var hashCode = getHashCode(key, timeStamp);
+    var prefix = getCheckStamp(userName);
+    var sessionID = userName + prefix + hashCode;
+    var sessionIDEncrypted = "";
+
+    if (typeof encryptionScript !== "undefined")
+    {
+        sessionIDEncrypted = encryptionScript.storeMeEncrypt(sessionID);
+    }
+    else
+    {
+        sessionIDEncrypted = storeMeEncrypt(sessionID);
+    }
+    return sessionIDEncrypted;
+};
+
+/**
+ * Returns an 8-digit long hash code built by a given key and seed.
+ * @function
+ * @param key {String}  - The key to build the hash code for
+ * @param seed {Number} - Long integer corresponding to the given timestamp
+ * @returns {String} Hash code
+ * @author Marvin Therolf
+ */
+var getHashCode = function(key, seed)
+{
+    var hashCode = "";
+    var offSet = digitSum(seed);
+
+    for (var i = 0; i &lt; key.length; i++)
+    {
+        hashCode += (key.charCodeAt(i) + offSet) % 10;
+    }
+    hashCode %= 9 * Math.pow(10, HASH_CODE_LENGTH - 1);
+    hashCode += Math.pow(10, HASH_CODE_LENGTH - 1);
+    return "" + hashCode;
+};
+
+/**
+ * Returns the digit sum of a given number.
+ * @function
+ * @param {Number} number      - A number
+ * @returns {Number} The digit sum of the given number
+ * @author Marvin Therolf
+ */
+var digitSum = function(number)
+{
+    var rest = number;
+    var digitSum = 0;
+
+    while (rest > 0)
+    {
+        digitSum += rest % 10;
+        rest = Math.floor(rest/10);
+    }
+    return digitSum;
+};
+
+/**
+ * Return a 2-digit check stamp for a given username.
+ * @function
+ * @param userName {String}     - The given username
+ * @returns {String} The check stamp. A two digit number as its string representation.
+ * @author Marvin Therolf
+ */
+var getCheckStamp = function(userName)
+{
+    var checkStamp = 0;
+
+    for (var i = 0; i &lt; userName.length; i++)
+    {
+        checkStamp += userName.charCodeAt(i);
+    }
+    checkStamp %= 9 * Math.pow(10, CHECK_STAMP_LENGTH - 1);
+    checkStamp += Math.pow(10, CHECK_STAMP_LENGTH - 1);
+    return "" + checkStamp;
+};
+
+/**
+ * Calculates the expire time of a given timestamp.
+ * @param timeStamp {Number}    - Long integer representing the timestamp
+ * @returns {Number} Long integer representing the expire time
+ * @author Marvin Therolf
+ */
+var getExpireTimeStamp = function(timeStamp)
+{
+    return timeStamp + EXPIRE_TIME;
+};
+
+/**
+ * Checks if a session id is valid. Checks for existence as well es valid expire timestamp. Deletes expired session ids
+ * in the process. Will refresh a valid session id for another 10 minutes.
+ * @param sessionID
+ * @returns {boolean}
+ * @author Marvin Therolf
+ */
+var isValidSession = function(sessionID)
+{
+    var valid = false;
+
+    for (var i = 0; i &lt; currentSessions.length; i++)
+    {
+        var currentSession = currentSessions[i];
+
+        if (currentSession.expires &lt; Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+
+        if (currentSession.sessionID === sessionID)
+        {
+            valid = true;
+            currentSessions[i].expires = getExpireTimeStamp(Date.now());
+            break;
+        }
+    }
+    return valid;
+};
+
+/**http://localhost:13373/
+ * Builds an url containing the given session id.
+ * @function
+ * @param page {String}         - URL of the screen the built url should refer to
+ * @param sessionID {String}    - id of the current session
+ * @returns {String} Next URL including the current session id
+ * @author Marvin Therolf
+ */
+var urlBuilder = function(page, sessionID)
+{
+    return page + "?" + strings.fixeddata.queryparams + "=" + sessionID;
+};
+
+/**
+ * Deletes a given session from the list of valid sessions by searching for the session id. Deletes expired session ids
+ * in the process.
+ * @function
+ * @param sessionID {String}    -
+ * @author Marvin Therolf
+ */
+var endSession = function(sessionID)
+{
+    for (var i = 0; i &lt; currentSessions.length; i++)
+    {
+        var currentSession = currentSessions[i];
+
+        if (currentSession.expires &lt; Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+        if (currentSession.sessionID === sessionID)
+        {
+            removeFromArray(currentSessions, i);
+            break;
+        }
+    }
+};
+
+/**
+ * Extracts the session id from the url.
+ * @function
+ * @returns {String} The current session id.
+ * @author Marvin Therolf
+ */
+var getSessionIDFromURL = function()
+{
+    var query = location.search;
+    var queryParams = query.substring(1, query.length);
+    var queryParamsArray = queryParams.split('&amp;');
+    var querySessionID = queryParamsArray[0].split('=');
+    var sessionID = querySessionID[1];
+    return sessionID;
+};
+
+var getDialogInfoFromURL = function()
+{
+    var query = location.search;
+    var queryParams = query.substring(1, query.length);
+    var queryParamsArray = queryParams.split('&amp;');
+    var queryDialogInfo = queryParamsArray[1].split('=');
+    var dialogInfo = queryDialogInfo[1];
+    return dialogInfo;
+};
+
+/**
+ * Returns a username corresponding to a given session id if the session id is valid. Returns null otherwise;
+ * @function
+ * @param sessionID {String}        - session id to search for
+ * @returns {String} Username
+ * @author Marvin Therolf
+ */
+var getUserNameBySessionID = function(sessionID)
+{
+    var userName = "none";
+
+    if (sessionID !== "")
+    {
+        var decodedSessionID = "";
+        if (typeof encryptionScript !== "undefined")
+        {
+            decodedSessionID = encryptionScript.storeMeDecrypt(sessionID);
+        }
+        else{
+            decodedSessionID = storeMeDecrypt(sessionID);
+        }
+        userName = decodedSessionID.substring(0, decodedSessionID.length - 10);
+    }
+    return userName;
+};
+
+/**
+ * Function to quickly remove an object from an array by providing the array and the object's index.
+ * @function
+ * @param {Array} array     - Array to remove object from
+ * @param index             - Index of the object to remove
+ * @author Marvin Therolf
+ */
+var removeFromArray = function(array, index)
+{
+    var hold = array[index];
+    array[index] = array[array.length-1];
+    array[array.length-1] = hold;
+    array.pop();
+};
+
+if (typeof exports !== "undefined")
+{
+    exports.newSession = function(username, password)
+    {
+        return newSession(username, password);
+    };
+
+    exports.isValidSession = function(sessionID)
+    {
+        return isValidSession(sessionID);
+    };
+
+    exports.endSession = function(sessionID)
+    {
+        return endSession(sessionID);
+    }
+}
+
+/**
+ * Created by Waleska on 03.06.2015.
+ */
+var loginName, loginPassword;
+
+
+/**
+ * This functions tries to log the user in. It validates Username and Password and sends them via GET-Request to the backend.
+ * The Backend responses with 200 and an valid sessionID if the login was successful, status code 400 if the password was wrong
+ * and 404 if there is no such user stored in the database.
+ * If there is one of such errors it will be displayed via alert.
+ *
+ * @function
+ * @author Marcel Waleska, Marcel Gross
+ */
+var tryLogin = function(){
+    try{
+        getLoginValues();
+        checkNullLoginValues();
+        var encryptedUserData = storeMeEncrypt(loginName + ":" + CryptoJS.SHA1(loginPassword));
+
+        $.ajax({
+            url: strings.link.backendConnection+":"+strings.link.port+"/login",
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'json',
+            headers: {'authorization': encryptedUserData},
+            success: function(res, status, xhr) {
+                location.href = urlBuilder(strings.link.toDashboard, res.sessionID);
+            },
+            error: function(res, status, xhr) {
+                //wrongPassword
+                if(res.status == 400){
+                    window.alert(strings.login.wrongPassword);
+                }
+                //user does not exists
+                else if(res.status == 404){
+                    window.alert(strings.login.noUser);
+                } else {
+                    window.alert(strings.login.loginfailed);
+                }
+            }
+        });
+
+    } catch(err){
+        console.log(err);
+    }
+};
+/**
+ * This function takes the username and password from the input form and saves it to the variables loginName and loginPassword
+ *
+ * @function
+ * @author Marcel Waleska
+ */
+var getLoginValues = function () {
+    loginName = $('#login-username').val();
+    loginPassword = $('#login-password').val();
+};
+
+/**
+ * This function listens for the key event enter.
+ * After enter is pressed it starts the method trylogin
+ * @function
+ * @param {Number} event    - value of the key which is pressed
+ * @author Marcel Waleska
+ */
+var keyHandlerLogin = function(event){
+    var key = event.keyCode;
+    if(key == 13) tryLogin();
+};
+
+/**
+ * This function checks if the given username and password is not null.
+ * If one of it is null it throws an exception
+ * @function
+ * @author Marcel Waleska
+ */
+var checkNullLoginValues = function(){
+    if(!loginName)
+    {
+        window.alert(strings.login.noUsername);
+        throw "no Username";
+    }
+    else if(!loginPassword)
+    {
+        window.alert(strings.login.noPassword);
+        throw "no Password";
+    }
+};
+
+/**
+ * Created by Marvin Therolf and Marcel Groß on 17.06.15.
+ */
+
+/**
+ * Stocks an amount of items into a given storage.
+ * @function
+ * @param {Container} storage   - Root Container object of used storage
+ * @param {String} containerID  - Unique Identifier of container to stock item(s) into
+ * @param {String} itemID       - Unique Identifier of item(s) to stock into container
+ * @param {Number} amount       - Amount of items to stock
+ * @author Marvin Therolf and Marcel Groß
+ */
+var stock = function(storage, containerID, itemID, amount)
+{
+    var container = getContainerById(storage, containerID);
+    return addItem(container, itemID, amount);
+};
+
+/**
+ * Depletes an amount of items from a given storage.
+ * @function
+ * @param {Container} storage   - Root Container object of used storage
+ * @param {String} containerID  - Unique Identifier of container to deplete item(s) from
+ * @param {String} itemID       - Unique Identifier of item(s) to deplete from container
+ * @param {Number} amount       - Amount of items to deplete
+ * @author Marvin Therolf and Marcel Groß
+ */
+var deplete = function(storage, containerID, itemID, amount)
+{
+    var container = getContainerById(storage, containerID);
+    return removeItem(container, itemID, amount);
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a></li><li><a href="ContainerAttribute.html">ContainerAttribute</a></li><li><a href="ContainerItem.html">ContainerItem</a></li><li><a href="Item.html">Item</a></li><li><a href="ItemAttribute.html">ItemAttribute</a></li><li><a href="LogContainer.html">LogContainer</a></li><li><a href="Session.html">Session</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addAttributes">addAttributes</a></li><li><a href="global.html#addContainerAttribute">addContainerAttribute</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addItemAttribute">addItemAttribute</a></li><li><a href="global.html#addStore">addStore</a></li><li><a href="global.html#addSubContainer">addSubContainer</a></li><li><a href="global.html#addSubContainers">addSubContainers</a></li><li><a href="global.html#addToSet">addToSet</a></li><li><a href="global.html#categoryStillReferenced">categoryStillReferenced</a></li><li><a href="global.html#changeUserType">changeUserType</a></li><li><a href="global.html#checkIfUserAlreadyExist">checkIfUserAlreadyExist</a></li><li><a href="global.html#checkNull">checkNull</a></li><li><a href="global.html#checkNullLoginValues">checkNullLoginValues</a></li><li><a href="global.html#checkPasswordConfirmation">checkPasswordConfirmation</a></li><li><a href="global.html#checkSafePassword">checkSafePassword</a></li><li><a href="global.html#contains">contains</a></li><li><a href="global.html#containsItem">containsItem</a></li><li><a href="global.html#copyArray">copyArray</a></li><li><a href="global.html#countContainers">countContainers</a></li><li><a href="global.html#countItems">countItems</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#decreaseAmount">decreaseAmount</a></li><li><a href="global.html#deplete">deplete</a></li><li><a href="global.html#digitSum">digitSum</a></li><li><a href="global.html#encryptionScript">encryptionScript</a></li><li><a href="global.html#endSession">endSession</a></li><li><a href="global.html#findFreeID">findFreeID</a></li><li><a href="global.html#getAllCompulsoryContainerAttributes">getAllCompulsoryContainerAttributes</a></li><li><a href="global.html#getAllContainerAttributes">getAllContainerAttributes</a></li><li><a href="global.html#getAllItemIDs">getAllItemIDs</a></li><li><a href="global.html#getAllItems">getAllItems</a></li><li><a href="global.html#getCheckStamp">getCheckStamp</a></li><li><a href="global.html#getContainerById">getContainerById</a></li><li><a href="global.html#getCurrentTime">getCurrentTime</a></li><li><a href="global.html#getDataItems">getDataItems</a></li><li><a href="global.html#getExpireTimeStamp">getExpireTimeStamp</a></li><li><a href="global.html#getHashCode">getHashCode</a></li><li><a href="global.html#getLoginValues">getLoginValues</a></li><li><a href="global.html#getSessionID">getSessionID</a></li><li><a href="global.html#getSessionIDFromURL">getSessionIDFromURL</a></li><li><a href="global.html#getUserNameBySessionID">getUserNameBySessionID</a></li><li><a href="global.html#getValues">getValues</a></li><li><a href="global.html#increaseAmount">increaseAmount</a></li><li><a href="global.html#isValidSession">isValidSession</a></li><li><a href="global.html#itemStillStored">itemStillStored</a></li><li><a href="global.html#keyHandlerLogin">keyHandlerLogin</a></li><li><a href="global.html#keyHandlerRegister">keyHandlerRegister</a></li><li><a href="global.html#loadAllAttributes">loadAllAttributes</a></li><li><a href="global.html#loadAllLogContainer">loadAllLogContainer</a></li><li><a href="global.html#loadAttributeByName">loadAttributeByName</a></li><li><a href="global.html#loadStore">loadStore</a></li><li><a href="global.html#loadStoreByName">loadStoreByName</a></li><li><a href="global.html#loadUserFromDB">loadUserFromDB</a></li><li><a href="global.html#loginName">loginName</a></li><li><a href="global.html#name">name</a></li><li><a href="global.html#notSafe">notSafe</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeAllContainerAttributes">removeAllContainerAttributes</a></li><li><a href="global.html#removeAllItemAttributes">removeAllItemAttributes</a></li><li><a href="global.html#removeAllItems">removeAllItems</a></li><li><a href="global.html#removeAllSubContainers">removeAllSubContainers</a></li><li><a href="global.html#removeContainerAttribute">removeContainerAttribute</a></li><li><a href="global.html#removeFromArray">removeFromArray</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#removeItemAttribute">removeItemAttribute</a></li><li><a href="global.html#removeStore">removeStore</a></li><li><a href="global.html#removeSubContainer">removeSubContainer</a></li><li><a href="global.html#saveAttribute">saveAttribute</a></li><li><a href="global.html#saveLogContainer">saveLogContainer</a></li><li><a href="global.html#saveStore">saveStore</a></li><li><a href="global.html#saveUserInDB">saveUserInDB</a></li><li><a href="global.html#searchForItemName">searchForItemName</a></li><li><a href="global.html#sortArrayByGivenArray">sortArrayByGivenArray</a></li><li><a href="global.html#sortNumerically">sortNumerically</a></li><li><a href="global.html#stock">stock</a></li><li><a href="global.html#tryLogin">tryLogin</a></li><li><a href="global.html#urlBuilder">urlBuilder</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Fri Jul 17 2015 13:00:02 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Session</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Session</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Session
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="Session"><span class="type-signature"></span>new Session<span class="signature">(userName, password)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    A Session object contains a session id and an expire timestamp (10 min after creation). A session id is created
+during a successful login process. The session id is build by hashing the username, the password and the current
+time. All active sessions are stored in a static array called currentSessions. Every time a function iterates over
+this array it will delete all expired sessions. <br>
+<br>Never use this constructor! Use function newSession instead! Otherwise the session will not be pushed to the
+array of valid sessions. <br>
+<br> The Session ID does contain the username and is Base64-encoded.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The username of a successfully logged in user</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The password of the given user</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Username</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sessionID</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">10 digit session id plus username encoded with Base64</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>expires</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Long integer representing the expire date</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Marvin Therolf</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="storme.js.html">storme.js</a>, <a href="storme.js.html#line1496">line 1496</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a></li><li><a href="ContainerAttribute.html">ContainerAttribute</a></li><li><a href="ContainerItem.html">ContainerItem</a></li><li><a href="Item.html">Item</a></li><li><a href="ItemAttribute.html">ItemAttribute</a></li><li><a href="LogContainer.html">LogContainer</a></li><li><a href="Session.html">Session</a></li><li><a href="User.html">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addAttributes">addAttributes</a></li><li><a href="global.html#addContainerAttribute">addContainerAttribute</a></li><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#addItemAttribute">addItemAttribute</a></li><li><a href="global.html#addStore">addStore</a></li><li><a href="global.html#addSubContainer">addSubContainer</a></li><li><a href="global.html#addSubContainers">addSubContainers</a></li><li><a href="global.html#addToSet">addToSet</a></li><li><a href="global.html#categoryStillReferenced">categoryStillReferenced</a></li><li><a href="global.html#changeUserType">changeUserType</a></li><li><a href="global.html#checkIfUserAlreadyExist">checkIfUserAlreadyExist</a></li><li><a href="global.html#checkNull">checkNull</a></li><li><a href="global.html#checkNullLoginValues">checkNullLoginValues</a></li><li><a href="global.html#checkPasswordConfirmation">checkPasswordConfirmation</a></li><li><a href="global.html#checkSafePassword">checkSafePassword</a></li><li><a href="global.html#contains">contains</a></li><li><a href="global.html#containsItem">containsItem</a></li><li><a href="global.html#copyArray">copyArray</a></li><li><a href="global.html#countContainers">countContainers</a></li><li><a href="global.html#countItems">countItems</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#decreaseAmount">decreaseAmount</a></li><li><a href="global.html#deplete">deplete</a></li><li><a href="global.html#digitSum">digitSum</a></li><li><a href="global.html#encryptionScript">encryptionScript</a></li><li><a href="global.html#endSession">endSession</a></li><li><a href="global.html#findFreeID">findFreeID</a></li><li><a href="global.html#getAllCompulsoryContainerAttributes">getAllCompulsoryContainerAttributes</a></li><li><a href="global.html#getAllContainerAttributes">getAllContainerAttributes</a></li><li><a href="global.html#getAllItemIDs">getAllItemIDs</a></li><li><a href="global.html#getAllItems">getAllItems</a></li><li><a href="global.html#getCheckStamp">getCheckStamp</a></li><li><a href="global.html#getContainerById">getContainerById</a></li><li><a href="global.html#getCurrentTime">getCurrentTime</a></li><li><a href="global.html#getDataItems">getDataItems</a></li><li><a href="global.html#getExpireTimeStamp">getExpireTimeStamp</a></li><li><a href="global.html#getHashCode">getHashCode</a></li><li><a href="global.html#getLoginValues">getLoginValues</a></li><li><a href="global.html#getSessionID">getSessionID</a></li><li><a href="global.html#getSessionIDFromURL">getSessionIDFromURL</a></li><li><a href="global.html#getUserNameBySessionID">getUserNameBySessionID</a></li><li><a href="global.html#getValues">getValues</a></li><li><a href="global.html#increaseAmount">increaseAmount</a></li><li><a href="global.html#isValidSession">isValidSession</a></li><li><a href="global.html#itemStillStored">itemStillStored</a></li><li><a href="global.html#keyHandlerLogin">keyHandlerLogin</a></li><li><a href="global.html#keyHandlerRegister">keyHandlerRegister</a></li><li><a href="global.html#loadAllAttributes">loadAllAttributes</a></li><li><a href="global.html#loadAllLogContainer">loadAllLogContainer</a></li><li><a href="global.html#loadAttributeByName">loadAttributeByName</a></li><li><a href="global.html#loadStore">loadStore</a></li><li><a href="global.html#loadStoreByName">loadStoreByName</a></li><li><a href="global.html#loadUserFromDB">loadUserFromDB</a></li><li><a href="global.html#loginName">loginName</a></li><li><a href="global.html#name">name</a></li><li><a href="global.html#notSafe">notSafe</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#removeAllContainerAttributes">removeAllContainerAttributes</a></li><li><a href="global.html#removeAllItemAttributes">removeAllItemAttributes</a></li><li><a href="global.html#removeAllItems">removeAllItems</a></li><li><a href="global.html#removeAllSubContainers">removeAllSubContainers</a></li><li><a href="global.html#removeContainerAttribute">removeContainerAttribute</a></li><li><a href="global.html#removeFromArray">removeFromArray</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#removeItemAttribute">removeItemAttribute</a></li><li><a href="global.html#removeStore">removeStore</a></li><li><a href="global.html#removeSubContainer">removeSubContainer</a></li><li><a href="global.html#saveAttribute">saveAttribute</a></li><li><a href="global.html#saveLogContainer">saveLogContainer</a></li><li><a href="global.html#saveStore">saveStore</a></li><li><a href="global.html#saveUserInDB">saveUserInDB</a></li><li><a href="global.html#searchForItemName">searchForItemName</a></li><li><a href="global.html#sortArrayByGivenArray">sortArrayByGivenArray</a></li><li><a href="global.html#sortNumerically">sortNumerically</a></li><li><a href="global.html#stock">stock</a></li><li><a href="global.html#tryLogin">tryLogin</a></li><li><a href="global.html#urlBuilder">urlBuilder</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0-dev</a> on Fri Jul 17 2015 13:00:03 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
