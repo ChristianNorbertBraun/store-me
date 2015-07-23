@@ -169,7 +169,7 @@ sortArrayByGivenArray = function(givenArray, resultArray){
     var result = [];
     for (var i = 0; i < givenArray.length; i++){
         for (var j = 0; j < resultArray.length; j++){
-            if(givenArray[i].itemID == resultArray[j]._id){
+            if(givenArray[i].itemID == resultArray[j]._id && givenArray[i].containerID == resultArray[j].containerID){
                 result[i] = resultArray[j];
                 break;
             }
