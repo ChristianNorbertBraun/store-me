@@ -5,21 +5,29 @@
     <title></title>
     <script src="../../string/strings.js"></script>
     <script type="text/javascript" src="../../js/jQuery/jquery-2.1.4.min.js"></script>
-    <script src="http://notimeforthat.org:5984/_utils/script/jquery.js?1.4.2"></script>
-    <script src="http://notimeforthat.org:5984/_utils/script/jquery.couch.js?0.11.0"></script>
-    <script src="http://notimeforthat.org:5984/_utils/script/jquery.dialog.js?0.11.0"></script>
-    <script src="misc/reset/reset.js"></script>
+    <script src="http://localhost:5984/_utils/script/jquery.js?1.4.2"></script>
+    <script src="http://localhost:5984/_utils/script/jquery.couch.js?0.11.0"></script>
+    <script src="http://localhost:5984/_utils/script/jquery.dialog.js?0.11.0"></script>
+    <script src="reset.js"></script>
+
+    <script src="../../js/data_structure/data_structure.js"></script>
+    <script src="../../js/itemsContainer/category/categoryCRUD.js"></script>
+    <script src="../../js/itemsContainer/items/itemsDBHandler.js"></script>
+    <script src="../../js/itemsContainer/category/categoryDBHandler.js"></script>
+    <script src="../../js/dbConnectorContainer/containerConnector.js"></script>
 </head>
 <body>
-    <h2> Reset Database Elements </h2>
-    <p>
-             <label> <input type="checkbox" id="cbAttributes" /> Attributes </label>
-        <br> <label> <input type="checkbox" id="cbCategories" /> Categories </label>
-        <br> <label> <input type="checkbox" id="cbContainers" /> Containers </label>
-        <br> <label> <input type="checkbox" id="cbItems" /> Items </label>
-        <br> <label> <input type="checkbox" id="cbLog" /> Log </label>
-        <br> <label> <input type="checkbox" id="cbUsers" /> Users </label>
-    </p>
-    <input type="submit" name="sbReset" value="Reset" onclick="resetTables()" />
+<h2> Reset Database Elements </h2>
+<p>
+    <label> <input type="checkbox" id="cbAttributes" /> Attributes </label>
+    <br> <label> <input type="checkbox" id="cbCategories" /> Categories </label>
+    <br> <label> <input type="checkbox" id="cbContainers" /> Containers </label>
+    <br> <label> <input type="checkbox" id="cbItems" /> Items </label>
+    <br> <label> <input type="checkbox" id="cbLog" /> Log </label>
+    <br> <label> <input type="checkbox" id="cbUsers" /> Users </label>
+    <br> <label> <input type="checkbox" id="cbFHWS" /> Create FHWS </label>
+    <br> <label> <input type="checkbox" id="cbSubNet" /> Create SubNet </label>
+</p>
+<input type="submit" name="sbReset" value="Reset" onclick="resetTables()" />
 </body>
 </html>
