@@ -44,7 +44,7 @@ var addContainerPopup = Ractive.extend({
                                 <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" value={{value}}  ></div>\
                                 <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" value={{unit}}></div>\
                                 <div class="col-md-2">\
-                                    <button class="btn btn-primary btn-sm" on-click="removeAttribute(this,i)">\
+                                    <button class="btn btn-primary btn-sm attribute-entry" on-click="removeAttribute(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                     </button>\
                                 </div>\
@@ -75,7 +75,7 @@ var addContainerPopup = Ractive.extend({
         this.prepareContainerForCreation(true);
         $('#add-container-modal').modal('hide');
         setTimeout(function(){
-            $('.item-structure').remove();
+            $('.attribute-entry').remove();
         },200);
     },
 
