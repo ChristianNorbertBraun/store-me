@@ -2,7 +2,7 @@
  * Created by Marvin Therolf on 26.06.15.
  */
 var codeAlphabet = "StoreMe";
-var alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:!?=_-+üäöß$§%&*~#,.;^°(){}[]<>|'";
+var alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:!_-+üäöß$§%*~#,.;^°(){}[]<>|'";
 
 var storeMeEncrypt = function(message)
 {
