@@ -28,7 +28,7 @@ var addContainerPopup = Ractive.extend({
                         \
                         <div id="attribute-container">\
                                 {{#if newContainer.attributes.length >= 1}}\
-                                <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
+                                <h3 id="attribute-heading" class="attribute-entry" intro-outro="slideh">Attributes</h3>\
                                 {{/if}}\
                             {{#each newContainer.attributes:i}}\
                             <div class="row popup-entry" intro-outro="slideh">\
