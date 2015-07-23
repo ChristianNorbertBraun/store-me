@@ -480,6 +480,9 @@ var coredataContainer = Ractive.extend({
     closeModal: function() {
         this.prepareItem();
         $('#add-item-modal').modal('hide');
+        setTimeout(function(){
+            $('#attribute-container').remove();
+        },200);
     },
 
     validateItemFields: function(itemId, itemName, itemCategory, attributes) {
