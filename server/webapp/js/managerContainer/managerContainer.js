@@ -126,7 +126,7 @@ var managerContainer = Ractive.extend(
             }
 
             if(latestClickedcontainer){
-                var parentId = latestClickedcontainer.containerID.substring(0,latestClickedcontainer.containerID.length-2);
+                var parentId = this.getParentIDFromContainer(latestClickedcontainer);
                 window.parentContainer = getContainerById(window.currentTableState, parentId);
             }
             this.mapContainerItemOnDataItem();
@@ -308,6 +308,13 @@ var managerContainer = Ractive.extend(
             var queryParam = queryParamString.split("=")[1];
             return queryParam;
 
+        },
+
+        getParentIDFromContainer:function(container){
+            var containerID = container.containerID;
+            var lastIndexofIDDelimiter = containerID.lastIndexOf("-");
+
+            return containerID.substring(0,lastIndexofIDDelimiter);
         }
 
     })
