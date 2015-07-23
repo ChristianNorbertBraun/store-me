@@ -218,20 +218,22 @@ var managerContainer = Ractive.extend(
 
         deleteContainer:function(){
             var GUIallSelectedContainer = $(".list-group-item-selected").get();
-            var allIds = [];
-            var allSelectedContainer = [];
+            if(GUIallSelectedContainer.length > 0) {
+                var allIds = [];
+                var allSelectedContainer = [];
 
-            for(i = 0; i < GUIallSelectedContainer.length;++i){
-                allSelectedContainer.push(this.get("data.container."+$(GUIallSelectedContainer[i]).attr('id')));
-            }
-            for(i = 0; i < GUIallSelectedContainer.length; ++i){
-                var subContainer = allSelectedContainer[i];
+                for (i = 0; i < GUIallSelectedContainer.length; ++i) {
+                    allSelectedContainer.push(this.get("data.container." + $(GUIallSelectedContainer[i]).attr('id')));
+                }
+                for (i = 0; i < GUIallSelectedContainer.length; ++i) {
+                    var subContainer = allSelectedContainer[i];
 
-                removeSubContainer(window.parentContainer, subContainer.containerID);
+                    removeSubContainer(window.parentContainer, subContainer.containerID);
+                }
+                this.set("data.container", window.parentContainer.subContainers);
+                this.writeToDb();
+                this.mapContainerItemOnDataItem();
             }
-            this.set("data.container", window.parentContainer.subContainers);
-            this.writeToDb();
-            this.mapContainerItemOnDataItem();
 
         },
 
