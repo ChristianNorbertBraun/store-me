@@ -22,8 +22,8 @@ var loginContainer = Ractive.extend({
           <div class="create-account center-block">\
             <p class="text-center">{{question}}<br>\
             <a id="sign-up" href="register.html">{{signup}}</a> </p>\
+            <a href="resources/apk/storeme.apk" download="storeme.apk"\>Download the App</a>\
           </div>\
-          <footer>Hallo</footer>\
     </div>\ ',
 
     data:{},
