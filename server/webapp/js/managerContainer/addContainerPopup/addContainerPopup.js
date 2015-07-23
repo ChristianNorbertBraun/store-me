@@ -31,7 +31,7 @@ var addContainerPopup = Ractive.extend({
                                 <h3 id="attribute-heading" class="attribute-entry" intro-outro="slideh">Attributes</h3>\
                                 {{/if}}\
                             {{#each newContainer.attributes:i}}\
-                            <div class="row popup-entry" intro-outro="slideh">\
+                            <div class="attribute-entry row popup-entry" intro-outro="slideh">\
                                  <div class="col-md-5 attribute-entry">\
                                     <div class="input-group">\
                                         <span class="input-group-addon">\
@@ -43,7 +43,7 @@ var addContainerPopup = Ractive.extend({
                                  \
                                 <div class="col-md-3 attribute-entry"><input id="attribute-value{{i}}" type="text" class="form-control" placeholder="Attribute Value" value={{value}}  ></div>\
                                 <div class="col-md-2 attribute-entry"><input id="attribute-unit{{i}}" type="text" class="form-control"  placeholder="Unit" value={{unit}}></div>\
-                                <div class="col-md-2">\
+                                <div class="col-md-2 attribute-entry">\
                                     <button class="btn btn-primary btn-sm attribute-entry" on-click="removeAttribute(this,i)">\
                                         <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>\
                                     </button>\
