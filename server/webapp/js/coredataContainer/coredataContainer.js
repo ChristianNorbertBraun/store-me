@@ -474,7 +474,7 @@ var coredataContainer = Ractive.extend({
         });
 
         this.prepareItem();
-        $('#add-item-modal').modal('hide');
+        this.closeModal();
     },
 
     closeModal: function() {
