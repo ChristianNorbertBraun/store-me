@@ -74,6 +74,9 @@ var addContainerPopup = Ractive.extend({
     closeModal:function(){
         this.prepareContainerForCreation(true);
         $('#add-container-modal').modal('hide');
+        setTimeout(function(){
+            $('.item-structure').remove();
+        },200);
     },
 
     addAttribute:function(){
@@ -138,7 +141,7 @@ var addContainerPopup = Ractive.extend({
 
             }
             window.currentRactive.writeToDb();
-            $('#add-container-modal').modal('hide');
+            this.closeModal;
         }
     }
 
