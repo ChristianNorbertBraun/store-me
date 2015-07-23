@@ -489,11 +489,16 @@ findFreeID = function(container)
  * @returns {Container} Searched container, or null if container wasn't found
  * @author Marvin Therolf and Marcel Groß
  */
-getContainerById = function(container, searchedID)
+getContainerById = function( container, searchedID )
+{
+    return getContainerByIdRecursion( container, searchedID, 1 );
+};
+
+getContainerByIdRecursion = function( container, searchedID, flag )
 {
     var result = null;
 
-    if (container.containerID === searchedID)
+    if ( container.containerID === searchedID )
     {
         result = container;
     }
@@ -503,13 +508,13 @@ getContainerById = function(container, searchedID)
 
         for (var i = 0; i < subContainers.length; i++)
         {
-            var subContainer = subContainers[i];
-            var subContainerID = subContainer.containerID;
-            var searchedSubID = searchedID.substring(0, subContainer.containerID.length);
+            var currentSubContainer = subContainers[i];
+            var subSearchedID = searchedID.split('-')[flag];
+            var subSubContainerID = currentSubContainer.containerID.split('-')[flag];
 
-            if (subContainerID === searchedSubID)
+            if ( subSearchedID === subSubContainerID )
             {
-                result = getContainerById(subContainer, searchedID);
+                result = getContainerByIdRecursion( currentSubContainer, searchedID, ++flag );
                 break;
             }
         }
