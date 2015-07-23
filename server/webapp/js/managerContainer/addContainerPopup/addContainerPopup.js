@@ -141,7 +141,7 @@ var addContainerPopup = Ractive.extend({
 
             }
             window.currentRactive.writeToDb();
-            this.closeModal;
+            this.closeModal();
         }
     }
 
