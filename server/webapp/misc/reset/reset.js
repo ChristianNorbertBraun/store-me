@@ -5,7 +5,7 @@
 $.couch.urlPrefix = strings.link.dbConnection;
 
 var tableNames = ["storemeattributes", "storemecategory", "storemecontainer", "storemeitems", "storemelog", "storemeusers"];
-var reset = [ false, false, false, false, false, false, false, false ];
+var reset = [ false, false, false, false, false, false, false, false, false ];
 
 var resetTables = function()
 {
@@ -17,6 +17,9 @@ var resetTables = function()
     reset[5] = $('#cbUsers').get()[0].checked;
     reset[6] = $('#cbFHWS').get()[0].checked;
     reset[7] = $('#cbSubNet').get()[0].checked;
+    reset[8] = $('#cbDefault').get()[0].checked;
+
+
 
     for ( var i = 0; i < tableNames.length; i++ )
     {
@@ -33,6 +36,10 @@ var resetTables = function()
     if ( reset[7] )
     {
         resetSubNet();
+    }
+    if ( reset[8] )
+    {
+        resetDefaultScript()
     }
 };
 
@@ -2945,4 +2952,409 @@ function resetSubNet(){
 //store items
 
     createStoreIP();
+}
+
+function resetDefaultScript(){
+    var table = {
+        "_id": "Mein Lager",
+        "_rev": "11-5599b6cc159f098738efc8d7dde9208e",
+        "containerID": "0",
+        "containerName": "Mein Lager",
+        "attributes": [
+        ],
+        "subContainers": [
+            {
+                "containerID": "0-0",
+                "containerName": "Regal 0",
+                "subContainers": [
+                    {
+                        "containerID": "0-0-0",
+                        "containerName": "Box 0",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-0-1",
+                        "containerName": "Box 1",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-0-2",
+                        "containerName": "Box 2",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-0-3",
+                        "containerName": "Box 3",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    }
+                ],
+                "items": [
+                ]
+            },
+            {
+                "containerID": "0-1",
+                "containerName": "Regal 1",
+                "subContainers": [
+                    {
+                        "containerID": "0-1-0",
+                        "containerName": "Box 0",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-1-1",
+                        "containerName": "Box 1",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-1-2",
+                        "containerName": "Box 2",
+                        "subContainers": [
+                        ],
+                        "items": [
+                            {
+                                "itemID": "3",
+                                "amount": 1,
+                                "parentContainerID": "0-1-2"
+                            }
+                        ]
+                    },
+                    {
+                        "containerID": "0-1-3",
+                        "containerName": "Box 3",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    }
+                ],
+                "items": [
+                ]
+            },
+            {
+                "containerID": "0-2",
+                "containerName": "Regal 2",
+                "subContainers": [
+                    {
+                        "containerID": "0-2-0",
+                        "containerName": "Box 0",
+                        "subContainers": [
+                        ],
+                        "items": [
+                            {
+                                "itemID": "0",
+                                "amount": 1,
+                                "parentContainerID": "0-2-0"
+                            }
+                        ]
+                    },
+                    {
+                        "containerID": "0-2-1",
+                        "containerName": "Box 1",
+                        "subContainers": [
+                        ],
+                        "items": [
+                        ]
+                    },
+                    {
+                        "containerID": "0-2-2",
+                        "containerName": "Box 2",
+                        "subContainers": [
+                        ],
+                        "items": [
+                            {
+                                "itemID": "1",
+                                "amount": 1,
+                                "parentContainerID": "0-2-2"
+                            }
+                        ]
+                    }
+                ],
+                "items": [
+                ]
+            }
+        ],
+        "items": [
+        ]
+    };
+    var item1 = {
+        "_id": "0",
+        "_rev": "1-07e8fbc59b405b27215b60e036c49fd0",
+        "category_id": "Büroutensilien",
+        "attributes": [
+            {
+                "attributeName": "Anzahl",
+                "value": "5",
+                "unit": "Stück",
+                "type": "Number"
+            },
+            {
+                "attributeName": "Farbe",
+                "value": "blau",
+                "unit": "Farbe",
+                "type": "String"
+            }
+        ],
+        "name": "Edding Patronen"
+    };
+    var item2 = {
+        "_id": "1",
+        "_rev": "1-83d96f2e4aaf754e32a1e560220cc039",
+        "category_id": "Büroutensilien",
+        "attributes": [
+        ],
+        "name": "Tacker"
+    };
+    var item3 = {
+        "_id": "10",
+        "_rev": "1-6882dc6836b12dd905f775fb54d50355",
+        "category_id": "Flyer",
+        "attributes": null,
+        "name": "Informatik 2015"
+    };
+    var item4 = {
+        "_id": "11",
+        "_rev": "1-0da24667daabd8a344d7002d829ef265",
+        "category_id": "FHWS",
+        "attributes": [
+            {
+                "attributeName": "Größe",
+                "value": "A4",
+                "unit": "DIN",
+                "type": "String"
+            }
+        ],
+        "name": "Deckblatt Praktikantenamt"
+    };
+    var item5 = {
+        "_id": "12",
+        "_rev": "1-a4677b3ef376397c23f30eef273716f7",
+        "category_id": "FHWS",
+        "attributes": [
+            {
+                "attributeName": "Jahr",
+                "value": "SS15",
+                "unit": "Datum",
+                "type": "String"
+            }
+        ],
+        "name": "Klausur BT"
+    };
+    var item6 = {
+        "_id": "13",
+        "_rev": "1-cb3d6d11d07dad914efea10773bcd1b6",
+        "category_id": "",
+        "attributes": [
+        ],
+        "name": "Spezi Dose"
+    };
+    var item7 = {
+        "_id": "14",
+        "_rev": "1-a39aedbc128a444df95b48ae2812ebea",
+        "category_id": "",
+        "attributes": null,
+        "name": "Platik Becher"
+    };
+    var item8 = {
+        "_id": "15",
+        "_rev": "1-ee40223a50e893794fe544eb00abf454",
+        "category_id": "",
+        "attributes": [
+            {
+                "attributeName": "Marke",
+                "value": "kokett",
+                "unit": "",
+                "type": "String"
+            }
+        ],
+        "name": "Taschentücher"
+    };
+    var item9 = {
+        "_id": "2",
+        "_rev": "1-c2358066fa20dcc8ec2d9a69c1c91b3c",
+        "category_id": "Büroutensilien",
+        "attributes": [
+        ],
+        "name": "UHU flinke flasche"
+    };
+    var item10 = {
+        "_id": "3",
+        "_rev": "1-ff8b2a75928b94f734b037c913b20519",
+        "category_id": "Büroutensilien",
+        "attributes": [
+            {
+                "attributeName": "Anzahl",
+                "value": "1000",
+                "unit": "Stück",
+                "type": "Number"
+            },
+            {
+                "attributeName": "Typ",
+                "value": "26/6",
+                "unit": "Maß",
+                "type": "Number"
+            }
+        ],
+        "name": "Heftklammern"
+    };
+    var item11 = {
+        "_id": "4",
+        "_rev": "1-73ef81d30b389ee9833f92f539299363",
+        "category_id": "Büroutensilien",
+        "attributes": [
+            {
+                "attributeName": "Farbe",
+                "value": "rot",
+                "unit": "Farbe",
+                "type": "String"
+            }
+        ],
+        "name": "Heftstreifen"
+    };
+    var item12 = {
+        "_id": "5",
+        "_rev": "1-dfd3b0a41ae182baceabbfdef27ca92c",
+        "category_id": "Büroutensilien",
+        "attributes": [
+        ],
+        "name": "Klebeband"
+    };
+    var item13 = {
+        "_id": "6",
+        "_rev": "1-aaf5d8840efcdaa02abdf4ed299bd1cc",
+        "category_id": "Büroutensilien",
+        "attributes": [
+            {
+                "attributeName": "Fenster",
+                "value": "true",
+                "unit": "",
+                "type": "Boolean"
+            }
+        ],
+        "name": "Briefumschlag"
+    };
+    var item14 = {
+        "_id": "7",
+        "_rev": "1-e5d0684a51ff34e9690c6cba11ddd05f",
+        "category_id": "Büroutensilien",
+        "attributes": null,
+        "name": "Klarsichthüllen"
+    };
+    var item15 = {
+        "_id": "8",
+        "_rev": "1-43b10583520a3a02a94db2e68b6bf94f",
+        "category_id": "Flyer",
+        "attributes": [
+            {
+                "attributeName": "Größe",
+                "value": "Postkarte",
+                "unit": "",
+                "type": "String"
+            }
+        ],
+        "name": "BestStudentChallenge"
+    };
+    var item16 = {
+        "_id": "9",
+        "_rev": "1-4de7e8973348b17bee0e896db3322d67",
+        "category_id": "Flyer",
+        "attributes": [
+        ],
+        "name": "WingTsun"
+    };
+    var category1 = {
+        "_id": "Büroutensilien",
+        "_rev": "1-967a00dff5e02add41819138abb3284d"
+    };
+    var category2 = {
+        "_id": "FHWS",
+        "_rev": "1-967a00dff5e02add41819138abb3284d"
+    };
+    var category3 = {
+        "_id": "Flyer",
+        "_rev": "1-967a00dff5e02add41819138abb3284d"
+    };
+
+    var createDefaultTable = function (store) {
+        try {
+            saveStore(function (created) {
+                if (created) {
+                    console.log("is created");
+                } else {
+                    console.log("could not create");
+                }
+            }, store);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+    var saveCategory = function(callBackFunction, category){
+        $.couch.urlPrefix = strings.link.dbConnection;
+
+            $.couch.db(strings.database.category).saveDoc(category, {
+
+                success: function (data) {
+                    callBackFunction(true);
+                },
+                error: function (status) {
+                    console.log(status);
+                    callBackFunction(false);
+                }
+            });
+    };
+
+    var createCa = function (cat) {
+        try {
+            saveCategory(function (created) {
+                if (created) {
+                    console.log("is created");
+                } else {
+                    console.log("could not create");
+                }
+            }, cat);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    createDefaultTable(table);
+    createCa(category1);
+    createCa(category2);
+    createCa(category3);
+    addItemToDB(item1, function(hello, hello2){});
+    addItemToDB(item2, function(hello, hello2){});
+    addItemToDB(item3, function(hello, hello2){});
+    addItemToDB(item4, function(hello, hello2){});
+    addItemToDB(item5, function(hello, hello2){});
+    addItemToDB(item6, function(hello, hello2){});
+    addItemToDB(item7, function(hello, hello2){});
+    addItemToDB(item8, function(hello, hello2){});
+    addItemToDB(item9, function(hello, hello2){});
+    addItemToDB(item10, function(hello, hello2){});
+    addItemToDB(item11, function(hello, hello2){});
+    addItemToDB(item12, function(hello, hello2){});
+    addItemToDB(item13, function(hello, hello2){});
+    addItemToDB(item14, function(hello, hello2){});
+    addItemToDB(item15, function(hello, hello2){});
+    addItemToDB(item16, function(hello, hello2){});
+
 }
