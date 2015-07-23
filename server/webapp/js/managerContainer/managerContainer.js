@@ -314,7 +314,9 @@ var managerContainer = Ractive.extend(
             var containerID = container.containerID;
             var lastIndexofIDDelimiter = containerID.lastIndexOf("-");
 
-            return containerID.substring(0,lastIndexofIDDelimiter);
+            var substring = containerID.substring(0,lastIndexofIDDelimiter);
+            console.log(substring);
+            return substring;
         }
 
     })
