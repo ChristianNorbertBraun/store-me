@@ -172,10 +172,9 @@ var coredataContainer = Ractive.extend({
                             </div>\
                         </div>\
                         \
+                        {{#if newItem.attributes}}\
                         <div id="attribute-container">\
-                            {{#if newItem.attributes}}\
-                                <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
-                            {{/if}}\
+                            <h3 id="attribute-heading" intro-outro="slideh">Attributes</h3>\
                             \
                             {{#each newItem.attributes:i}}\
                                 <div id="attribute_row_{{i}}" class="row modal-row" intro-outro="slideh">\
@@ -203,6 +202,7 @@ var coredataContainer = Ractive.extend({
                             {{/each}}\
                             \
                         </div>\
+                        {{/if}}\
                         \
                         <button id="add-new-attribute-button" class="btn btn-primary btn-sm" on-click="addNewAttribute()">\
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>\

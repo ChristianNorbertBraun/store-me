@@ -2,7 +2,7 @@
  * Created by captainluma on 13.07.15.
  */
 
-$.couch.urlPrefix = "http://notimeforthat.org:5984";
+$.couch.urlPrefix = "http://localhost:5984";
 
 var tableNames = ["storemeattributes", "storemecategory", "storemecontainer", "storemeitems", "storemelog", "storemeusers"];
 var reset = [ false, false, false, false, false, false ];
