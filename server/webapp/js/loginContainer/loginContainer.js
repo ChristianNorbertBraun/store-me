@@ -23,6 +23,7 @@ var loginContainer = Ractive.extend({
             <p class="text-center">{{question}}<br>\
             <a id="sign-up" href="register.html">{{signup}}</a> </p>\
           </div>\
+          <footer>Hallo</footer>\
     </div>\ ',
 
     data:{},
