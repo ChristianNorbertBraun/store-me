@@ -299,6 +299,22 @@ if (typeof exports !== "undefined")
 
     exports.endSession = function(sessionID)
     {
-        return endSession(sessionID);
+        for (var i = 0; i < currentSessions.length; i++)
+    {
+        var currentSession = currentSessions[i];
+
+        if (currentSession.expires < Date.now())
+        {
+            removeFromArray(currentSessions, i);
+            i--;
+            continue;
+        }
+        if (currentSession.sessionID === sessionID)
+        {
+            removeFromArray(currentSessions, i);
+            break;
+        }
+    }
+//        return endSession(sessionID);
     }
 }
